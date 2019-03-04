@@ -14,6 +14,7 @@ vim +PlugInstall +PlugClean +qa!
 for rcfile in "${ZDOTDIR:-$HOME}"/dotfiles/zprezto/runcoms/^README.md(.N); do
     ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
 done
+git submodule update --init --recursive
 
 # Create tmux.conf sym link
 ln -s "$HOME/dotfiles/tmux.conf" "$HOME/.tmux.conf"
