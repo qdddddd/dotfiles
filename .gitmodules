@@ -1,0 +1,3 @@
+[submodule "zprezto/modules/history-substring-search/external"]
+	path = zprezto/modules/history-substring-search/external
+	url = https://github.com/zsh-users/zsh-history-substring-search.git
