@@ -1,0 +1,48 @@
+alias sudo='sudo '
+
+func_osx() {
+    echo $1 | gsha256sum
+}
+
+func_lnx() {
+    echo $1 | sha256sum
+}
+
+case "$OSTYPE" in
+    darwin*)
+        alias vim='mvim'
+        alias sha2=func_osx
+        alias fw='/usr/libexec/ApplicationFirewall/socketfilterfw'
+        alias ctags="$(brew --prefix)/bin/ctags"
+        ;;
+    linux*)
+        alias vi='vim'
+        alias sha2=func_lnx
+        ;;
+esac
+
+alias llp='latexmk -xelatex -pvc -pdf -interaction=batchmode -quiet'
+alias BundleInstall='vim +BundleInstall! +BundleClean +q'
+alias ll='ls -lFh'
+
+func_backup() {
+     fswatch -0 -o -e .git/ -e *.pyc -e $1:~/ . |
+             rsync -avz -e "ssh" --delete $1:~/. $2.
+}
+alias backup=func_backup
+
+alias crontab='VIM_CRONTAB=true EDITOR=vim crontab'
+alias wallet47='open -a /Applications/Ethereum\ Wallet.app --args --rpc http://47.104.238.166:8545'
+alias wallet111='open -a /Applications/Ethereum\ Wallet.app --args --rpc http://111.230.11.46:8545'
+alias wallet52='open -a /Applications/Ethereum\ Wallet.app/ --args --rpc http://52.14.206.161:8545'
+alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
+alias ss-load='launchctl load -w /Library/LaunchDaemons/com.shadowsocks.plist'
+alias ss-unload='launchctl unload -w /Library/LaunchDaemons/com.shadowsocks.plist'
+alias close_tunnel="pkill -f '8888:bernoulli.ieda.ust.hk:445'"
+alias ss-load='launchctl load -w ~/Library/LaunchAgents/com.shadowsocks.plist'
+alias ss-unload='launchctl unload -w ~/Library/LaunchAgents/com.shadowsocks.plist'
+
+alias biiota-jshell='JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home \
+                     JAVA_OPTS="--add-exports jdk.jshell/jdk.internal.jshell.tool=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED"\
+                     gradle --no-daemon --console plain jshell'
+alias ds='du -h --max-depth=1'
