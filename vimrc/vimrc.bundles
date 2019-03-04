@@ -1,0 +1,137 @@
+" Modeline and Notes {
+
+" Environment {
+
+    " Basics {
+        set nocompatible        " Must be first line
+    " }
+
+        " Setup Bundle Support {
+        " The next three lines ensure that the ~/.vim/bundle/ system works
+        filetype off
+        call plug#begin('~/.vim/bundle')
+    " }
+
+    function! s:deregister(repo)
+        let repo = substitute(a:repo, '[\/]\+$', '', '')
+        let name = fnamemodify(repo, ':t:s?\.git$??')
+        call remove(g:plugs, name)
+        call remove(g:plugs_order, index(g:plugs_order, name))
+    endfunction
+
+    command! -nargs=+ -bar Bundle call plug#(<args>)
+    command! -nargs=1 -bar UnBundle call s:deregister(<args>)
+
+" }
+
+" Bundles {
+
+    " Ack {
+        if executable('ag')
+            Bundle 'mileszs/ack.vim'
+            let g:ackprg = 'ag --nogroup --nocolor --column --smart-case'
+        endif
+    " }
+
+    " General {
+        Bundle 'scrooloose/nerdtree'
+        Bundle 'skwp/vim-colors-solarized'
+        Bundle 'spf13/vim-colors'
+        Bundle 'tpope/vim-surround'
+        Bundle 'tpope/vim-repeat'
+        Bundle 'rhysd/conflict-marker.vim'
+        Bundle 'jiangmiao/auto-pairs'
+        Bundle 'terryma/vim-multiple-cursors'
+        Bundle 'vim-scripts/sessionman.vim'
+        Bundle 'vim-scripts/matchit.zip'
+        Bundle 'vim-airline/vim-airline'
+        Bundle 'vim-airline/vim-airline-themes'
+        Bundle 'bling/vim-bufferline'
+        Bundle 'easymotion/vim-easymotion'
+        Bundle 'jistr/vim-nerdtree-tabs'
+        Bundle 'flazz/vim-colorschemes'
+        Bundle 'mbbill/undotree'
+        Bundle 'vim-scripts/restore_view.vim'
+        Bundle 'mhinz/vim-signify'
+        Bundle 'tpope/vim-fugitive'
+    " }
+
+    " Writing {
+        Bundle 'reedes/vim-litecorrect'
+        Bundle 'reedes/vim-textobj-sentence'
+        Bundle 'reedes/vim-textobj-quote'
+    " }
+
+    " General Programming {
+        Bundle 'scrooloose/nerdcommenter'
+        Bundle 'godlygeek/tabular'
+        Bundle 'luochen1990/rainbow'
+        if executable('ctags')
+            Bundle 'majutsushi/tagbar'
+        endif
+        Bundle 'skywind3000/asyncrun.vim'
+    " }
+
+    " Snippets & AutoComplete {
+        Bundle 'honza/vim-snippets'
+        " Source support_function.vim to support vim-snippets.
+        if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
+            source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
+        endif
+        Bundle 'SirVer/ultisnips'
+        Bundle 'Valloric/YouCompleteMe', {
+                    \ 'do': './install.py --java-completer',
+                    \ }
+        "Bundle 'Shougo/neocomplcache'
+        "Bundle 'Shougo/neosnippet'
+        "Bundle 'Shougo/neosnippet-snippets'
+        "Bundle 'honza/vim-snippets'
+
+        "Bundle 'Shougo/neocomplete.vim'
+        "Bundle 'Shougo/neosnippet'
+        "Bundle 'Shougo/neosnippet-snippets'
+        "Bundle 'honza/vim-snippets'
+
+    " }
+
+
+    " Python {
+        Bundle 'python-mode/python-mode', { 'branch': 'develop' }
+    " }
+
+    " Json {
+        Bundle 'elzr/vim-json'
+    " }
+
+   " Go Lang {
+        Bundle 'fatih/vim-go'
+    " }
+
+    " Misc {
+        Bundle 'tpope/vim-markdown'
+        Bundle 'spf13/vim-preview'
+        Bundle 'tpope/vim-cucumber'
+        Bundle 'quentindecock/vim-cucumber-align-pipes'
+        Bundle 'lifepillar/vim-cheat40'
+        "Bundle 'vim-scripts/CycleColor'
+        Bundle 'qdddddd/vim-cycle-airline-theme'
+        Bundle 'Konfekt/FastFold'
+        Bundle 'Yggdroot/indentLine'
+        Bundle 'mhinz/vim-startify'
+        Bundle 'Yggdroot/LeaderF'
+        Bundle 'Xuyuanp/nerdtree-git-plugin'
+        Bundle 'tfnico/vim-gradle'
+        Bundle 'airblade/vim-rooter'
+        Bundle 'blueyed/vim-diminactive'
+        Bundle 'morhetz/gruvbox'
+
+        Bundle 'w0rp/ale'
+    " }
+" }
+
+if has('macunix')
+    Bundle 'philpep/vim-rst-tables'
+    Bundle 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
+endif
+
+call plug#end()

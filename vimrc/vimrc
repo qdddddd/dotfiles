@@ -1,0 +1,886 @@
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=2 foldmethod=marker:
+
+" Environment {
+
+    " Identify platform {
+        silent function! OSX()
+            return has('macunix')
+        endfunction
+        silent function! LINUX()
+            return has('unix') && !has('macunix') && !has('win32unix')
+        endfunction
+        silent function! WINDOWS()
+            return  (has('win32') || has('win64'))
+        endfunction
+    " }
+
+    " Basics {
+        set nocompatible        " Must be first line
+    " }
+
+    " Arrow Key Fix {
+        if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
+            inoremap <silent> <C-[>OC <RIGHT>
+        endif
+    " }
+
+" }
+
+" Plugin setteings before loading {
+    "let g:ale_completion_enabled = 1
+    "let g:ale_set_balloons = 1
+    "let g:ale_completion_delay = 0
+    "let g:ale_java_javalsp_jar = $HOME . '/.vimlocal/fat-jar.jar'
+    "let g:ale_java_javalsp_executable = 'java'
+" }
+
+" Use bundles config {
+    if filereadable(expand("~/.vimrc.bundles"))
+        source ~/.vimrc.bundles
+    endif
+" }
+
+
+" General {
+    set background=dark         " Assume a dark background
+
+     if !has('gui')
+        set term=$TERM          " Make arrow and other keys work
+     endif
+    filetype plugin indent on   " Automatically detect file types.
+    syntax on                   " Syntax highlighting
+    set mouse=a                 " Automatically enable mouse usage
+    set mousehide               " Hide the mouse cursor while typing
+    set guioptions=             " Hide scroll bar in GVim
+    scriptencoding utf-8
+
+    if has('clipboard')
+        if has('unnamedplus')  " When possible use + register for copy-paste
+            set clipboard=unnamed,unnamedplus
+        else         " On mac and Windows, use * register for copy-paste
+            set clipboard=unnamed
+        endif
+    endif
+
+    " Automatically switch to the current file directory when
+    " a new buffer is opened
+    "autocmd! BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
+
+    set shortmess+=filmnrxoOtT          " Abbrev. of messages (avoids 'hit enter')
+    set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
+    set virtualedit=onemore             " Allow for cursor beyond last character
+    set history=1000                    " Store a ton of history (default is 20)
+    set nospell                          " Spell checking off
+    set hidden                          " Allow buffer switching without saving
+    set iskeyword-=.                    " '.' is an end of word designator
+    set iskeyword-=#                    " '#' is an end of word designator
+    set iskeyword-=-                    " '-' is an end of word designator
+
+    " Instead of reverting the cursor to the last position in the buffer, we
+    " set it to the first line when editing a git commit message
+    au! FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+
+    " Restore cursor to file position in previous editing session
+    function! ResCur()
+        if line("'\"") <= line("$")
+            silent! normal! g`"
+            return 1
+        endif
+    endfunction
+
+    augroup resCur
+        autocmd! BufWinEnter * call ResCur()
+    augroup END
+
+    " Setting up the directories {
+        set backup                  " Backups are nice ...
+        if has('persistent_undo')
+            set undofile                " So is persistent undo ...
+            set undolevels=1000         " Maximum number of changes that can be undone
+            set undoreload=10000        " Maximum number lines to save for undo on a buffer reload
+        endif
+    " }
+
+    " Initialize directories
+    function! InitializeDirectories()
+        let parent = $HOME
+        let prefix = 'vim'
+        let dir_list = {
+                    \ 'backup': 'backupdir',
+                    \ 'views': 'viewdir',
+                    \ 'swap': 'directory' }
+
+        if has('persistent_undo')
+            let dir_list['undo'] = 'undodir'
+        endif
+
+        " To specify a different directory in which to place the vimbackup,
+        " vimviews, vimundo, and vimswap files/directories
+        let common_dir = $HOME . '/.vim/' . prefix
+
+        for [dirname, settingname] in items(dir_list)
+            let directory = common_dir . dirname . '/'
+            if exists("*mkdir")
+                if !isdirectory(directory)
+                    call mkdir(directory)
+                endif
+            endif
+            if !isdirectory(directory)
+                echo "Warning: Unable to create backup directory: " . directory
+                echo "Try: mkdir -p " . directory
+            else
+                let directory = substitute(directory, " ", "\\\\ ", "g")
+                exec "set " . settingname . "=" . directory
+            endif
+        endfor
+    endfunction
+    call InitializeDirectories()
+" }
+
+" Misc {
+    set wrap                        " Wrap long lines
+    set autoindent                  " Indent at the same level of the previous line
+    set shiftwidth=4                " Use indents of 4 spaces
+    set expandtab                   " Tabs are spaces, not tabs
+    set tabstop=4                   " An indentation every four columns
+    set softtabstop=4               " Let backspace delete indent
+    set nojoinspaces                " Prevents inserting two spaces after punctuation on a join (J)
+    set splitright                  " Puts new vsplit windows to the right of the current
+    set splitbelow                  " Puts new split windows to the bottom of the current
+    set pastetoggle=<F12>           " pastetoggle (sane indentation on pastes)
+    set breakindent
+    set equalalways
+    set ttimeoutlen=0 timeoutlen=500
+
+    set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
+
+    autocmd! BufNewFile,BufRead *.html.twig set filetype=html.twig
+    autocmd! BufNewFile,BufRead *.coffee set filetype=coffee
+    autocmd! BufRead,BufNewFile *.rst set ft=rst
+    autocmd! BufRead,BufNewFile *.go set nospell
+
+    "nnoremap <silent> <C-z> @=(foldlevel('.')?'za':"\<Space>")<CR>
+    vnoremap <C-z> zf
+
+    " Crontab {
+        if $VIM_CRONTAB == 'true'
+            set nobackup
+            set nowritebackup
+        endif
+    " }
+
+    " Wild ignore {
+        set wildignore+=.git,.hg,.svn
+        set wildignore+=*.aux,*.out,*.toc
+        set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest,*.rbc,*.class
+        set wildignore+=*.ai,*.bmp,*.gif,*.ico,*.jpg,*.jpeg,*.png,*.psd,*.webp
+        set wildignore+=*.avi,*.divx,*.mp4,*.webm,*.mov,*.m2ts,*.mkv,*.vob,*.mpg,*.mpeg
+        set wildignore+=*.mp3,*.oga,*.ogg,*.wav,*.flac,*.m4a,*.mov
+        set wildignore+=*.eot,*.otf,*.ttf,*.woff
+        set wildignore+=*.doc,*.pdf,*.cbr,*.cbz
+        set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz,*.kgb
+        set wildignore+=*.swp,.lock,.DS_Store,._*
+    " }
+
+    " Rsync project {
+        function! Sync()
+            !rsync -azcuv -e "ssh -p99" --delete `pwd`/src volta:~/BIIOTA &&
+           \ rsync -azcuv -e "ssh -p99" --delete `pwd`/src pascal:~/BIIOTA &&
+           \ rsync -azcuv -e "ssh -p99" --delete `pwd`/src pascal:~/BIIOTA_2 &&
+           \ rsync -azcuv -e "ssh -p22" --delete `pwd`/src ali2:~/biiota &&
+           \ rsync -azcuv -e "ssh -p22" --delete `pwd`/src aliyun:~/qdu/BIIOTA &&
+           \ rsync -azcuv -e "ssh -p99" --delete `pwd`/src maxwell:~/BIIOTA &&
+        endfunction
+    " }
+" }
+
+" Key Mappings {
+
+    let mapleader = ' '
+
+    " Wrapped lines goes down/up to next row, rather than next line in file.
+    noremap j gj
+    noremap k gk
+    noremap $ g$
+    noremap 0 g0
+    noremap ^ g^
+
+    " Stupid shift key fixes
+    if has("user_commands")
+        command! -bang -nargs=* -complete=file E e<bang> <args>
+        command! -bang -nargs=* -complete=file W w<bang> <args>
+        command! -bang -nargs=* -complete=file Wq wq<bang> <args>
+        command! -bang -nargs=* -complete=file WQ wq<bang> <args>
+        command! -bang Wa wa<bang>
+        command! -bang WA wa<bang>
+        command! -bang Q q<bang>
+        command! -bang QA qa<bang>
+        command! -bang Qa qa<bang>
+    endif
+
+    " Yank from the cursor to the end of the line, to be consistent with C and D.
+    nnoremap Y y$
+
+    " Visual shifting (does not exit Visual mode)
+    vnoremap < <gv
+    vnoremap > >gv
+
+    " Allow using the repeat operator with a visual selection (!)
+    vnoremap . :normal .<CR>
+
+    " For when you forget to sudo.. Really Write the file.
+    cmap w!! w !sudo tee % >/dev/null
+
+    command! Uf set foldlevel=20
+
+    "nnoremap <f5> :CycleColorNext<CR> " \| Silent call AirlineRefresh()
+    "nnoremap <f6> :CycleColorPrev<CR> " \| Silent call AirlineRefresh()
+
+    " Comment toggling
+    "nnoremap <leader>c :call NERDComment(0,"toggle")<CR>
+    "vnoremap <leader>c :call NERDComment(0,"toggle")<CR>
+    "inoremap <leader>cc <C-o>:call NERDComment(0,"toggle")<C-m>
+
+    map ,,c :python ReformatTable()<CR>
+    map ,,f :python ReflowTable()<CR>
+
+    " Shorcut saving
+    nnoremap <leader>w :w<CR>
+
+    " Compile and run code
+    set autowrite
+    autocmd! BufEnter,BufNewFile *.cpp nnoremap <leader>s :w <bar> AsyncRun g++ -W -Wall -pedantic -o %:r % && ./%:r<CR>
+    autocmd! BufEnter,BufNewFile *.c nnoremap <leader>s :w <bar> AsyncRun gcc -std=c99 -lm % -o %:p:h/%:t:r.out && ./%:r.out<CR>
+    "autocmd! BufEnter,BufNewFile *.java nnoremap <leader>s :w <bar> !javac -d . % && java -enableassertions %:r <CR>
+    autocmd! BufEnter,BufNewFile *.java nnoremap <leader>s :w <bar> AsyncRun gradle build <CR>
+    autocmd! BufEnter,BufNewFile *.py nnoremap <leader>s :w <bar> AsyncRun python % <CR>
+    autocmd! BufEnter,BufNewFile *.go nnoremap <leader>s :w <bar> AsyncRun go build % && ./%:p <CR>
+    autocmd! BufEnter,BufNewFile *.vim,*vimrc* nnoremap <leader>s :w <bar> so % <CR>
+
+    " Bind K to grep word under cursor
+    if isdirectory(expand("~/.vim/bundle/ack.vim/"))
+        nnoremap K :Ack <c-r>=expand("<cword>") <CR><CR>
+    endif
+
+    " Terminal mode
+    command! Vter vert ter zsh
+    command! Ter ter zsh
+
+    " Clear highlight
+    nnoremap <silent> \ :noh<CR>
+
+    " Map redo to U
+    nnoremap U :redo<cr>
+
+    "Search pattern with start of words
+    "nnoremap / /\v
+
+" }
+
+" Displays {
+
+    function! GruvBoxSettings()
+        set background=light
+        if !has('gui_macvim')
+            set background=dark
+            let g:gruvbox_contrast_light = 'hard'
+        endif
+        let g:gruvbox_invert_selection = 0
+        colo gruvbox
+        let g:airline_theme = 'gruvbox'
+        "hi Pmenu guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=lightgray
+        hi PmenuSbar  guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermbg=lightgray cterm=NONE
+        hi PmenuThumb guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=darkcyan cterm=NONE
+    endfunction
+
+    function! SetDefaultDisplays()
+        "let g:indentLine_color_gui = '#4c4c4b'
+        if has('gui_macvim')
+            "set lines=66 columns=120
+            set guifont=Monaco\ Nerd\ Font\ Mono:h13
+        else
+            set t_Co=256
+        endif
+        call GruvBoxSettings()
+        highlight clear SignColumn      " SignColumn should match background
+        set conceallevel=1
+        "let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`'}
+    endfunction
+
+    "function! SetTexDisplays()
+        "set background=light
+        "colo solarized
+        "set guifont=Cousine\ for\ Powerline:h14
+        "let g:airline_theme = 'solarized'
+        "let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '$':'$'}
+        "set conceallevel=0
+    "endfunction
+
+    "function! SetDisplays()
+        "if (&ft=='tex')
+            "call SetTexDisplays()
+        "else
+            "call SetDefaultDisplays()
+        "endif
+        "AirlineRefresh
+    "endfunction
+
+    "au! BufEnter,BufRead * call SetDisplays()
+    call SetDefaultDisplays()
+
+    set tabpagemax=15               " Only show 15 tabs
+    set showmode                    " Display the current mode
+
+    set cursorline                  " Highlight current line
+    set backspace=indent,eol,start  " Backspace for dummies
+    set linespace=0                 " No extra spaces between rows
+    set number relativenumber       " Line numbers on
+    set showmatch                   " Show matching brackets/parenthesis
+    set incsearch                   " Find as you type search
+    set hlsearch                    " Highlight search terms
+    set winminheight=0              " Windows can be 0 line high
+    set ignorecase                  " Case insensitive search
+    set smartcase                   " Case sensitive when uc present
+    set wildmenu                    " Show list instead of just completing
+    set wildmode=list:longest,full  " Command <Tab> completion, list matches, then longest common part, then all.
+    set whichwrap=b,s,h,l,<,>,[,]   " Backspace and cursor keys wrap too
+    set scrolljump=0                " Lines to scroll when cursor leaves screen
+    set scrolloff=3                 " Minimum lines to keep above and below cursor
+    set foldenable                  " Auto fold code
+    set list
+    set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespaces
+
+" }
+
+" Plugins {
+
+    " GoLang {
+        let g:go_highlight_functions = 1
+        let g:go_highlight_methods = 1
+        let g:go_highlight_structs = 1
+        let g:go_highlight_operators = 1
+        let g:go_highlight_build_constraints = 1
+        let g:go_fmt_command = "goimports"
+        let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+        let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+        au FileType go nmap <Leader>s <Plug>(go-implements)
+        au FileType go nmap <Leader>i <Plug>(go-info)
+        au FileType go nmap <Leader>e <Plug>(go-rename)
+        au FileType go nmap <leader>r <Plug>(go-run)
+        au FileType go nmap <leader>b <Plug>(go-build)
+        au FileType go nmap <leader>t <Plug>(go-test)
+        au FileType go nmap <Leader>gd <Plug>(go-doc)
+        au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+        au FileType go nmap <leader>co <Plug>(go-coverage)
+        " }
+
+    " Matchit {
+        if isdirectory(expand("~/.vim/bundle/matchit.zip"))
+            let b:match_ignorecase = 1
+        endif
+    " }
+
+    " Ctags {
+        " Automatically generate tag files on save
+        command! Gtags silent !ctags -R -o $HOME/.cache/tags $(pwd) &
+        let g:auctaglangs = ['java', 'cpp', 'c', 'go']
+
+        autocmd! BufWritePost <buffer>
+            \ if &buftype != 'terminal' |
+                \ if index(g:auctaglangs, &ft) > -1 |
+                    \ exe 'Gtags' |
+                \ endif |
+            \ endif
+        "set tags=./tags,tags;$HOME
+        set tags=$HOME/.cache/tags
+    " }
+
+    " Vim-rooter {
+        let g:rooter_targets = 'Projects/,Course\ Work/,*'
+        let g:rooter_patterns = ['.git/']
+        let g:rooter_change_directory_for_non_project_files = 'current'
+        let g:rooter_silent_chdir = 1
+        let g:rooter_resolve_links = 1
+    " }
+
+    " AutoCloseTag {
+        " Make it so AutoCloseTag works for xml and xhtml files as well
+        au FileType xhtml,xml ru ftplugin/html/autoclosetag.vim
+        nmap <Leader>ac <Plug>ToggleAutoCloseMappings
+    " }
+
+    " NerdTree {
+        let NERDTreeMapActivateNode = 'oo'
+        let NERDTreeMapPreview = 'o'
+        let NERDTreeMapPreviewVSplit = 'v'
+        let NERDTreeMapOpenVSplit = 'vv'
+        let NERDTreeMapOpenSplit = 'ss'
+        let NERDTreeMapPreviewSplit = 's'
+        let NERDTreeAutoDeleteBuffer = 1
+        let NERDTreeMinimalUI = 1
+        let NERDTreeChDirMode = 2
+
+        map <C-q> <plug>NERDTreeTabsToggle<CR>
+        nmap <leader>e :NERDTreeFind<CR>
+
+        let NERDTreeShowBookmarks=1
+        let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
+        let NERDTreeIgnore+=['^\.DS_Store$', '^build$', '^gradle$', '^\.gradle$', '^\.idea$']
+        let NERDTreeQuitOnOpen=1
+        let NERDTreeMouseMode=2
+        let NERDTreeShowHidden=1
+        let NERDTreeKeepTreeInNewTab=1
+        let g:nerdtree_tabs_open_on_gui_startup=0
+
+        let g:NERDShutUp=1
+        nnoremap <Leader>v :NERDTreeFind<SPACE>
+        let g:NERDTreeIndicatorMapCustom = {
+            \ "Modified"  : "✹",
+            \ "Staged"    : "✚",
+            \ "Untracked" : "✭",
+            \ "Renamed"   : "➜",
+            \ "Unmerged"  : "═",
+            \ "Deleted"   : "✖",
+            \ "Dirty"     : "✗",
+            \ "Clean"     : "✔︎",
+            \ 'Ignored'   : '☒',
+            \ "Unknown"   : "?"
+            \ }
+
+        " Initialize NERDTree as needed {
+            function! NERDTreeInitAsNeeded()
+                redir => bufoutput
+                buffers!
+                redir END
+                let idx = stridx(bufoutput, "NERD_tree")
+                if idx > -1
+                    NERDTreeMirror
+                    NERDTreeFind
+                    wincmd l
+                endif
+            endfunction
+        " }
+    " }
+
+    " Session List {
+        set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
+        if isdirectory(expand("~/.vim/bundle/sessionman.vim/"))
+            nmap <leader>sl :SessionList<CR>
+            nmap <leader>ss :SessionSave<CR>
+            nmap <leader>sc :SessionClose<CR>
+        endif
+    " }
+
+    " JSON {
+        nmap <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
+        let g:vim_json_syntax_conceal = 0
+    " }
+
+    " PyMode {
+        " Disable if python support not present
+        if has('python3')
+            let g:pymode_python = 'python3'
+        else
+            if !has('python2')
+                let g:pymode = 0
+            endif
+        endif
+
+
+        if isdirectory(expand("~/.vim/bundle/python-mode"))
+            let g:pymode_lint = 0
+            let g:pymode_trim_whitespaces = 0
+            let g:pymode_options = 0
+            let g:pymode_rope = 0
+            let g:pymode_syntax_print_as_function = 1
+        endif
+
+        let g:pymode_options_max_line_length = 120
+        let g:pymode_lint_options_pylint = {'max-line-length': g:pymode_options_max_line_length}
+    " }
+
+    " TagBar {
+        if isdirectory(expand("~/.vim/bundle/tagbar/"))
+            nnoremap <silent> <leader>tt :TagbarToggle<CR>
+        endif
+    "}
+
+    " Rainbow {
+        if isdirectory(expand("~/.vim/bundle/rainbow/"))
+            let g:rainbow_conf = {
+                \ 'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+                \ 'ctermfgs': ['lightblue', 229, 'lightcyan', 'lightmagenta'],
+                \ 'operators': '_,_',
+                \ 'parentheses': ['start=/(/ end=/)/ fold',
+                \                 'start=/\[/ end=/\]/ fold',
+                \                 'start=/{/ end=/}/ fold'],
+                \ 'separately': {
+                \     '*': {},
+                \     'tex': {
+                \         'parentheses': [['(',')'], ['\[','\]'], ['\\begin{.*}','\\end{.*}']],
+                \     },
+                \     'lisp': {
+                \         'guifgs': ['royalblue', 'darkorange', 'seagreen', 'firebrick', 'darkorchid'],
+                \     },
+                \     'vim': {
+                \         'parentheses': ['start=/(/ end=/)/',
+                \                         'start=/\[/ end=/\]/',
+                \                         'start=/{/ end=/}/ fold',
+                \                         'start=/(/ end=/)/ containedin=vimFuncBody',
+                \                         'start=/\[/ end=/\]/ containedin=vimFuncBody',
+                \                         'start=/{/ end=/}/ fold containedin=vimFuncBody'],
+                \     },
+                \     'html': {
+                \         'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
+                \     },
+                \     'css': 0,
+                \ },
+            \ }
+            let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+        endif
+    "}
+
+    " YouCompleteMe {
+        if isdirectory(expand("~/.vim/bundle/YouCompleteMe/"))
+            " Disable YCM
+            "let g:loaded_youcompleteme = 1
+
+            let g:acp_enableAtStartup = 0
+
+            let g:ycm_always_populate_location_list = 1
+            nnoremap <C-j> :lnext <CR>
+            nnoremap <C-k> :lprevious <CR>
+
+            " enable completion from tags
+            let g:ycm_collect_identifiers_from_tags_files = 1
+
+            " remap Ultisnips for compatibility for YCM
+            "let g:UltiSnipsExpandTrigger = '<C-j>'
+            "let g:UltiSnipsJumpForwardTrigger = '<C-j>'
+            "let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
+
+            " Enable omni completion.
+            "autocmd! FileType css setlocal omnifunc=csscomplete#CompleteCSS
+            autocmd! FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+            "autocmd! FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+            autocmd! FileType python setlocal omnifunc=pythoncomplete#Complete
+            "autocmd! FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+            "autocmd! FileType ruby setlocal omnifunc=rubycomplete#Complete
+            "autocmd! FileType haskell setlocal omnifunc=necoghc#omnifunc
+
+            " For snippet_complete marker.
+            if has('conceal')
+                set conceallevel=2 concealcursor=i
+            endif
+
+            nnoremap <silent> <leader>dl :YcmCompleter GoTo <CR>
+            nnoremap <silent> <leader>fi :YcmCompleter FixIt <CR>
+            nnoremap <silent> <leader>re :YcmCompleter GoToReferences <CR>
+            nnoremap <silent> <leader>fo :YcmCompleter Format <CR>
+            vnoremap <silent> <leader>fo :YcmCompleter Format <CR>
+            nnoremap <leader>rn :YcmCompleter RefactorRename<space>
+
+            " Disable the neosnippet preview candidate window
+            " When enabled, there can be too much visual noise
+            " especially when splits are used.
+            set completeopt-=preview
+        endif
+    " }
+
+    " OmniComplete {
+        if has("autocmd") && exists("+omnifunc")
+            autocmd! Filetype *
+                \if &omnifunc == "" |
+                \setlocal omnifunc=syntaxcomplete#Complete |
+                \endif
+        endif
+
+
+        " Some convenient mappings
+        "inoremap <expr> <Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
+        inoremap <expr> <CR>     pumvisible() ? "\<C-y>" : "\<CR>"
+        inoremap <expr> <Down>   pumvisible() ? "\<C-n>" : "\<Down>"
+        inoremap <expr> <Up>     pumvisible() ? "\<C-p>" : "\<Up>"
+        inoremap <expr> <C-d>    pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+        inoremap <expr> <C-u>    pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+
+        " Automatically open and close the popup menu / preview window
+        au! CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+        set completeopt=menu,longest
+    " }
+
+    " Airline {
+        " Use the powerline theme and optionally enable powerline symbols.
+        " To use the symbols , , , , , , and .in the statusline
+
+        if isdirectory(expand("~/.vim/bundle/vim-airline-themes/"))
+            if !exists('g:airline_theme')
+                let g:airline_theme = 'solarized'
+            endif
+
+            let g:airline_powerline_fonts = 1
+            let g:airline#extensions#tabline#enabled = 1
+            let g:airline#extensions#tabline#fnamemod = ':t'
+            let g:bufferline_echo = 0
+            let g:airline_detect_spell = 0
+
+            " Unicode symbols
+            if !exists('g:airline_symbols')
+                let g:airline_symbols = {}
+            endif
+            let g:Powerline_symbols = 'unicode'
+            let g:Powerline_symbols = 'fancy'
+            let g:airline_symbols.crypt = '🔒'
+            let g:airline_symbols.branch = ''
+            let g:airline_symbols.paste = '∥'
+            let g:airline_symbols.notexists = '∄'
+            let g:airline_symbols.whitespace = 'Ξ'
+            let g:airline_symbols.space = "\ua0"
+            let g:airline_symbols.linenr = '⭡'
+
+            let g:airline#extensions#bufferline#enabled = 0
+            let g:airline#extensions#branch#enabled = 1
+            let g:airline#extensions#branch#format = 2
+            let g:airline#extensions#tagbar#enabled = 1
+            let g:airline#extensions#tabline#buffer_idx_mode = 1
+            let g:airline#extensions#whitespace#mixed_indent_algo = 2
+            let g:airline#extensions#ale#enabled = 1
+
+            function! s:truncate_status_symbol()"{
+                if winwidth(0) < 120
+                    let g:airline_mode_map = {
+                          \ '__' : '-',
+                          \ 'n'  : 'N',
+                          \ 'i'  : 'I',
+                          \ 'R'  : 'R',
+                          \ 'c'  : 'C',
+                          \ 'v'  : 'V',
+                          \ 'V'  : 'V',
+                          \ '' : 'V',
+                          \ 's'  : 'S',
+                          \ 'S'  : 'S',
+                          \ ''   : 'S',
+                          \ 't'  : 'T',
+                          \ }
+                else
+                    let g:airline_mode_map = {
+                        \ '__' : '------',
+                        \ 'i'  : 'INSERT',
+                        \ 'ic' : 'INSERT COMPL',
+                        \ 'ix' : 'INSERT COMPL',
+                        \ 'n'  : 'NORMAL',
+                        \ 'ni' : '(INSERT)',
+                        \ 'no' : 'OP PENDING',
+                        \ 'R'  : 'REPLACE',
+                        \ 'v'  : 'VISUAL',
+                        \ 'V'  : 'V-LINE',
+                        \ 'c'  : 'COMMAND',
+                        \ '' : 'V-BLOCK',
+                        \ 's'  : 'SELECT',
+                        \ 'S'  : 'S-LINE',
+                        \ ''   : 'S-BLOCK',
+                        \ 't'  : 'TERMINAL',
+                        \ 'Rv' : 'V REPLACE',
+                        \ }
+                endif
+                AirlineRefresh
+            endfunction"}
+            "autocmd! VimResized * call s:truncate_status_symbol()
+
+            set noshowmode
+            " Tabline key mappings
+            nmap <leader>1 <Plug>AirlineSelectTab1
+            nmap <leader>2 <Plug>AirlineSelectTab2
+            nmap <leader>3 <Plug>AirlineSelectTab3
+            nmap <leader>4 <Plug>AirlineSelectTab4
+            nmap <leader>5 <Plug>AirlineSelectTab5
+            nmap <leader>6 <Plug>AirlineSelectTab6
+            nmap <leader>7 <Plug>AirlineSelectTab7
+            nmap <leader>8 <Plug>AirlineSelectTab8
+            nmap <leader>9 <Plug>AirlineSelectTab9
+            nmap – <Plug>AirlineSelectPrevTab
+            nmap ≠ <Plug>AirlineSelectNextTab
+
+            " Sections
+            let g:airline_section_y = airline#section#create_right(['filetype'])
+            let g:airline_section_x = airline#section#create_right(['tagbar'])
+            let g:airline_section_z = '%3p%% %{g:airline_symbols.linenr} %l/%L:%c'
+
+            set hidden
+        endif
+    " }
+
+    " ALE {
+        if isdirectory(expand("~/.vim/bundle/ale/"))
+            let g:ale_linters_explicit = 0
+            let g:ale_lint_on_text_changed = 'normal'
+            let g:ale_lint_delay = 0
+            "nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+            "nmap <silent> <C-j> <Plug>(ale_next_wrap)
+            let g:ale_set_loclist = 1
+            let g:ale_set_quickfix = 0
+            let g:ale_sign_error = '✗'
+            let g:ale_sign_warning = '◇'
+            if g:colors_name == 'gruvbox'
+                highlight link ALEErrorSign GruvboxRedSign
+                highlight link ALEWarningSign GruvboxYellowSign
+            endif
+            let g:ale_statusline_format = ['✗ %d', '⚠ %d', '✓ OK']
+
+            let g:ale_linters = {
+                        \ 'java': [],
+                        \ }
+
+            let g:ale_fixers = {
+                        \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+                        \}
+
+            let g:ale_fix_on_save = 1
+        endif
+    " }
+
+    " Diminactive {
+        if isdirectory(expand("~/.vim/bundle/vim-diminactive/"))
+            let g:diminactive_use_colorcolumn = 1
+            let g:diminactive_use_syntax = 0
+        endif
+    " }
+
+    " Latex preview {
+        if isdirectory(expand("~/.vim/bundle/vim-latex-live-preview/"))
+            let g:livepreview_previewer = 'open -a Preview'
+            command! LLP LLPStartPreview
+            let g:livepreview_engine = 'pdflatex'
+            "autocmd! Filetype tex setl updatetime=1
+            augroup RemoveTemp
+                autocmd! FileType tex
+                    \ autocmd! BufUnload <buffer> silent !rm -rf $TMPDIR/vim-latex-live-preview-*
+            augroup END
+        endif
+    " }
+
+    " LeaderF {
+        if isdirectory(expand("~/.vim/bundle/LeaderF/"))
+            let g:Lf_StlSeparator = { 'left': '⮀', 'right': '⮂' }
+            let g:Lf_StlColorscheme = 'default'
+            let g:Lf_RootMarkers = ['.project', '.root', '.git', '.svn']
+            let g:Lf_WorkingDirectoryMode = 'Ac'
+            if executable('ag')
+                let g:Lf_DefaultExternalTool = "ag"
+            endif
+            if has('maxunix')
+                let g:Lf_Ctags = '/usr/local/bin/ctags'
+            endif
+            let g:Lf_CacheDirectory = $HOME . '/.cache'
+            let g:Lf_UseCache = 0
+            let g:Lf_UseMemoryCache = 0
+            let g:Lf_WildIgnore = {
+                \ 'dir': ['.svn','.git','.hg', 'Music', 'Movies', 'Public', 'Pictures'],
+                \ 'file': ['~$*','*.bak','*.exe','*.o','*.a','*.so','*.py[co]','.DS_Store', '*.pyc', '*.dat', '*.dll', '*.jpg', '*.png']
+                \ }
+
+            " Key mapping
+            let g:Lf_ShortcutF = '<leader>f<space>'
+            nnoremap <leader>ff :LeaderfFunction<CR>
+            nnoremap <leader>t :LeaderfTag<CR>
+            nnoremap <leader>r :LeaderfMru<CR>
+        endif
+    " }
+
+    " Auto-pairs {
+        if isdirectory(expand("~/.vim/bundle/auto-pairs/"))
+            let g:AutoPairsShortcutFastWrap = '<Leader>/'
+            let g:AutoPairsShortcutBackInsert = '<Leader>]'
+            let g:AutoPairsShortcutJump = '<Leader>.'
+            let g:AutoPairsFlyMode = 0
+        endif
+    " }
+
+    " FastFold {
+        if isdirectory(expand("~/.vim/bundle/FastFold/"))
+            let g:tex_fold_enabled=1
+            let g:vimsyn_folding='af'
+            let g:fastfold_fold_command_suffixes = []
+            nmap zuz <Plug>(FastFoldUpdate)
+        endif
+    " }
+
+    " IndentLine {
+        if isdirectory(expand("~/.vim/bundle/indentLine/"))
+            let g:indentLine_enabled = 1
+            let g:indentLine_faster = 1
+            let g:indentLine_char = '⎸'    " Can be ¦, ┆, │, ⎸, or ▏
+            let g:indentLine_fileTypeExclude = ['startify']
+            let g:indentLine_concealcursor = ''
+        endif
+    " }
+
+    " Startify {
+        if isdirectory(expand("~/.vim/bundle/vim-startify/"))
+            "let s:FILE = SpaceVim#api#import('file')
+            let g:startify_custom_header = [
+                            \'',
+                            \'',
+                            \'                          /##    /##/##                                             ',
+                            \'                         | ##   | #|__/                                             ',
+                            \'                         | ##   | ##/##/######/####                                 ',
+                            \'                         |  ## / ##| #| ##_  ##_  ##                                ',
+                            \'                          \  ## ##/| #| ## \ ## \ ##                                ',
+                            \'                           \  ###/ | #| ## | ## | ##                                ',
+                            \'                            \  #/  | #| ## | ## | ##                                ',
+                            \'                             \_/   |__|__/ |__/ |__/    version : ' . v:version . ' ',
+                            \'',
+                            \ ]
+            let g:startify_session_dir = $HOME .  '/.vim/' . '/session'
+            let g:startify_files_number = 6
+            let g:startify_list_order = [
+                        \ ['   MRU files in the current directory:'],
+                        \ 'dir',
+                        \ ['   MRU files:'],
+                        \ 'files',
+                        \ ['   Sessions:'],
+                        \ 'sessions',
+                        \ ['   Bookmarks:'],
+                        \ 'bookmarks',
+                        \ ]
+            let g:startify_bookmarks = [ {'c': '~/.vimrc'},
+                                       \ {'cc': '~/.vimrc.bundles'},
+                                       \ {'d': '~/Documents/Projects/'},
+                                       \ ]
+            let g:startify_update_oldfiles = 1
+            let g:startify_disable_at_vimenter = 0
+            let g:startify_session_autoload = 1
+            let g:startify_session_persistence = 1
+            "let g:startify_session_delete_buffers = 0
+            let g:startify_change_to_dir = 0
+            "let g:startify_change_to_vcs_root = 0  " vim-rooter has same feature
+            let g:startify_skiplist = [
+                \ 'COMMIT_EDITMSG',
+                \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
+                \ 'bundle/.*/doc',
+                \ ]
+            autocmd! FileType startify nnoremap <buffer> <F2> <Nop>
+            autocmd! FileType startify setl nowrap
+
+        endif
+    " }
+
+    " AsyncRun {
+        if isdirectory(expand("~/.vim/bundle/asyncrun.vim"))
+            nnoremap <leader>a :AsyncRun<space>
+            nnoremap <C-c>: AsyncStop<CR>
+            let g:asyncrun_open = 16
+        endif
+    "}
+
+" }
+
+" GUI Settings {
+
+    " GVIM- (here instead of .gvimrc)
+    if has('gui_running')
+        set guioptions-=T           " Remove the toolbar
+        set lines=40                " 40 lines of text instead of 24
+    endif
+
+" }
