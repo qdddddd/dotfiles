@@ -36,7 +36,6 @@
     " General {
         Bundle 'scrooloose/nerdtree'
         Bundle 'skwp/vim-colors-solarized'
-        Bundle 'spf13/vim-colors'
         Bundle 'tpope/vim-surround'
         Bundle 'tpope/vim-repeat'
         Bundle 'rhysd/conflict-marker.vim'
@@ -49,7 +48,6 @@
         Bundle 'bling/vim-bufferline'
         Bundle 'easymotion/vim-easymotion'
         Bundle 'jistr/vim-nerdtree-tabs'
-        Bundle 'flazz/vim-colorschemes'
         Bundle 'mbbill/undotree'
         Bundle 'vim-scripts/restore_view.vim'
         Bundle 'mhinz/vim-signify'
@@ -122,10 +120,10 @@
         Bundle 'Xuyuanp/nerdtree-git-plugin'
         Bundle 'tfnico/vim-gradle'
         Bundle 'airblade/vim-rooter'
-        Bundle 'blueyed/vim-diminactive'
+        "Bundle 'blueyed/vim-diminactive'
         Bundle 'morhetz/gruvbox'
-
         Bundle 'w0rp/ale'
+        Bundle 'christoomey/vim-tmux-navigator'
     " }
 " }
 

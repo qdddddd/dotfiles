@@ -281,14 +281,14 @@
 
     function! GruvBoxSettings()
         set background=light
-        if !has('gui_macvim')
-            set background=dark
-            let g:gruvbox_contrast_light = 'hard'
-        endif
         let g:gruvbox_invert_selection = 0
         colo gruvbox
         let g:airline_theme = 'gruvbox'
-        "hi Pmenu guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=lightgray
+        if !has('gui_macvim')
+            hi Normal ctermbg=NONE
+            hi! airline_a guifg=white
+            hi Pmenu guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=lightgray
+        endif
         hi PmenuSbar  guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermbg=lightgray cterm=NONE
         hi PmenuThumb guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=darkcyan cterm=NONE
     endfunction
@@ -873,6 +873,17 @@
             let g:asyncrun_open = 16
         endif
     "}
+    "
+    " vim-tmux-navigator {
+        let g:tmux_navigator_no_mappings = 1
+        let g:tmux_navigator_disable_when_zoomed = 1
+
+        nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
+        nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
+        nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
+        nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
+        nnoremap <silent> <C-\> :TmuxNavigatePrevious<cr>
+    " }
 
 " }
 
