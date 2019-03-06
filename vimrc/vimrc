@@ -285,9 +285,13 @@
         colo gruvbox
         let g:airline_theme = 'gruvbox'
         if !has('gui_macvim')
-            hi Normal ctermbg=NONE
-            hi! airline_a guifg=white
-            hi Pmenu guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=lightgray
+            hi Normal            ctermbg=NONE      ctermfg=237
+            hi CursorLine        ctermbg=white     term=underline
+            hi CursorLineNr      ctermbg=white     ctermfg=136    term=bold
+            hi SignifySignAdd    ctermbg=NONE      ctermfg=100    cterm=bold
+            hi SignifySignDelete ctermbg=NONE      ctermfg=88     cterm=bold
+            hi SignifySignChange ctermbg=NONE      ctermfg=66     cterm=bold
+            hi Pmenu             ctermbg=lightgray ctermfg=black  guifg=#000000 guibg=#F8F8F8
         endif
         hi PmenuSbar  guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermbg=lightgray cterm=NONE
         hi PmenuThumb guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=darkcyan cterm=NONE
