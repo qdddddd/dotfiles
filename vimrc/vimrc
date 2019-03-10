@@ -206,17 +206,15 @@
     noremap ^ g^
 
     " Stupid shift key fixes
-    if has("user_commands")
-        command! -bang -nargs=* -complete=file E e<bang> <args>
-        command! -bang -nargs=* -complete=file W w<bang> <args>
-        command! -bang -nargs=* -complete=file Wq wq<bang> <args>
-        command! -bang -nargs=* -complete=file WQ wq<bang> <args>
-        command! -bang Wa wa<bang>
-        command! -bang WA wa<bang>
-        command! -bang Q q<bang>
-        command! -bang QA qa<bang>
-        command! -bang Qa qa<bang>
-    endif
+    command! -bang -nargs=* -complete=file E e<bang> <args>
+    command! -bang -nargs=* -complete=file W w<bang> <args>
+    command! -bang -nargs=* -complete=file Wq wq<bang> <args>
+    command! -bang -nargs=* -complete=file WQ wq<bang> <args>
+    command! -bang Wa wa<bang>
+    command! -bang WA wa<bang>
+    command! -bang Q q<bang>
+    command! -bang QA qa<bang>
+    command! -bang Qa qa<bang>
 
     " Yank from the cursor to the end of the line, to be consistent with C and D.
     nnoremap Y y$
@@ -235,11 +233,6 @@
 
     "nnoremap <f5> :CycleColorNext<CR> " \| Silent call AirlineRefresh()
     "nnoremap <f6> :CycleColorPrev<CR> " \| Silent call AirlineRefresh()
-
-    " Comment toggling
-    "nnoremap <leader>c :call NERDComment(0,"toggle")<CR>
-    "vnoremap <leader>c :call NERDComment(0,"toggle")<CR>
-    "inoremap <leader>cc <C-o>:call NERDComment(0,"toggle")<C-m>
 
     map ,,c :python ReformatTable()<CR>
     map ,,f :python ReflowTable()<CR>
@@ -285,14 +278,19 @@
         colo gruvbox
         let g:airline_theme = 'gruvbox'
         if !has('gui_macvim')
-            hi Normal            ctermbg=NONE      ctermfg=237
-            hi CursorLine        ctermbg=white     term=underline
-            hi CursorLineNr      ctermbg=white     ctermfg=136    term=bold
-            hi SignifySignAdd    ctermbg=NONE      ctermfg=100    cterm=bold
-            hi SignifySignDelete ctermbg=NONE      ctermfg=88     cterm=bold
-            hi SignifySignChange ctermbg=NONE      ctermfg=66     cterm=bold
-            hi Pmenu             ctermbg=lightgray ctermfg=black  guifg=#000000 guibg=#F8F8F8
+            let g:airline_theme = 'biogoo'
+            set ttyfast
         endif
+
+        " Fix term colors
+        hi GruvboxGreenSign ctermfg=100 ctermbg=NONE guifg=#79740e guibg=bg
+        hi GruvboxRedSign ctermfg=88 ctermbg=NONE cterm=bold guifg=#9d0006 guibg=bg
+        hi GruvboxAquaSign ctermfg=66 ctermbg=NONE cterm=bold guifg=#427b58 guibg=bg
+        hi GruvboxYellowSign ctermfg=136 ctermbg=NONE guifg=#b57614 guibg=bg
+        hi Normal ctermbg=NONE ctermfg=237 guifg=#3c3836 guibg=#fbf1c7
+        hi CursorLine ctermbg=white term=underline guibg=#ebdbb2
+        hi CursorLineNr ctermbg=white ctermfg=136 term=bold guifg=#b57614 guibg=#ebdbb2
+        hi VertSplit term=reverse ctermfg=lightgray ctermbg=NONE guifg=#bdae93 guibg=#fbf1c7
         hi PmenuSbar  guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermbg=lightgray cterm=NONE
         hi PmenuThumb guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=darkcyan cterm=NONE
     endfunction
@@ -514,7 +512,8 @@
         if isdirectory(expand("~/.vim/bundle/rainbow/"))
             let g:rainbow_conf = {
                 \ 'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
-                \ 'ctermfgs': ['lightblue', 229, 'lightcyan', 'lightmagenta'],
+                "\ 'ctermfgs': ['lightblue', 229, 'lightcyan', 'lightmagenta'],
+                \ 'ctermfgs': ['darkblue', 'darkyellow', 'darkgreen', 'darkred'],
                 \ 'operators': '_,_',
                 \ 'parentheses': ['start=/(/ end=/)/ fold',
                 \                 'start=/\[/ end=/\]/ fold',
@@ -559,6 +558,15 @@
             " enable completion from tags
             let g:ycm_collect_identifiers_from_tags_files = 1
 
+            let g:ycm_global_ycm_extra_conf = '$HOME/.vim/ycm_extra_conf.py'
+
+            " Let clangd fully control code completion
+            let g:ycm_clangd_uses_ycmd_caching = 0
+
+            " Use installed clangd, not YCM-bundled clangd which doesn't get updates.
+            let g:ycm_clangd_binary_path = exepath("clangd")
+            let g:ycm_clangd_args = ['-log=verbose', '-pretty']
+
             " remap Ultisnips for compatibility for YCM
             "let g:UltiSnipsExpandTrigger = '<C-j>'
             "let g:UltiSnipsJumpForwardTrigger = '<C-j>'
@@ -600,7 +608,6 @@
                 \endif
         endif
 
-
         " Some convenient mappings
         "inoremap <expr> <Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
         inoremap <expr> <CR>     pumvisible() ? "\<C-y>" : "\<CR>"
@@ -612,7 +619,8 @@
         " Automatically open and close the popup menu / preview window
         au! CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
         set completeopt=menu,longest
-    " }
+
+        " }
 
     " Airline {
         " Use the powerline theme and optionally enable powerline symbols.
@@ -734,7 +742,9 @@
 
             let g:ale_linters = {
                         \ 'java': [],
-                        \ }
+                        \ 'cpp': [],
+                        \ 'python': ['flake8', 'pylint'],
+                        \}
 
             let g:ale_fixers = {
                         \   '*': ['remove_trailing_lines', 'trim_whitespace'],
@@ -882,11 +892,11 @@
         let g:tmux_navigator_no_mappings = 1
         let g:tmux_navigator_disable_when_zoomed = 1
 
-        nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
-        nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
-        nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
-        nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
-        nnoremap <silent> <C-\> :TmuxNavigatePrevious<cr>
+        nnoremap <silent> ˙ :TmuxNavigateLeft<cr>
+        nnoremap <silent> ∆ :TmuxNavigateDown<cr>
+        nnoremap <silent> ˚ :TmuxNavigateUp<cr>
+        nnoremap <silent> ¬ :TmuxNavigateRight<cr>
+        nnoremap <silent> « :TmuxNavigatePrevious<cr>
     " }
 
 " }

@@ -78,7 +78,7 @@
         endif
         Bundle 'SirVer/ultisnips'
         Bundle 'Valloric/YouCompleteMe', {
-                    \ 'do': './install.py --java-completer',
+                    \ 'do': 'python3 install.py --java-completer --clang-completer',
                     \ }
         "Bundle 'Shougo/neocomplcache'
         "Bundle 'Shougo/neosnippet'
