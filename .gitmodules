@@ -1,12 +1,12 @@
-[submodule "zprezto/modules/history-substring-search/external"]
-	path = zprezto/modules/history-substring-search/external
+[submodule "prezto/modules/history-substring-search/external"]
+	path = prezto/modules/history-substring-search/external
 	url = https://github.com/zsh-users/zsh-history-substring-search.git
-[submodule "zprezto/modules/syntax-highlighting/external"]
-	path = zprezto/modules/syntax-highlighting/external
+[submodule "prezto/modules/syntax-highlighting/external"]
+	path = prezto/modules/syntax-highlighting/external
 	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
-[submodule "zprezto/modules/completion/external"]
-	path = zprezto/modules/completion/external
+[submodule "prezto/modules/completion/external"]
+	path = prezto/modules/completion/external
 	url = https://github.com/zsh-users/zsh-completions.git
-[submodule "zprezto/modules/fasd/external"]
-	path = zprezto/modules/fasd/external
+[submodule "prezto/modules/fasd/external"]
+	path = prezto/modules/fasd/external
 	url = https://github.com/clvv/fasd.git

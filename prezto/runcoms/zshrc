@@ -1,0 +1,42 @@
+#
+# Executes commands at the start of an interactive session.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+# Source Prezto.
+
+ZPREZTODIR="${HOME}/.dotfiles/prezto"
+
+if [[ -s "${ZPREZTODIR}/init.zsh" ]]; then
+  source "${ZPREZTODIR}/init.zsh"
+fi
+
+if [[ -f ~/.zshenv ]]; then
+    source ~/.zshenv
+fi
+
+# Customized settings
+if [ -f ~/.zshrc.local ]; then
+    source ~/.zshrc.local
+fi
+
+# Aliases
+if [ -f ~/.aliases ]; then
+    source ~/.aliases
+fi
+
+# Autojump
+plugins=(git autojump)
+case "$OSTYPE" in
+    darwin*)
+        [[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
+        ;;
+    linux*)
+        [[ -s /usr/share/autojump/autojump.sh ]] && . /usr/share/autojump/autojump.sh
+        ;;
+esac
+
+export LSCOLORS='ExgxcxdxdxGxDxabagacad'
+export GRADLE_USER_HOME=$HOME/.cache/gradle

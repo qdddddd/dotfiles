@@ -1,22 +1,24 @@
 #!/bin/zsh
 
+DOTFILESDIR=${0:h}
 setopt EXTENDED_GLOB
 
 # Create vim config sym links
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-for lcfile in ${PWD}/vimrc/^*(README.md|init)*; do
-    ln -s "$lcfile" "$HOME/.${lcfile:t}"
+for lcfile in ${DOTFILESDIR}/vim/rc/^*(README.md|init)*; do
+    ln -s "$lcfile" "$HOME/.vim/${lcfile:t}"
 done
-vim +PlugInstall +PlugClean +qa!
-ln -s ${PWD}/ycm_extra_conf.py "$HOME/.vim/ycm_extra_conf.py"
+ln -s ${DOTFILESDIR}/ycm_extra_conf.py "$HOME/.vim/ycm_extra_conf.py"
+vim +PlugInstall +qa!
 
 # Create zsh config sym links
-for rcfile in "${PWD}"/zprezto/runcoms/^README.md(.N); do
+for rcfile in "${DOTFILESDIR}"/prezto/runcoms/^README.md(.N); do
     ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
 done
 git submodule update --init --recursive
+source $HOME/.zshrc
 
 # Create tmux.conf sym link
-ln -s "${PWD}/tmux.conf" "$HOME/.tmux.conf"
+ln -s "${DOTFILESDIR}/tmux.conf" "$HOME/.tmux.conf"
 git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
