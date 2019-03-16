@@ -9,14 +9,13 @@ from clang_helpers import PrepareClangFlags
 # 'flags' list of compilation flags. Notice that YCM itself uses that approach.
 compilation_database_folder = ''
 
-# These are the compilation flags that will be used in case there's no
-# compilation database set.
-flags = [
+# These are the default compilation flags.
+FLAGS = [
     '-Wall',
-    # '-std=c++11',
-    # '-stdlib=libc++',
-    # '-x', 'c++',
-    # '-I', '/usr/local/include',
+    '-std=c++17',
+    '-stdlib=libc++',
+    '-I', '.',
+    '-I', './src',
 ]
 
 if compilation_database_folder:
@@ -25,8 +24,9 @@ else:
     database = None
 
 
-def DirectoryOfThisScript():
-    return os.path.dirname(os.path.abspath(__file__))
+def WorkingDir():
+    # return os.path.dirname(os.path.abspath(__file__))
+    return os.getcwd()
 
 
 def MakeRelativePathsInFlagsAbsolute(flags, working_directory):
@@ -58,20 +58,22 @@ def MakeRelativePathsInFlagsAbsolute(flags, working_directory):
     return new_flags
 
 
-def FlagsForFile(filename):
+def FlagsForFile(filename, **kwargs):
+    final_flags = MakeRelativePathsInFlagsAbsolute(FLAGS, os.getcwd())
     if database:
         # Bear in mind that compilation_info.compiler_flags_ does NOT return a
         # python list, but a "list-like" StringVec object
         compilation_info = database.GetCompilationInfoForFile(filename)
-        final_flags = PrepareClangFlags(
+        final_flags.extend(PrepareClangFlags(
             MakeRelativePathsInFlagsAbsolute(
                 compilation_info.compiler_flags_,
-                compilation_info.compiler_working_dir_),
-            filename)
-    else:
-        relative_to = DirectoryOfThisScript()
-        final_flags = MakeRelativePathsInFlagsAbsolute(flags, relative_to)
+                compilation_info.compiler_working_dir_
+            ),
+            filename))
+        final_flags = MakeRelativePathsInFlagsAbsolute(FLAGS, os.getcwd())
+    # final_flags.extend(MakeRelativePathsInFlagsAbsolute(flags, WorkingDir()))
 
     return {
         'flags': final_flags,
-        'do_cache': True}
+        'do_cache': True,
+    }

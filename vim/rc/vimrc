@@ -283,6 +283,14 @@
         endif
 
         " Fix term colors
+        if has("termguicolors") && ($TERM_PROGRAM == 'iTerm.app')
+            let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+            let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+            " enable true color
+            set termguicolors
+            colo gruvbox
+        endif
+
         hi GruvboxGreenSign ctermfg=100 ctermbg=NONE guifg=#79740e guibg=bg
         hi GruvboxRedSign ctermfg=88 ctermbg=NONE cterm=bold guifg=#9d0006 guibg=bg
         hi GruvboxAquaSign ctermfg=66 ctermbg=NONE cterm=bold guifg=#427b58 guibg=bg
@@ -386,7 +394,7 @@
     " Ctags {
         " Automatically generate tag files on save
         command! Gtags silent !ctags -R -o $HOME/.cache/tags $(pwd) &
-        let g:auctaglangs = ['java', 'cpp', 'c', 'go']
+        let g:auctaglangs = ['go']
 
         autocmd! BufWritePost <buffer>
             \ if &buftype != 'terminal' |
@@ -429,6 +437,7 @@
         let NERDTreeShowBookmarks=1
         let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
         let NERDTreeIgnore+=['^\.DS_Store$', '^build$', '^gradle$', '^\.gradle$', '^\.idea$']
+        let NERDTreeIgnore+=['^bin$', '\.cmake$', '^CMakeCache\.txt$', '^compile_commands\.json$', '^CMakeFiles$']
         let NERDTreeQuitOnOpen=1
         let NERDTreeMouseMode=2
         let NERDTreeShowHidden=1
@@ -559,18 +568,12 @@
             let g:ycm_collect_identifiers_from_tags_files = 1
 
             let g:ycm_global_ycm_extra_conf = '$HOME/.vim/ycm_extra_conf.py'
-
-            " Let clangd fully control code completion
-            let g:ycm_clangd_uses_ycmd_caching = 0
-
-            " Use installed clangd, not YCM-bundled clangd which doesn't get updates.
-            let g:ycm_clangd_binary_path = exepath("clangd")
-            let g:ycm_clangd_args = ['-log=verbose', '-pretty']
+            let g:ycm_confirm_extra_conf = 0
 
             " remap Ultisnips for compatibility for YCM
-            "let g:UltiSnipsExpandTrigger = '<C-j>'
-            "let g:UltiSnipsJumpForwardTrigger = '<C-j>'
-            "let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
+            let g:UltiSnipsExpandTrigger = '<C-j>'
+            let g:UltiSnipsJumpForwardTrigger = '<C-j>'
+            let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
 
             " Enable omni completion.
             "autocmd! FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -587,11 +590,13 @@
             endif
 
             nnoremap <silent> <leader>dl :YcmCompleter GoTo <CR>
+            nnoremap <silent> <leader>df :YcmCompleter GoToDefinition <CR>
             nnoremap <silent> <leader>fi :YcmCompleter FixIt <CR>
             nnoremap <silent> <leader>re :YcmCompleter GoToReferences <CR>
             nnoremap <silent> <leader>fo :YcmCompleter Format <CR>
             vnoremap <silent> <leader>fo :YcmCompleter Format <CR>
             nnoremap <leader>rn :YcmCompleter RefactorRename<space>
+            nnoremap <leader>d :YcmForceCompileAndDiagnostics<CR>
 
             " Disable the neosnippet preview candidate window
             " When enabled, there can be too much visual noise
@@ -858,8 +863,8 @@
                         \ ['   Bookmarks:'],
                         \ 'bookmarks',
                         \ ]
-            let g:startify_bookmarks = [ {'c': '~/.vimrc'},
-                                       \ {'cc': '~/.vimrc.bundles'},
+            let g:startify_bookmarks = [ {'c': '~/.vim/vimrc'},
+                                       \ {'cc': '~/.vim/vimrc.bundles'},
                                        \ {'d': '~/Documents/Projects/'},
                                        \ ]
             let g:startify_update_oldfiles = 1
