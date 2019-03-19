@@ -118,7 +118,7 @@ zstyle ':prezto:load' pmodule \
 # Set the prompt theme to load.
 # Setting it to 'random' loads a random theme.
 # Auto set to 'off' on dumb terminals.
-zstyle ':prezto:module:prompt' theme 'bernoulli' blue
+zstyle ':prezto:module:prompt' theme 'bernoulli' 66
 
 # Set the working directory prompt display length.
 # By default, it is set to 'short'. Set it to 'long' (without '~' expansion)
@@ -168,6 +168,7 @@ zstyle ':prezto:module:prompt' theme 'bernoulli' blue
 #
 #
 zstyle ':prezto:module:syntax-highlighting' color 'yes'
+#zstyle ':prezto:module:syntax-highlighting' theme 'forest'
 
 # Terminal
 #
