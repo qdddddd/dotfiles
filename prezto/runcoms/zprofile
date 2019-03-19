@@ -55,6 +55,7 @@ case "$OSTYPE" in
         ;;
     linux*)
         path=(
+            $HOME/.local/bin
             /usr/local/{bin,sbin}
             /usr/{bin,sbin}
             /bin
