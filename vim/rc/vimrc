@@ -1,4 +1,4 @@
-" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=2 foldmethod=marker:
+" vim: set sw=4 ts=4 sts=4 et foldmarker={,} foldlevel=3 foldmethod=marker:
 
 " Environment {
 
@@ -8,9 +8,6 @@
         endfunction
         silent function! LINUX()
             return has('unix') && !has('macunix') && !has('win32unix')
-        endfunction
-        silent function! WINDOWS()
-            return  (has('win32') || has('win64'))
         endfunction
     " }
 
@@ -70,7 +67,7 @@
     set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
     set virtualedit=onemore             " Allow for cursor beyond last character
     set history=1000                    " Store a ton of history (default is 20)
-    set nospell                          " Spell checking off
+    set nospell                         " Spell checking off
     set hidden                          " Allow buffer switching without saving
     set iskeyword-=.                    " '.' is an end of word designator
     set iskeyword-=#                    " '#' is an end of word designator
@@ -147,7 +144,6 @@
     set nojoinspaces                " Prevents inserting two spaces after punctuation on a join (J)
     set splitright                  " Puts new vsplit windows to the right of the current
     set splitbelow                  " Puts new split windows to the bottom of the current
-    set pastetoggle=<F12>           " pastetoggle (sane indentation on pastes)
     set breakindent
     set equalalways
     set ttimeoutlen=0 timeoutlen=500
@@ -247,7 +243,6 @@
     "autocmd! BufEnter,BufNewFile *.java nnoremap <leader>s :w <bar> !javac -d . % && java -enableassertions %:r <CR>
     autocmd! BufEnter,BufNewFile *.java nnoremap <leader>s :w <bar> AsyncRun gradle build <CR>
     autocmd! BufEnter,BufNewFile *.py nnoremap <leader>s :w <bar> AsyncRun python % <CR>
-    autocmd! BufEnter,BufNewFile *.go nnoremap <leader>s :w <bar> AsyncRun go build % && ./%:p <CR>
     autocmd! BufEnter,BufNewFile *.vim,*vimrc* nnoremap <leader>s :w <bar> so % <CR>
 
     " Bind K to grep word under cursor
@@ -271,15 +266,12 @@
 " }
 
 " Displays {
-
     function! GruvBoxSettings()
         set background=light
         let g:gruvbox_invert_selection = 0
-        colo gruvbox
         let g:airline_theme = 'gruvbox'
         if !has('gui_macvim')
             let g:airline_theme = 'biogoo'
-            set ttyfast
         endif
 
         " Fix term colors
@@ -288,8 +280,10 @@
             let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
             " enable true color
             set termguicolors
-            colo gruvbox
         endif
+
+        colo gruvbox
+        "set ttyfast
 
         hi GruvboxGreenSign ctermfg=100 ctermbg=NONE guifg=#79740e guibg=bg
         hi GruvboxRedSign ctermfg=88 ctermbg=NONE cterm=bold guifg=#9d0006 guibg=bg
@@ -393,17 +387,17 @@
 
     " Ctags {
         " Automatically generate tag files on save
-        command! Gtags silent !ctags -R -o $HOME/.cache/tags $(pwd) &
-        let g:auctaglangs = ['go']
+        "command! Gtags silent !ctags -R -o $HOME/.cache/tags $(pwd) &
+        "let g:auctaglangs = ['go']
 
-        autocmd! BufWritePost <buffer>
-            \ if &buftype != 'terminal' |
-                \ if index(g:auctaglangs, &ft) > -1 |
-                    \ exe 'Gtags' |
-                \ endif |
-            \ endif
-        "set tags=./tags,tags;$HOME
-        set tags=$HOME/.cache/tags
+        "autocmd! BufWritePost <buffer>
+            "\ if &buftype != 'terminal' |
+                "\ if index(g:auctaglangs, &ft) > -1 |
+                    "\ exe 'Gtags' |
+                "\ endif |
+            "\ endif
+        ""set tags=./tags,tags;$HOME
+        "set tags=$HOME/.cache/tags
     " }
 
     " Vim-rooter {
@@ -421,45 +415,45 @@
     " }
 
     " NerdTree {
-        let NERDTreeMapActivateNode = 'oo'
-        let NERDTreeMapPreview = 'o'
-        let NERDTreeMapPreviewVSplit = 'v'
-        let NERDTreeMapOpenVSplit = 'vv'
-        let NERDTreeMapOpenSplit = 'ss'
-        let NERDTreeMapPreviewSplit = 's'
-        let NERDTreeAutoDeleteBuffer = 1
-        let NERDTreeMinimalUI = 1
-        let NERDTreeChDirMode = 2
+        if isdirectory(expand("~/.vim/bundle/nerdtree"))
+            let NERDTreeMapActivateNode = 'oo'
+            let NERDTreeMapPreview = 'o'
+            let NERDTreeMapPreviewVSplit = 'v'
+            let NERDTreeMapOpenVSplit = 'vv'
+            let NERDTreeMapOpenSplit = 'ss'
+            let NERDTreeMapPreviewSplit = 's'
+            let NERDTreeAutoDeleteBuffer = 1
+            let NERDTreeMinimalUI = 1
+            let NERDTreeChDirMode = 2
 
-        map <C-q> <plug>NERDTreeTabsToggle<CR>
-        nmap <leader>e :NERDTreeFind<CR>
+            map <C-q> <plug>NERDTreeTabsToggle<CR>
+            nmap <leader>e :NERDTreeFind<CR>
 
-        let NERDTreeShowBookmarks=1
-        let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
-        let NERDTreeIgnore+=['^\.DS_Store$', '^build$', '^gradle$', '^\.gradle$', '^\.idea$']
-        let NERDTreeIgnore+=['^bin$', '\.cmake$', '^CMakeCache\.txt$', '^compile_commands\.json$', '^CMakeFiles$']
-        let NERDTreeQuitOnOpen=1
-        let NERDTreeMouseMode=2
-        let NERDTreeShowHidden=1
-        let NERDTreeKeepTreeInNewTab=1
-        let g:nerdtree_tabs_open_on_gui_startup=0
+            let NERDTreeShowBookmarks=1
+            let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
+            let NERDTreeIgnore+=['^\.DS_Store$', '^build$', '^gradle$', '^\.gradle$', '^\.idea$']
+            let NERDTreeIgnore+=['^bin$', '\.cmake$', '^CMakeCache\.txt$', '^CMakeFiles$']
+            let NERDTreeQuitOnOpen=1
+            let NERDTreeMouseMode=2
+            let NERDTreeShowHidden=1
+            let NERDTreeKeepTreeInNewTab=1
+            let g:nerdtree_tabs_open_on_gui_startup=0
 
-        let g:NERDShutUp=1
-        nnoremap <Leader>v :NERDTreeFind<SPACE>
-        let g:NERDTreeIndicatorMapCustom = {
-            \ "Modified"  : "✹",
-            \ "Staged"    : "✚",
-            \ "Untracked" : "✭",
-            \ "Renamed"   : "➜",
-            \ "Unmerged"  : "═",
-            \ "Deleted"   : "✖",
-            \ "Dirty"     : "✗",
-            \ "Clean"     : "✔︎",
-            \ 'Ignored'   : '☒',
-            \ "Unknown"   : "?"
-            \ }
+            let g:NERDShutUp=1
+            let g:NERDTreeIndicatorMapCustom = {
+                        \ "Modified"  : "✹",
+                        \ "Staged"    : "✚",
+                        \ "Untracked" : "✭",
+                        \ "Renamed"   : "➜",
+                        \ "Unmerged"  : "═",
+                        \ "Deleted"   : "✖",
+                        \ "Dirty"     : "✗",
+                        \ "Clean"     : "✔︎",
+                        \ 'Ignored'   : '☒',
+                        \ "Unknown"   : "?"
+                        \ }
 
-        " Initialize NERDTree as needed {
+            " Initialize NERDTree as needed {
             function! NERDTreeInitAsNeeded()
                 redir => bufoutput
                 buffers!
@@ -471,7 +465,79 @@
                     wincmd l
                 endif
             endfunction
-        " }
+            " }
+        endif
+    " }
+
+    " defx {
+        if isdirectory(expand("~/.vim/bundle/defx.nvim"))
+            call defx#custom#option('_', {
+                        \ 'root_marker': '',
+                        \ 'split': 'vertical',
+                        \ 'winwidth': &columns/4,
+                        \ 'direction': 'topleft',
+                        \ 'columns': 'git:icons:filename',
+                        \ })
+
+            call defx#custom#column('filename', {
+                        \ 'root_marker_highlight': 'Constant',
+                        "\ 'directory_icon': '▸',
+                        "\ 'opened_icon': '▾',
+                        \ 'directory_icon': '',
+                        \ 'opened_icon': '',
+                        \ 'root_icon': '',
+                        \ 'min_width': &columns/4-12,
+                        \ 'max_width': &columns/4-12,
+                        "\ 'indent': '  ',
+                        \ })
+
+            nnoremap <silent><leader>e :Defx -toggle
+                        \ -ignored-files=*.py[cd],*~,*.swo,*.swp,.git,.hg,.svn,*.bzr,*.DS_Store,build,gradle,.gradle,.idea,bin,.cmake,CMakeCache.txt,CMakeFiles,.github,.travis
+                        \ -search=`resolve(expand('%:p'))` `getcwd()`
+                        \ <CR>
+
+            autocmd FileType defx call s:defx_my_settings()
+            function! s:defx_my_settings() abort
+                " Define mappings
+                nnoremap <silent><buffer><expr> o       defx#async_action('drop')
+                nnoremap <silent><buffer><expr> oo      defx#async_action('multi', ['drop', 'quit'])
+                nnoremap <silent><buffer><expr> <CR>    defx#async_action('open_or_close_tree')
+                nnoremap <silent><buffer><expr> v       defx#async_action('open','vsplit')
+                nnoremap <silent><buffer><expr> vv      defx#async_action('multi', [['drop', 'vsplit'], 'quit'])
+                nnoremap <silent><buffer><expr> h       defx#async_action('cd',['..'])
+                nnoremap <silent><buffer><expr> l       defx#async_action('open_directory')
+                nnoremap <silent><buffer><expr> y       defx#async_action('copy')
+                nnoremap <silent><buffer><expr> m       defx#async_action('move')
+                nnoremap <silent><buffer><expr> p       defx#async_action('paste')
+                nnoremap <silent><buffer><expr> aa      defx#async_action('new_directory')
+                nnoremap <silent><buffer><expr> a       defx#async_action('new_file')
+                nnoremap <silent><buffer><expr> c       defx#async_action('toggle_columns','git:filename:size')
+                nnoremap <silent><buffer><expr> S       defx#async_action('toggle_sort','time')
+                nnoremap <silent><buffer><expr> d       defx#async_action('remove')
+                nnoremap <silent><buffer><expr> r       defx#async_action('rename')
+                nnoremap <silent><buffer><expr> f       defx#async_action('search')
+                nnoremap <silent><buffer><expr> !       defx#async_action('execute_command')
+                nnoremap <silent><buffer><expr> x       defx#async_action('execute_system')
+                nnoremap <silent><buffer><expr> yy      defx#async_action('yank_path')
+                nnoremap <silent><buffer><expr> .       defx#async_action('toggle_ignored_files')
+                nnoremap <silent><buffer><expr> ;       defx#async_action('repeat')
+                nnoremap <silent><buffer><expr> q       defx#async_action('quit')
+                nnoremap <silent><buffer><expr> <Space> defx#async_action('toggle_select') . 'j'
+                nnoremap <silent><buffer><expr> *       defx#async_action('toggle_select_all')
+                nnoremap <silent><buffer><expr> j       line('.') == line('$') ? 'gg' : 'j'
+                nnoremap <silent><buffer><expr> k       line('.') == 1 ? 'G' : 'k'
+                nnoremap <silent><buffer><expr> <C-l>   defx#async_action('redraw')
+                nnoremap <silent><buffer><expr> <C-g>   defx#async_action('print')
+                nnoremap <silent><buffer><expr> cd      defx#async_action('change_vim_cwd')
+            endfunction
+        endif
+    " }
+
+    " defx-icons {
+        if isdirectory(expand("~/.vim/bundle/defx-icons"))
+            let g:defx_icons_enable_syntax_highlight = 0
+            let g:defx_icons_column_length = 1
+        endif
     " }
 
     " Session List {
@@ -570,6 +636,15 @@
             let g:ycm_global_ycm_extra_conf = '$HOME/.vim/ycm_extra_conf.py'
             let g:ycm_confirm_extra_conf = 0
 
+            " clangd config
+            " Let clangd fully control code completion
+            let g:ycm_clangd_uses_ycmd_caching = 0
+            " Use installed clangd, not YCM-bundled clangd which doesn't get updates.
+            let g:ycm_clangd_binary_path = exepath("clangd")
+
+            let g:ycm_clangd_args = ['-log=verbose', '-pretty']
+
+
             " remap Ultisnips for compatibility for YCM
             let g:UltiSnipsExpandTrigger = '<C-j>'
             let g:UltiSnipsJumpForwardTrigger = '<C-j>'
@@ -636,6 +711,7 @@
                 let g:airline_theme = 'solarized'
             endif
 
+            let g:airline_highlighting_cache = 1
             let g:airline_powerline_fonts = 1
             let g:airline#extensions#tabline#enabled = 1
             let g:airline#extensions#tabline#fnamemod = ':t'
@@ -830,7 +906,7 @@
             let g:indentLine_enabled = 1
             let g:indentLine_faster = 1
             let g:indentLine_char = '⎸'    " Can be ¦, ┆, │, ⎸, or ▏
-            let g:indentLine_fileTypeExclude = ['startify']
+            let g:indentLine_fileTypeExclude = ['startify', 'defx']
             let g:indentLine_concealcursor = ''
         endif
     " }
@@ -851,7 +927,7 @@
                             \'                             \_/   |__|__/ |__/ |__/    version : ' . v:version . ' ',
                             \'',
                             \ ]
-            let g:startify_session_dir = $HOME .  '/.vim/' . '/session'
+            let g:startify_session_dir = $HOME .  '/.vim/' . '/sessions'
             let g:startify_files_number = 6
             let g:startify_list_order = [
                         \ ['   MRU files in the current directory:'],

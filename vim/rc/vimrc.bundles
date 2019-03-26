@@ -34,8 +34,6 @@
     " }
 
     " General {
-        Bundle 'scrooloose/nerdtree'
-        Bundle 'skwp/vim-colors-solarized'
         Bundle 'tpope/vim-surround'
         Bundle 'tpope/vim-repeat'
         Bundle 'rhysd/conflict-marker.vim'
@@ -47,11 +45,22 @@
         Bundle 'vim-airline/vim-airline-themes'
         Bundle 'bling/vim-bufferline'
         Bundle 'easymotion/vim-easymotion'
-        Bundle 'jistr/vim-nerdtree-tabs'
         Bundle 'mbbill/undotree'
         Bundle 'vim-scripts/restore_view.vim'
         Bundle 'mhinz/vim-signify'
         Bundle 'tpope/vim-fugitive'
+    " }
+
+    " File explorer {
+        "Bundle 'scrooloose/nerdtree'
+        "Bundle 'Xuyuanp/nerdtree-git-plugin'
+        "Bundle 'jistr/vim-nerdtree-tabs'
+        "Bundle 'skwp/vim-colors-solarized'
+        Bundle 'Shougo/defx.nvim'
+        Bundle 'roxma/nvim-yarp'
+        Bundle 'roxma/vim-hug-neovim-rpc'
+        "Bundle 'kristijanhusak/defx-icons'
+        Bundle 'kristijanhusak/defx-git'
     " }
 
     " Writing {
@@ -78,7 +87,7 @@
         endif
         Bundle 'SirVer/ultisnips'
         Bundle 'Valloric/YouCompleteMe', {
-                    \ 'do': 'python3 install.py --java-completer --clang-completer',
+                    \ 'do': 'python3 install.py --java-completer --clangd-completer',
                     \ }
         "Bundle 'Shougo/neocomplcache'
         "Bundle 'Shougo/neosnippet'
@@ -117,7 +126,6 @@
         Bundle 'Yggdroot/indentLine'
         Bundle 'mhinz/vim-startify'
         Bundle 'Yggdroot/LeaderF'
-        Bundle 'Xuyuanp/nerdtree-git-plugin'
         Bundle 'tfnico/vim-gradle'
         Bundle 'airblade/vim-rooter'
         "Bundle 'blueyed/vim-diminactive'

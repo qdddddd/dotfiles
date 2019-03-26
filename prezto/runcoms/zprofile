@@ -45,6 +45,7 @@ typeset -gU cdpath fpath mailpath path
 case "$OSTYPE" in
     darwin*)
         path=(
+            /usr/local/opt/llvm/bin
             /usr/local/{texlive/2018/bin/x86_64-darwin,opt/openssl@1.1/bin,bin,sbin}
             /usr/{bin,sbin}
             /bin
@@ -52,6 +53,10 @@ case "$OSTYPE" in
             /Library/TeX/texbin
             $path
         )
+        LDFLAGS+="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+        export LDFLAGS
+        CXXFLAGS+="-I/usr/local/opt/llvm/include -I/usr/local/opt/llvm/include/c++/v1/"
+        export CXXFLAGS
         ;;
     linux*)
         path=(
