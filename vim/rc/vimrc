@@ -1,4 +1,4 @@
-" vim: set sw=4 ts=4 sts=4 et foldmarker={,} foldlevel=3 foldmethod=marker:
+" vim: set sw=4 ts=4 sts=4 et foldmarker={,} foldlevel=1 foldmethod=marker:
 
 " Environment {
 
@@ -27,8 +27,6 @@
     "let g:ale_completion_enabled = 1
     "let g:ale_set_balloons = 1
     "let g:ale_completion_delay = 0
-    "let g:ale_java_javalsp_jar = $HOME . '/.vimlocal/fat-jar.jar'
-    "let g:ale_java_javalsp_executable = 'java'
 " }
 
 " Use bundles config {
@@ -39,7 +37,7 @@
 
 
 " General {
-    set background=dark         " Assume a dark background
+    set background=light         " Assume a light background
 
      if !has('gui')
         set term=$TERM          " Make arrow and other keys work
@@ -267,7 +265,6 @@
 
 " Displays {
     function! GruvBoxSettings()
-        set background=light
         let g:gruvbox_invert_selection = 0
         let g:airline_theme = 'gruvbox'
         if !has('gui_macvim')
@@ -283,7 +280,6 @@
         endif
 
         colo gruvbox
-        "set ttyfast
 
         hi GruvboxGreenSign ctermfg=100 ctermbg=NONE guifg=#79740e guibg=bg
         hi GruvboxRedSign ctermfg=88 ctermbg=NONE cterm=bold guifg=#9d0006 guibg=bg
@@ -301,7 +297,7 @@
         "let g:indentLine_color_gui = '#4c4c4b'
         if has('gui_macvim')
             "set lines=66 columns=120
-            set guifont=Monaco\ Nerd\ Font\ Mono:h13
+            set guifont=Monaco\ Nerd\ Font:h13
         else
             set t_Co=256
         endif
@@ -353,6 +349,8 @@
     set foldenable                  " Auto fold code
     set list
     set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespaces
+    set lazyredraw                  " Speed up scrolling with large files
+    set ttyfast                     " Send more characters to the screen for redrawing
 
 " }
 
@@ -471,6 +469,19 @@
 
     " defx {
         if isdirectory(expand("~/.vim/bundle/defx.nvim"))
+            " Toggle between defx window width and longest line
+            function! g:DefxToggleWidth(context) abort
+                let l:max = 0
+                let l:original = a:context['winwidth']
+                for l:line in range(1, line('$'))
+                    let l:len = len(getline(l:line))
+                    if l:len > l:max
+                        let l:max = l:len
+                    endif
+                endfor
+                execute 'vertical resize '.(l:max == winwidth('.') ? l:original : l:max)
+            endfunction
+
             call defx#custom#option('_', {
                         \ 'root_marker': '',
                         \ 'split': 'vertical',
@@ -481,13 +492,11 @@
 
             call defx#custom#column('filename', {
                         \ 'root_marker_highlight': 'Constant',
-                        "\ 'directory_icon': '▸',
-                        "\ 'opened_icon': '▾',
                         \ 'directory_icon': '',
                         \ 'opened_icon': '',
                         \ 'root_icon': '',
                         \ 'min_width': &columns/4-12,
-                        \ 'max_width': &columns/4-12,
+                        \ 'max_width': &columns/3,
                         "\ 'indent': '  ',
                         \ })
 
@@ -496,12 +505,14 @@
                         \ -search=`resolve(expand('%:p'))` `getcwd()`
                         \ <CR>
 
-            autocmd FileType defx call s:defx_my_settings()
+            au! FileType defx call s:defx_my_settings()
             function! s:defx_my_settings() abort
                 " Define mappings
-                nnoremap <silent><buffer><expr> o       defx#async_action('drop')
+                nnoremap <silent><buffer><expr> w       defx#do_action('call', 'DefxToggleWidth')
                 nnoremap <silent><buffer><expr> oo      defx#async_action('multi', ['drop', 'quit'])
-                nnoremap <silent><buffer><expr> <CR>    defx#async_action('open_or_close_tree')
+                nnoremap <silent><buffer><expr> <CR>    defx#is_directory()
+                                                        \ ? defx#call_async_action('open_or_close_tree')
+                                                        \ : defx#call_async_action('drop')
                 nnoremap <silent><buffer><expr> v       defx#async_action('open','vsplit')
                 nnoremap <silent><buffer><expr> vv      defx#async_action('multi', [['drop', 'vsplit'], 'quit'])
                 nnoremap <silent><buffer><expr> h       defx#async_action('cd',['..'])
@@ -537,6 +548,18 @@
         if isdirectory(expand("~/.vim/bundle/defx-icons"))
             let g:defx_icons_enable_syntax_highlight = 0
             let g:defx_icons_column_length = 1
+        endif
+    " }
+
+    " defx-git {
+        if isdirectory(expand("~/.vim/bundle/defx-git"))
+            hi def link Defx_git_Untracked Comment
+            hi def link Defx_git_Ignored DiffAdd
+            hi def link Defx_git_Renamed Title
+            hi def link Defx_git_Modified Special
+            hi def link Defx_git_Unmerged Label
+            hi def link Defx_git_Deleted DiffDelete
+            hi def link Defx_git_Staged Function
         endif
     " }
 
