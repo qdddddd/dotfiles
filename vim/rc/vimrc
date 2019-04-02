@@ -291,6 +291,7 @@
         hi VertSplit term=reverse ctermfg=lightgray ctermbg=NONE guifg=#bdae93 guibg=#fbf1c7
         hi PmenuSbar  guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermbg=lightgray cterm=NONE
         hi PmenuThumb guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=darkcyan cterm=NONE
+        hi! def link Function GruvboxBlue
     endfunction
 
     function! SetDefaultDisplays()
@@ -509,37 +510,37 @@
             function! s:defx_my_settings() abort
                 " Define mappings
                 nnoremap <silent><buffer><expr> w       defx#do_action('call', 'DefxToggleWidth')
-                nnoremap <silent><buffer><expr> oo      defx#async_action('multi', ['drop', 'quit'])
-                nnoremap <silent><buffer><expr> <CR>    defx#is_directory()
-                                                        \ ? defx#call_async_action('open_or_close_tree')
-                                                        \ : defx#call_async_action('drop')
-                nnoremap <silent><buffer><expr> v       defx#async_action('open','vsplit')
-                nnoremap <silent><buffer><expr> vv      defx#async_action('multi', [['drop', 'vsplit'], 'quit'])
-                nnoremap <silent><buffer><expr> h       defx#async_action('cd',['..'])
-                nnoremap <silent><buffer><expr> l       defx#async_action('open_directory')
-                nnoremap <silent><buffer><expr> y       defx#async_action('copy')
-                nnoremap <silent><buffer><expr> m       defx#async_action('move')
-                nnoremap <silent><buffer><expr> p       defx#async_action('paste')
-                nnoremap <silent><buffer><expr> aa      defx#async_action('new_directory')
-                nnoremap <silent><buffer><expr> a       defx#async_action('new_file')
-                nnoremap <silent><buffer><expr> c       defx#async_action('toggle_columns','git:filename:size')
-                nnoremap <silent><buffer><expr> S       defx#async_action('toggle_sort','time')
-                nnoremap <silent><buffer><expr> d       defx#async_action('remove')
-                nnoremap <silent><buffer><expr> r       defx#async_action('rename')
-                nnoremap <silent><buffer><expr> f       defx#async_action('search')
-                nnoremap <silent><buffer><expr> !       defx#async_action('execute_command')
-                nnoremap <silent><buffer><expr> x       defx#async_action('execute_system')
-                nnoremap <silent><buffer><expr> yy      defx#async_action('yank_path')
-                nnoremap <silent><buffer><expr> .       defx#async_action('toggle_ignored_files')
-                nnoremap <silent><buffer><expr> ;       defx#async_action('repeat')
-                nnoremap <silent><buffer><expr> q       defx#async_action('quit')
-                nnoremap <silent><buffer><expr> <Space> defx#async_action('toggle_select') . 'j'
-                nnoremap <silent><buffer><expr> *       defx#async_action('toggle_select_all')
+                nnoremap <silent><buffer><expr> oo      defx#do_action('multi', ['drop', 'quit'])
+                nnoremap <silent><buffer><expr> o       defx#do_action('drop')
+                nnoremap <silent><buffer><expr> <CR>    defx#is_directory() ?
+                                                        \ defx#do_action('open_or_close_tree') : defx#do_action('drop')
+                nnoremap <silent><buffer><expr> v       defx#do_action('open','vsplit')
+                nnoremap <silent><buffer><expr> vv      defx#do_action('multi', [['drop', 'vsplit'], 'quit'])
+                nnoremap <silent><buffer><expr> h       defx#do_action('cd',['..'])
+                nnoremap <silent><buffer><expr> l       defx#do_action('open_directory')
+                nnoremap <silent><buffer><expr> y       defx#do_action('copy')
+                nnoremap <silent><buffer><expr> m       defx#do_action('move')
+                nnoremap <silent><buffer><expr> p       defx#do_action('paste')
+                nnoremap <silent><buffer><expr> aa      defx#do_action('new_directory')
+                nnoremap <silent><buffer><expr> a       defx#do_action('new_file')
+                nnoremap <silent><buffer><expr> c       defx#do_action('toggle_columns','git:filename:size')
+                nnoremap <silent><buffer><expr> S       defx#do_action('toggle_sort','time')
+                nnoremap <silent><buffer><expr> d       defx#do_action('remove')
+                nnoremap <silent><buffer><expr> r       defx#do_action('rename')
+                nnoremap <silent><buffer><expr> f       defx#do_action('search')
+                nnoremap <silent><buffer><expr> !       defx#do_action('execute_command')
+                nnoremap <silent><buffer><expr> x       defx#do_action('execute_system')
+                nnoremap <silent><buffer><expr> yy      defx#do_action('yank_path')
+                nnoremap <silent><buffer><expr> .       defx#do_action('toggle_ignored_files')
+                nnoremap <silent><buffer><expr> ;       defx#do_action('repeat')
+                nnoremap <silent><buffer><expr> q       defx#do_action('quit')
+                nnoremap <silent><buffer><expr> <Space> defx#do_action('toggle_select') . 'j'
+                nnoremap <silent><buffer><expr> *       defx#do_action('toggle_select_all')
                 nnoremap <silent><buffer><expr> j       line('.') == line('$') ? 'gg' : 'j'
                 nnoremap <silent><buffer><expr> k       line('.') == 1 ? 'G' : 'k'
-                nnoremap <silent><buffer><expr> <C-l>   defx#async_action('redraw')
-                nnoremap <silent><buffer><expr> <C-g>   defx#async_action('print')
-                nnoremap <silent><buffer><expr> cd      defx#async_action('change_vim_cwd')
+                nnoremap <silent><buffer><expr> <C-l>   defx#do_action('redraw')
+                nnoremap <silent><buffer><expr> <C-g>   defx#do_action('print')
+                nnoremap <silent><buffer><expr> cd      defx#do_action('change_vim_cwd')
             endfunction
         endif
     " }
@@ -649,24 +650,23 @@
 
             let g:acp_enableAtStartup = 0
 
-            let g:ycm_always_populate_location_list = 1
-            nnoremap <C-j> :lnext <CR>
-            nnoremap <C-k> :lprevious <CR>
-
-            " enable completion from tags
-            let g:ycm_collect_identifiers_from_tags_files = 1
-
             let g:ycm_global_ycm_extra_conf = '$HOME/.vim/ycm_extra_conf.py'
             let g:ycm_confirm_extra_conf = 0
+
+            let g:ycm_always_populate_location_list = 1
+            let g:ycm_complete_in_comments = 1
+            let g:ycm_collect_identifiers_from_comments_and_strings = 1
+            let g:ycm_collect_identifiers_from_tags_files = 1
+
+            nnoremap <C-j> :lnext <CR>
+            nnoremap <C-k> :lprevious <CR>
 
             " clangd config
             " Let clangd fully control code completion
             let g:ycm_clangd_uses_ycmd_caching = 0
             " Use installed clangd, not YCM-bundled clangd which doesn't get updates.
             let g:ycm_clangd_binary_path = exepath("clangd")
-
             let g:ycm_clangd_args = ['-log=verbose', '-pretty']
-
 
             " remap Ultisnips for compatibility for YCM
             let g:UltiSnipsExpandTrigger = '<C-j>'
@@ -694,7 +694,7 @@
             nnoremap <silent> <leader>fo :YcmCompleter Format <CR>
             vnoremap <silent> <leader>fo :YcmCompleter Format <CR>
             nnoremap <leader>rn :YcmCompleter RefactorRename<space>
-            nnoremap <leader>d :YcmForceCompileAndDiagnostics<CR>
+            nnoremap <leader>d :YcmRestartServer<CR>
 
             " Disable the neosnippet preview candidate window
             " When enabled, there can be too much visual noise
