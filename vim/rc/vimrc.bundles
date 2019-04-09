@@ -58,8 +58,9 @@
         "Bundle 'skwp/vim-colors-solarized'
         Bundle 'Shougo/defx.nvim'
         Bundle 'roxma/nvim-yarp'
-        Bundle 'roxma/vim-hug-neovim-rpc'
-        "Bundle 'kristijanhusak/defx-icons'
+        Bundle 'roxma/vim-hug-neovim-rpc', {
+                    \ 'do': 'pip3 install neovim --user'
+                    \ }
         Bundle 'kristijanhusak/defx-git'
     " }
 

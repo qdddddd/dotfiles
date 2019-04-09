@@ -11,9 +11,9 @@ else
     BINDIR=$HOME/.local/bin
 fi
 
-for xfile in ${PWD}/bin/*; do
-    ln -s "$xfile" "$BINDIR/${xfile:t}"
-done
+#for xfile in ${PWD}/bin/*; do
+#    ln -s "$xfile" "$BINDIR/${xfile:t}"
+#done
 
 # Create vim config sym links
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \

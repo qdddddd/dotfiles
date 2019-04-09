@@ -268,11 +268,12 @@
         let g:gruvbox_invert_selection = 0
         let g:airline_theme = 'gruvbox'
         if !has('gui_macvim')
-            let g:airline_theme = 'biogoo'
+            "let g:airline_theme = 'biogoo'
         endif
 
         " Fix term colors
-        if has("termguicolors") && ($TERM_PROGRAM == 'iTerm.app')
+        if has("termguicolors")
+                    "\ && ($TERM_PROGRAM == 'iTerm.app')
             let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
             let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
             " enable true color
@@ -498,7 +499,7 @@
                         \ 'root_icon': '',
                         \ 'min_width': &columns/4-12,
                         \ 'max_width': &columns/3,
-                        "\ 'indent': '  ',
+                        \ 'indent': '  ',
                         \ })
 
             nnoremap <silent><leader>e :Defx -toggle
