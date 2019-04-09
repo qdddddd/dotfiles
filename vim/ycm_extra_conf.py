@@ -28,7 +28,6 @@ flags = [
 ]
 
 if compilation_database_folder:
-    # database = ycm_core.CompilationDatabase(compilation_database_folder)
     database = compilation_database_folder
 else:
     database = None
