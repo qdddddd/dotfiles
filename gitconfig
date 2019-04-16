@@ -1,0 +1,18 @@
+[filter "lfs"]
+    required = true
+    process = git-lfs filter-process
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+[user]
+    name = qdu
+    email = q.du@connect.ust.hk
+[credential]
+    helper = osxkeychain
+[core]
+    excludesfile = ~/.gitignore_global
+[branch]
+    autosetuprebase = always
+[alias]
+    log-graph = log --graph --abbrev-commit --decorate --all --format=format:'%C(bold blue)%h%C(reset) %C(auto)%d%C(reset) %C(auto)%s%C(reset) %C(dim white)- %an (%cr)%C(reset)'
+[color "status"]
+    unmerged  = yellow

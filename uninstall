@@ -30,3 +30,7 @@ rm -rf $HOME/.zcompdump* $HOME/.zhistory $HOME/.zcompcache
 # Remove tmux files
 rm "$HOME/.tmux.conf"
 rm -rf $HOME/.tmux/
+
+# Remove git configs
+rm $HOME/.gitconfig
+rm $HOME/.gitignore_global

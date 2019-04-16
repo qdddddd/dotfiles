@@ -178,12 +178,14 @@
 
     " Rsync project {
         function! Sync()
-            !rsync -azcuv -e "ssh -p99" --delete `pwd`/src volta:~/BIIOTA &&
-           \ rsync -azcuv -e "ssh -p99" --delete `pwd`/src pascal:~/BIIOTA &&
-           \ rsync -azcuv -e "ssh -p99" --delete `pwd`/src pascal:~/BIIOTA_2 &&
-           \ rsync -azcuv -e "ssh -p22" --delete `pwd`/src ali2:~/biiota &&
-           \ rsync -azcuv -e "ssh -p22" --delete `pwd`/src aliyun:~/qdu/BIIOTA &&
-           \ rsync -azcuv -e "ssh -p99" --delete `pwd`/src maxwell:~/BIIOTA &&
+           "!rsync -azcuv -e "ssh -p99" --delete `pwd`/src volta:~/BIIOTA &&
+           "\ rsync -azcuv -e "ssh -p99" --delete `pwd`/src pascal:~/BIIOTA &&
+           "\ rsync -azcuv -e "ssh -p99" --delete `pwd`/src pascal:~/BIIOTA_2 &&
+           "\ rsync -azcuv -e "ssh -p22" --delete `pwd`/src ali2:~/biiota &&
+           "\ rsync -azcuv -e "ssh -p22" --delete `pwd`/src aliyun:~/qdu/BIIOTA &&
+           "\ rsync -azcuv -e "ssh -p99" --delete `pwd`/src maxwell:~/BIIOTA &&
+
+           !rsync -azcuv -e "ssh -p99" --delete `pwd`/{CMakeLists.txt,src,test} pascal:~/epic &&
         endfunction
     " }
 " }

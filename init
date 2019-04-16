@@ -34,3 +34,7 @@ source $HOME/.zshrc
 # Create tmux.conf sym link
 ln -s "${PWD}/tmux.conf" "$HOME/.tmux.conf"
 git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+
+# Create git global config sym links
+ln -s "${PWD}/gitconfig" "$HOME/.gitconfig"
+ln -s "${PWD}/gitignore_global" "$HOME/.gitignore_global"
