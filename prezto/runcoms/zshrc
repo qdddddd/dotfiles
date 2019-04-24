@@ -38,5 +38,8 @@ case "$OSTYPE" in
         ;;
 esac
 
+# Environment variables
 export LSCOLORS='ExgxcxdxdxGxDxabagacad'
 export GRADLE_USER_HOME=$HOME/.cache/gradle
+export GREP_COLOR='1;35;40'
+export GREP_COLORS='mt=1;35;40'
