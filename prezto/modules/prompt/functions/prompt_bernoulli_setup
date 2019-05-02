@@ -3,12 +3,33 @@ pmodload 'helper'
 
 function prompt_bernoulli_precmd {
     setopt LOCAL_OPTIONS
+    prompt_opts=(cr percent sp subst)
     unsetopt XTRACE KSH_ARRAYS
 
-# Get Git repository information.
-if (( $+functions[git-info] )); then
-    git-info
-fi
+    LEFT_CONTENT=${USER}'@'${HOST}' » %~ '
+    LEFT='%F{$COLOR}%B'${LEFT_CONTENT}
+    local pwdsize=${#${(%):-%~}}
+
+    # Get Git repository information.
+    if (( $+functions[git-info] )); then
+        git-info
+    fi
+    RIGHT=${git_info:+${(e)git_info[prompt]}}
+
+    local middle_width=$((COLUMNS-${#LEFT_CONTENT}+3-${pwdsize}-${#RIGHT}))
+
+
+    if ((${#RIGHT} == 0)); then
+        MIDDLE=''
+    else
+        MIDDLE=${(r:$middle_width:: :)}
+    fi
+
+    if ((middle_width < 0)); then
+        RIGHT='%f'
+    fi
+
+    #echo $((${#LEFT_CONTENT}-3+${pwdsize})) ${#MIDDLE} ${#RIGHT} $COLUMNS
 }
 
 function prompt_bernoulli_help {
@@ -64,10 +85,9 @@ function prompt_bernoulli_setup {
         'rprompt' ''
 
     # Define prompts.
-    PROMPT='%F{$COLOR}%n@%m » %c %f→ '
-    RPROMPT='%F{$COLOR}${git_info:+${(e)git_info[prompt]}}%f'
+    PROMPT=$'${LEFT} ${MIDDLE} ${RIGHT}'
+    PROMPT+=$'\n→ %f%b '
 }
-
 prompt_bernoulli_setup "$@"
 
 #PROMPT='%F{$COLOR}%n@%m » %1~ %f → '
