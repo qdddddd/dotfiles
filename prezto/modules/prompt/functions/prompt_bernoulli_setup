@@ -7,7 +7,7 @@ function prompt_bernoulli_precmd {
     unsetopt XTRACE KSH_ARRAYS
 
     LEFT_CONTENT=${USER}'@'${HOST}' » %~ '
-    LEFT='%F{$COLOR}%B'${LEFT_CONTENT}
+    LEFT='%F{$COLOR}'${LEFT_CONTENT}
     local pwdsize=${#${(%):-%~}}
 
     # Get Git repository information.
@@ -86,7 +86,7 @@ function prompt_bernoulli_setup {
 
     # Define prompts.
     PROMPT=$'${LEFT} ${MIDDLE} ${RIGHT}'
-    PROMPT+=$'\n→ %f%b '
+    PROMPT+=$'\n%B %f%b '
 }
 prompt_bernoulli_setup "$@"
 
