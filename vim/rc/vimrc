@@ -144,7 +144,6 @@
     set splitbelow                  " Puts new split windows to the bottom of the current
     set breakindent
     set equalalways
-    set ttimeoutlen=0 timeoutlen=500
 
     set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
 
@@ -185,9 +184,19 @@
            "\ rsync -azcuv -e "ssh -p22" --delete `pwd`/src aliyun:~/qdu/BIIOTA &&
            "\ rsync -azcuv -e "ssh -p99" --delete `pwd`/src maxwell:~/BIIOTA &&
 
-           !rsync -azcuv -e "ssh -p99" --delete `pwd`/{CMakeLists.txt,src,test} pascal:~/epic &&
+           !rsync -azcuv -e "ssh -p99" --delete `pwd`/{CMakeLists.txt,src,test,cmake,config.toml} pascal:~/epic &&
         endfunction
     " }
+
+    " Fix esc delay
+    if ! has('gui_running')
+        set ttimeoutlen=0 timeoutlen=500
+        augroup FastEscape
+            autocmd!
+            au InsertEnter * set timeoutlen=0
+            au InsertLeave * set timeoutlen=1000
+        augroup END
+    endif
 " }
 
 " Key Mappings {
@@ -552,6 +561,15 @@
         if isdirectory(expand("~/.vim/bundle/defx-icons"))
             let g:defx_icons_enable_syntax_highlight = 0
             let g:defx_icons_column_length = 1
+            let g:defx_icons_directory_icon = ''
+            let g:defx_icons_mark_icon = '*'
+            let g:defx_icons_parent_icon = ''
+            let g:defx_icons_default_icon = ''
+            let g:defx_icons_directory_symlink_icon = ''
+            " Options below are applicable only when using "tree" feature
+            let g:defx_icons_root_opened_tree_icon = ''
+            let g:defx_icons_nested_opened_tree_icon = ''
+            let g:defx_icons_nested_closed_tree_icon = ''
         endif
     " }
 
@@ -658,8 +676,13 @@
 
             let g:ycm_always_populate_location_list = 1
             let g:ycm_complete_in_comments = 1
-            let g:ycm_collect_identifiers_from_comments_and_strings = 1
-            let g:ycm_collect_identifiers_from_tags_files = 1
+            let g:ycm_collect_identifiers_from_comments_and_strings = 0
+            let g:ycm_collect_identifiers_from_tags_files = 0
+            let g:ycm_max_num_candidates = 20
+            let g:ycm_max_num_identifier_candidates = 20
+            let g:ycm_add_preview_to_completeopt = 1
+            let g:ycm_autoclose_preview_window_after_completion = 0
+            let g:ycm_autoclose_preview_window_after_insertion = 1
 
             nnoremap <C-j> :lnext <CR>
             nnoremap <C-k> :lprevious <CR>
