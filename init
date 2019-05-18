@@ -25,8 +25,8 @@ ln -s ${PWD}/vim/ycm_extra_conf.py "$HOME/.vim/ycm_extra_conf.py"
 vim +PlugInstall +qa!
 
 # Create zsh config sym links
-for rcfile in "${PWD}"/prezto/runcoms/^README.md(.N); do
-    ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+for rcfile in "${PWD}"/zsh/^README.md(.N); do
+    ln -s "$rcfile" "$HOME/.${rcfile:t}"
 done
 git submodule update --init --recursive
 source $HOME/.zshrc

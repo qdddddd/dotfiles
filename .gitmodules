@@ -13,3 +13,9 @@
 [submodule "prezto/modules/autosuggestions/external"]
 	path = prezto/modules/autosuggestions/external
 	url = https://github.com/zsh-users/zsh-autosuggestions
+[submodule "prezto/modules/git/git-prune"]
+	path = prezto/modules/git/git-prune
+	url = https://github.com/diazod/git-prune.git
+[submodule "oh-my-zsh"]
+	path = oh-my-zsh
+	url = https://github.com/robbyrussell/oh-my-zsh.git

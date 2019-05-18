@@ -1,0 +1,67 @@
+# Path to your oh-my-zsh installation.
+export ZSH="/Users/Qing/.dotfiles/oh-my-zsh"
+
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+ZSH_THEME="bernoulli"
+
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
+HYPHEN_INSENSITIVE="true"
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS=true
+
+# Uncomment the following line to enable command auto-correction.
+ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Plugins
+plugins=(git autojump git-extras git git-prompt gitfast thefuck vi-mode)
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+if [[ -f ~/.zshenv ]]; then
+    source ~/.zshenv
+fi
+
+if [[ -f ~/.zprofile ]]; then
+    source ~/.zprofile
+fi
+
+# Customized settings
+if [ -f ~/.zshrc.local ]; then
+    source ~/.zshrc.local
+fi
+
+# Aliases
+if [ -f ~/.aliases ]; then
+    source ~/.aliases
+fi
+
+# Autojump
+case "$OSTYPE" in
+    darwin*)
+        [[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
+        ;;
+    linux*)
+        [[ -s /usr/share/autojump/autojump.sh ]] && . /usr/share/autojump/autojump.sh
+        ;;
+esac
+
+# Environment variables
+export LSCOLORS='ExgxcxdxdxGxDxabagacad'
+export GRADLE_USER_HOME=$HOME/.cache/gradle
+export GREP_COLOR='1;35;40'
+export GREP_COLORS='mt=1;35;40'

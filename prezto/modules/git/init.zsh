@@ -15,3 +15,6 @@ pmodload 'helper'
 
 # Source module files.
 source "${0:h}/alias.zsh"
+source "${0:h}/git-prune/git-prune.plugin.zsh"
+
+fpath=(gitfast-zsh-plugin $fpath)
