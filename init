@@ -2,6 +2,8 @@
 
 setopt EXTENDED_GLOB
 
+git submodule update --init --recursive
+
 # Create local bin sym links
 if [ -s $HOME/.local ]; then
     BINDIR=$HOME/.local/bin
@@ -25,10 +27,10 @@ ln -s ${PWD}/vim/ycm_extra_conf.py "$HOME/.vim/ycm_extra_conf.py"
 vim +PlugInstall +qa!
 
 # Create zsh config sym links
-for rcfile in "${PWD}"/zsh/^README.md(.N); do
+for rcfile in "${PWD}"/zsh/config/*; do
     ln -s "$rcfile" "$HOME/.${rcfile:t}"
 done
-git submodule update --init --recursive
+ln -s "${PWD}"/zsh/bernoulli.zsh-theme "${PWD}"/oh-my-zsh/custom/themes/bernoulli.zsh-theme
 source $HOME/.zshrc
 
 # Create tmux.conf sym link

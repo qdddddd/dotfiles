@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/Qing/.dotfiles/oh-my-zsh"
+export ZSH=$HOME/.dotfiles/oh-my-zsh
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -26,7 +26,7 @@ COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Plugins
-plugins=(git autojump git-extras git git-prompt gitfast thefuck vi-mode)
+plugins=(git autojump git-extras git gitfast thefuck vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
