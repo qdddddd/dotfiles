@@ -26,7 +26,7 @@ COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Plugins
-plugins=(git autojump git-extras git gitfast thefuck vi-mode)
+plugins=(git autojump git-extras git gitfast git-auto-fetch history-substring-search thefuck vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -59,6 +59,10 @@ case "$OSTYPE" in
         [[ -s /usr/share/autojump/autojump.sh ]] && . /usr/share/autojump/autojump.sh
         ;;
 esac
+
+# history-substring-search
+bindkey "^P" history-beginning-search-backward
+bindkey "^N" history-beginning-search-forward
 
 # Environment variables
 export LSCOLORS='ExgxcxdxdxGxDxabagacad'
