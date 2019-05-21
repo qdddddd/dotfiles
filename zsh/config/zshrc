@@ -1,5 +1,6 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.dotfiles/oh-my-zsh
+export ZSH_CUSTOM=$HOME/.dotfiles/zsh
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -26,11 +27,24 @@ COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Plugins
-plugins=(git autojump git-extras git gitfast git-auto-fetch history-substring-search thefuck vi-mode)
+plugins=(
+    autojump
+    git
+    git-extras
+    gitfast
+    git-auto-fetch
+    history-substring-search
+    thefuck
+    vi-mode
+    fast-syntax-highlighting
+    zsh-autosuggestions
+)
 
 source $ZSH/oh-my-zsh.sh
 
+#
 # User configuration
+#
 
 if [[ -f ~/.zshenv ]]; then
     source ~/.zshenv
@@ -50,6 +64,10 @@ if [ -f ~/.aliases ]; then
     source ~/.aliases
 fi
 
+#
+# Plugin settings
+#
+
 # Autojump
 case "$OSTYPE" in
     darwin*)
@@ -64,7 +82,12 @@ esac
 bindkey "^P" history-beginning-search-backward
 bindkey "^N" history-beginning-search-forward
 
+# autosuggestions
+bindkey '^F' autosuggest-accept
+
+#
 # Environment variables
+#
 export LSCOLORS='ExgxcxdxdxGxDxabagacad'
 export GRADLE_USER_HOME=$HOME/.cache/gradle
 export GREP_COLOR='1;35;40'

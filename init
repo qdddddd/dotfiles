@@ -30,7 +30,6 @@ vim +PlugInstall +qa!
 for rcfile in "${PWD}"/zsh/config/*; do
     ln -s "$rcfile" "$HOME/.${rcfile:t}"
 done
-ln -s "${PWD}"/zsh/bernoulli.zsh-theme "${PWD}"/oh-my-zsh/custom/themes/bernoulli.zsh-theme
 source $HOME/.zshrc
 
 # Create tmux.conf sym link
