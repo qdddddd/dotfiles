@@ -25,7 +25,7 @@ rm $HOME/.viminfo
 for rcfile in "${PWD}"/zsh/configs/*; do
     rm "$HOME/.${rcfile:t}"
 done
-rm -rf $HOME/.zcompdump* $HOME/.zhistory $HOME/.zcompcache
+rm -rf $HOME/.cache/.zcompdump* $HOME/.zhistory $HOME/.cache/.zcompcache
 
 # Remove tmux files
 rm "$HOME/.tmux.conf"

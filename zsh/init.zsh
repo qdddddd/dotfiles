@@ -9,8 +9,9 @@ if (( ! $+commands[git] )); then
     return 1
 fi
 
+setopt extended_glob
 # Load functions
 fpath=(${0:h}/functions $fpath)
-for function in "${0:h}"/functions/*; do
-    autoload -Uz $function
+for function in ${0:h}/functions/*; do
+    autoload -Uz ${function##*/}
 done

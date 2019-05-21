@@ -97,7 +97,7 @@ function prompt_bernoulli_setup {
     zstyle ':vcs_info:*' enable git
     zstyle ':vcs_info:*' get-revision true
     zstyle ':vcs_info:*' check-for-changes true
-    zstyle ':vcs_info:git:*' formats '%%B %b%%b'
+    zstyle ':vcs_info:git:*' formats '%{%%B%} %b%{%%b%}'
     zstyle ':vcs_info:git:*' actionformats '%F{240}[%b|%a]%f'
 
     # Define prompts.
@@ -105,8 +105,8 @@ function prompt_bernoulli_setup {
     PROMPT_L='%{%F{$COLOR}%}'${USER}'@'${HOST}' » %{%~%}'
     lsize=${#${(S%%)PROMPT_L//$~invisibles/}}
 
-    PROMPT=$'${PROMPT_L} ${PROMPT_M} ${PROMPT_R}'
-    PROMPT+=$'\n%B %f%b '
+    PROMPT='${PROMPT_L} ${PROMPT_M} ${PROMPT_R}'
+    PROMPT+=$'\n  %f'
 }
 
 prompt_bernoulli_setup "$@"
