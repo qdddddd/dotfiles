@@ -33,9 +33,6 @@ fi
 # Paths
 #
 
-# Ensure path arrays do not contain duplicates.
-typeset -gU cdpath fpath mailpath path
-
 # Set the list of directories that cd searches.
 # cdpath=(
 #   $cdpath
@@ -71,6 +68,9 @@ case "$OSTYPE" in
         ;;
 esac
 
+# Ensure path arrays do not contain duplicates.
+typeset -gU cdpath fpath mailpath path
+
 #
 # Less
 #
@@ -86,3 +86,11 @@ export LESS="-i -M -R -w -z-4"
 if (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
 fi
+
+#
+# Misc
+#
+export LSCOLORS='ExgxcxdxdxGxDxabagacad'
+export GRADLE_USER_HOME=$HOME/.cache/gradle
+export GREP_COLOR='1;35;40'
+export GREP_COLORS='mt=1;35;40'

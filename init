@@ -27,7 +27,7 @@ ln -s ${PWD}/vim/ycm_extra_conf.py "$HOME/.vim/ycm_extra_conf.py"
 vim +PlugInstall +qa!
 
 # Create zsh config sym links
-for rcfile in "${PWD}"/zsh/config/*; do
+for rcfile in "${PWD}"/zsh/configs/*; do
     ln -s "$rcfile" "$HOME/.${rcfile:t}"
 done
 source $HOME/.zshrc
