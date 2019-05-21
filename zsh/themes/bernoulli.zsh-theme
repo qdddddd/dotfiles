@@ -9,10 +9,6 @@ zstyle -s ":vcs_info:git:*:-all-" "command" _git_cmd || _git_cmd=$(whence -p git
 zstyle ':vcs_info:git*+set-message:*' hooks git-st
 
 function prompt_bernoulli_precmd {
-    setopt LOCAL_OPTIONS
-    prompt_opts=(cr percent sp subst)
-    unsetopt XTRACE KSH_ARRAYS
-
     LEFT_CONTENT=${USER}'@'${HOST}' » %~ '
     LEFT='%F{$COLOR}'${LEFT_CONTENT}
     local pwdsize=${#${(%):-%~}}
@@ -61,7 +57,7 @@ function +vi-git-st() {
 
     # Ahead
     ahead="$ahead_and_behind[(w)1]"
-    if [[ $ahead ]]; then
+    if (( $ahead )); then
         gitstatus+=( "ﰵ" )
     fi
 
