@@ -1,21 +1,19 @@
 #!/bin/zsh
 
 setopt EXTENDED_GLOB
+setopt +o nomatch
 
 git submodule update --init --recursive
 
 # Create local bin sym links
-if [ -s $HOME/.local ]; then
-    BINDIR=$HOME/.local/bin
-elif [ -s /usr/local/bin/ ]; then
+BINDIR=$HOME/.local/bin
+if [ -s /usr/local/bin/ ]; then
     BINDIR=/usr/local/bin
-else
-    BINDIR=$HOME/.local/bin
 fi
 
-#for xfile in ${PWD}/bin/*; do
-#    ln -s "$xfile" "$BINDIR/${xfile:t}"
-#done
+for xfile in ${PWD}/bin/*; do
+    ln -s "$xfile" "$BINDIR/${xfile:t}"
+done
 
 # Create vim config sym links
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
