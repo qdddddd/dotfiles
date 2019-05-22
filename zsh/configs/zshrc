@@ -61,6 +61,8 @@ if [ -f ~/.aliases ]; then
     source ~/.aliases
 fi
 
+bindkey -e
+
 #
 # Plugin settings
 #
@@ -80,7 +82,8 @@ bindkey "^P" history-beginning-search-backward
 bindkey "^N" history-beginning-search-forward
 
 # autosuggestions
-bindkey '^F' autosuggest-accept
+bindkey -M viins "^F" vi-forward-word
+bindkey -M viins "^E" vi-add-eolbindkey
 
 # completion
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
