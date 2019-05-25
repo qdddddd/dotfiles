@@ -43,30 +43,28 @@ case "$OSTYPE" in
     darwin*)
         path=(
             /usr/local/opt/llvm/bin
-            /usr/local/{texlive/2018/bin/x86_64-darwin,opt/openssl@1.1/bin,bin,sbin}
-            /usr/{bin,sbin}
-            /bin
-            /sbin
+            /usr/local/{texlive/2018/bin/x86_64-darwin,opt/openssl@1.1/bin}
             /Library/TeX/texbin
             $path
         )
-        LDFLAGS+="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
-        export LDFLAGS
-        CXXFLAGS+="-I/usr/local/opt/llvm/include -I/usr/local/opt/llvm/include/c++/v1/"
-        export CXXFLAGS
+        LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+        CXXFLAGS="-I/usr/local/opt/llvm/include -I/usr/local/opt/llvm/include/c++/v1/"
         ;;
     linux*)
         path=(
             $HOME/.local/bin
-            /usr/local/{bin,sbin}
-            /usr/{bin,sbin}
-            /bin
-            /sbin
-            /Library/TeX/texbin
             $path
         )
         ;;
 esac
+
+path=(
+    $path
+    /usr/local/{bin,sbin}
+    /usr/{bin,sbin}
+    /bin
+    /sbin
+)
 
 # Ensure path arrays do not contain duplicates.
 typeset -gU cdpath fpath mailpath path

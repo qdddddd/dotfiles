@@ -39,22 +39,13 @@ function +vi-git-st() {
         gitstatus+=( "✱" )
     fi
 
-    local ahead_and_behind_cmd ahead_and_behind
-    local ahead behind upstream
-    # Gets the commit difference counts between local and remote.
-    ahead_and_behind_cmd="$_git_cmd rev-list --count --left-right HEAD...@{upstream}"
-    # Get ahead and behind counts.
-    ahead_and_behind="$(${(z)ahead_and_behind_cmd} 2> /dev/null)"
-
     # Ahead
-    ahead="$ahead_and_behind[(w)1]"
-    if (( $ahead )); then
+    if (( $(git_commits_ahead) )); then
         gitstatus+=( "ﰵ" )
     fi
 
     # Behind
-    behind="$ahead_and_behind[(w)2]"
-    if (( $behind )); then
+    if (( $(git_commits_behind) )); then
         gitstatus+=( "ﰬ" )
     fi
 

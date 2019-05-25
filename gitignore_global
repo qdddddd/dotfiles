@@ -135,3 +135,4 @@ ENV/
 *.cbp
 *.idea/
 keystore
+.clangd/
