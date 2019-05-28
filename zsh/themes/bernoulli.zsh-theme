@@ -39,6 +39,11 @@ function +vi-git-st() {
         gitstatus+=( "✱" )
     fi
 
+    # Untracked
+    if [[ -n $(git ls-files --other --exclude-standard 2>/dev/null) ]]; then
+        gitstatus+=( "=" )
+    fi
+
     # Ahead
     if (( $(git_commits_ahead) )); then
         gitstatus+=( "ﰵ" )
