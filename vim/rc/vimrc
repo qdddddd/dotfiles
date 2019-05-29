@@ -24,7 +24,7 @@
 " }
 
 " Plugin setteings before loading {
-    "let g:ale_completion_enabled = 1
+    let g:ale_completion_enabled = 0
     "let g:ale_set_balloons = 1
     "let g:ale_completion_delay = 0
 " }
@@ -272,6 +272,7 @@
     "Search pattern with start of words
     "nnoremap / /\v
 
+    set rtp+=/usr/local/opt/fzf
 " }
 
 " Displays {
@@ -665,10 +666,9 @@
     "}
 
     " YouCompleteMe {
+        " Disable
+        "let g:loaded_youcompleteme = 1
         if isdirectory(expand("~/.vim/bundle/YouCompleteMe/"))
-            " Disable YCM
-            "let g:loaded_youcompleteme = 1
-
             let g:acp_enableAtStartup = 0
 
             let g:ycm_global_ycm_extra_conf = '$HOME/.vim/ycm_extra_conf.py'
@@ -689,15 +689,18 @@
 
             " clangd config
             " Let clangd fully control code completion
-            let g:ycm_clangd_uses_ycmd_caching = 0
+            let g:ycm_clangd_uses_ycmd_caching = 1
             " Use installed clangd, not YCM-bundled clangd which doesn't get updates.
             let g:ycm_clangd_binary_path = exepath("clangd")
-            let g:ycm_clangd_args = ['-log=verbose', '-pretty', '-background-index']
-
-            " remap Ultisnips for compatibility for YCM
-            let g:UltiSnipsExpandTrigger = '<C-j>'
-            let g:UltiSnipsJumpForwardTrigger = '<C-j>'
-            let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
+            let g:ycm_clangd_args = [
+                        \ '-log=error',
+                        \ '-pretty',
+                        "\ '-background-index',
+                        \ '-j=2',
+                        \ '-pch-storage=memory',
+                        \ '-function-arg-placeholders=1',
+                        \ '-header-insertion-decorators=1'
+                        \ ]
 
             " Enable omni completion.
             "autocmd! FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -727,6 +730,11 @@
             " especially when splits are used.
             set completeopt-=preview
         endif
+
+        " remap Ultisnips for compatibility for YCM
+        let g:UltiSnipsExpandTrigger = '<C-j>'
+        let g:UltiSnipsJumpForwardTrigger = '<C-j>'
+        let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
     " }
 
     " OmniComplete {
@@ -748,8 +756,8 @@
         " Automatically open and close the popup menu / preview window
         au! CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
         set completeopt=menu,longest
+    " }
 
-        " }
 
     " Airline {
         " Use the powerline theme and optionally enable powerline symbols.
@@ -848,8 +856,6 @@
             let g:airline_section_y = airline#section#create_right(['filetype'])
             let g:airline_section_x = airline#section#create_right(['tagbar'])
             let g:airline_section_z = '%3p%% %{g:airline_symbols.linenr} %l/%L:%c'
-
-            set hidden
         endif
     " }
 
@@ -858,8 +864,6 @@
             let g:ale_linters_explicit = 0
             let g:ale_lint_on_text_changed = 'normal'
             let g:ale_lint_delay = 0
-            "nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-            "nmap <silent> <C-j> <Plug>(ale_next_wrap)
             let g:ale_set_loclist = 1
             let g:ale_set_quickfix = 0
             let g:ale_sign_error = '✗'
@@ -877,10 +881,21 @@
                         \}
 
             let g:ale_fixers = {
-                        \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+                        \ '*': ['remove_trailing_lines', 'trim_whitespace'],
                         \}
 
-            let g:ale_fix_on_save = 1
+            if g:ale_completion_enabled == 1
+                nnoremap <silent> <leader>dl :ALEGoToDefinition <CR>
+                nnoremap <silent> <leader>re :ALEFindReferences <CR>
+                nnoremap <silent> <leader>fo :ALEFix<CR>
+                nnoremap <leader>rn :YcmCompleter RefactorRename<space>
+
+                set omnifunc=ale#completion#OmniFunc
+                nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+                nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+                let g:ale_fix_on_save = 0
+            endif
         endif
     " }
 
@@ -1029,7 +1044,64 @@
         nnoremap <silent> « :TmuxNavigatePrevious<cr>
     " }
 
-" }
+    " Deoplete {
+        let g:deoplete#enable_at_startup = 0
+        if isdirectory(expand("~/.vim/bundle/deoplete.nvim/")) && g:deoplete#enable_at_startup == 1
+            call deoplete#custom#source('LanguageClient',
+                        \ 'min_pattern_length',
+                        \ 2)
+        endif
+    " }
+
+    " LSP {
+        if isdirectory(expand("~/.vim/bundle/LanguageClient-neovim")) && g:deoplete#enable_at_startup == 1
+            let g:LanguageClient_serverCommands = {
+                \ 'cpp': ['clangd',
+                        \ '-log=verbose',
+                        \ '-pretty',
+                        \ '-pch-storage=memory',
+                        \ '-function-arg-placeholders=1',
+                        \ '-header-insertion-decorators=1',
+                        \ ],
+                    \ }
+
+            let g:LanguageClient_rootMarkers = {
+                    \ 'cpp': ['.git'],
+                    \ }
+
+            nnoremap <silent> <leader>dl :call LanguageClient#textDocument_definition() <CR>
+            nnoremap <silent> <leader>dd :call LanguageClient#textDocument_hover()<CR>
+            nnoremap <leader>rn :call LanguageClient#textDocument_rename()<CR>
+            nnoremap <silent> <leader>fo :call LanguageClient#textDocument_formatting() <CR>
+            nnoremap <silent> <leader>re :call LanguageClient#textDocument_references() <CR>
+            nnoremap <silent> <leader>fi :YcmCompleter FixIt <CR>
+        endif
+    " }
+
+    " FZF {
+        if executable("fzf")
+            "nnoremap <leader>f<space> :call fzf#run({
+                        "\ 'sink': 'e',
+                        "\ 'options': '--multi'
+                        "\ }) <CR>
+            nnoremap <leader>f<space> :FZF <CR>
+            let g:fzf_layout = { 'down': '~40%' }
+            let g:fzf_colors =
+                        \ { 'fg':    ['fg', 'Normal'],
+                        \ 'bg':      ['bg', 'Normal'],
+                        \ 'hl':      ['fg', 'Comment'],
+                        \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+                        \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+                        \ 'hl+':     ['fg', 'Statement'],
+                        \ 'info':    ['fg', 'PreProc'],
+                        \ 'border':  ['fg', 'Ignore'],
+                        \ 'prompt':  ['fg', 'Conditional'],
+                        \ 'pointer': ['fg', 'Exception'],
+                        \ 'marker':  ['fg', 'Keyword'],
+                        \ 'spinner': ['fg', 'Label'],
+                        \ 'header':  ['fg', 'Comment'] }
+        endif
+    " }
 
 " GUI Settings {
 

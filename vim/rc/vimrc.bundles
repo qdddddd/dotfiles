@@ -91,6 +91,7 @@
         Bundle 'Valloric/YouCompleteMe', {
                     \ 'do': 'python3 install.py --java-completer --clangd-completer --system-boost',
                     \ }
+        "Bundle 'Shougo/deoplete.nvim'
         "Bundle 'Shougo/neocomplcache'
         "Bundle 'Shougo/neocomplete.vim'
         "Bundle 'Shougo/neosnippet'
@@ -107,8 +108,15 @@
         Bundle 'elzr/vim-json'
     " }
 
-   " Go Lang {
+    " Go Lang {
         Bundle 'fatih/vim-go'
+    " }
+
+    " LSP {
+        "Plug 'autozimu/LanguageClient-neovim', {
+                "\ 'branch': 'next',
+                "\ 'do': './install.sh',
+                "\ }
     " }
 
     " Misc {

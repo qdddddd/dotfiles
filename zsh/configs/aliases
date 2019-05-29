@@ -47,3 +47,4 @@ alias biiota-jshell='JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.jdk/Cont
                      gradle --no-daemon --console plain jshell'
 alias ds='du -h --max-depth=1'
 alias git-refresh-date='GIT_COMMITTER_DATE="$(date)" git commit --amend --no-edit --date "$(date)"'
+alias ag='ag --nobreak --nonumbers --noheading . | fzf'
