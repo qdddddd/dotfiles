@@ -26,13 +26,6 @@
 
 " Bundles {
 
-    " Ack {
-        if executable('ag')
-            Bundle 'mileszs/ack.vim'
-            let g:ackprg = 'ag --nogroup --nocolor --column --smart-case'
-        endif
-    " }
-
     " General {
         Bundle 'bling/vim-bufferline'
         Bundle 'easymotion/vim-easymotion'
@@ -55,6 +48,8 @@
         "Bundle 'Xuyuanp/nerdtree-git-plugin'
         "Bundle 'jistr/vim-nerdtree-tabs'
         "Bundle 'scrooloose/nerdtree'
+        "Bundle 'Yggdroot/LeaderF'
+        Bundle 'junegunn/fzf.vim'
         Bundle 'Shougo/defx.nvim'
         Bundle 'roxma/nvim-yarp'
         Bundle 'roxma/vim-hug-neovim-rpc', {
@@ -123,7 +118,6 @@
         "Bundle 'blueyed/vim-diminactive'
         "Bundle 'vim-scripts/CycleColor'
         Bundle 'Konfekt/FastFold'
-        Bundle 'Yggdroot/LeaderF'
         Bundle 'Yggdroot/indentLine'
         Bundle 'airblade/vim-rooter'
         Bundle 'christoomey/vim-tmux-navigator'

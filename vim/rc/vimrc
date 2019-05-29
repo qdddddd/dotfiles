@@ -254,11 +254,6 @@
     autocmd! BufEnter,BufNewFile *.py nnoremap <leader>s :w <bar> AsyncRun python % <CR>
     autocmd! BufEnter,BufNewFile *.vim,*vimrc* nnoremap <leader>s :w <bar> so % <CR>
 
-    " Bind K to grep word under cursor
-    if isdirectory(expand("~/.vim/bundle/ack.vim/"))
-        nnoremap K :Ack <c-r>=expand("<cword>") <CR><CR>
-    endif
-
     " Terminal mode
     command! Vter vert ter zsh
     command! Ter ter zsh
@@ -942,8 +937,7 @@
             " Key mapping
             let g:Lf_ShortcutF = '<leader>f<space>'
             nnoremap <leader>ff :LeaderfFunction<CR>
-            nnoremap <leader>t :LeaderfTag<CR>
-            nnoremap <leader>r :LeaderfMru<CR>
+            nnoremap <leader>r<space> :LeaderfMru<CR>
         endif
     " }
 
@@ -1080,12 +1074,9 @@
 
     " FZF {
         if executable("fzf")
-            "nnoremap <leader>f<space> :call fzf#run({
-                        "\ 'sink': 'e',
-                        "\ 'options': '--multi'
-                        "\ }) <CR>
-            nnoremap <leader>f<space> :FZF <CR>
-            let g:fzf_layout = { 'down': '~40%' }
+            let g:fzf_layout = { 
+                        \ 'down': '~30%',
+                        \ }
             let g:fzf_colors =
                         \ { 'fg':    ['fg', 'Normal'],
                         \ 'bg':      ['bg', 'Normal'],
@@ -1100,7 +1091,23 @@
                         \ 'marker':  ['fg', 'Keyword'],
                         \ 'spinner': ['fg', 'Label'],
                         \ 'header':  ['fg', 'Comment'] }
+
+            command! -bang -nargs=* Ag call fzf#vim#ag
+                        \ (
+                        \ <args>,
+                        \ '--color-path "1;34" --color-line-number "1;35" --color-match "1;35"',
+                        \ { 'options': ['--color', 'hl:#9d0006,hl+:#9d0006'] },
+                        \ <bang>0
+                        \ )
+
+            " key mappings
+            nnoremap <leader>f<space> :FZF <CR>
+            nnoremap <leader>r<space> :History <CR>
+            nnoremap <leader>ff :BTags <CR>
+            " Bind K to grep word under cursor
+            nnoremap K :Ag expand('<cword>') <CR>
         endif
+
     " }
 
 " GUI Settings {

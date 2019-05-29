@@ -1,7 +1,7 @@
 # Setup fzf
 # ---------
 if [[ ! "$PATH" == */usr/local/opt/fzf/bin* ]]; then
-  export PATH="${PATH:+${PATH}:}/usr/local/opt/fzf/bin"
+    export PATH="${PATH:+${PATH}:}/usr/local/opt/fzf/bin"
 fi
 
 # Auto-completion
@@ -60,7 +60,7 @@ export FZF_DEFAULT_OPTS="
     --color=bg+:$light1,spinner:$neutral_blue,hl:$faded_red
     --color=fg:$dark2,header:$faded_blue,info:$faded_blue,pointer:$faded_red
     --color=marker:$faded_red,fg+:$dark2,prompt:$dark1,hl+:$faded_red
-    --preview 'cat {}'
     --height 40%
+    --reverse 
 "
-alias f='fzf --reverse'
+alias f="fzf --preview 'cat {}'"

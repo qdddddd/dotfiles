@@ -88,3 +88,5 @@ bindkey -M viins "^E" vi-add-eolbindkey
 # completion
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
+# fzf
+source $ZSH_CUSTOM/fzf.zsh
