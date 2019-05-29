@@ -61,6 +61,6 @@ export FZF_DEFAULT_OPTS="
     --color=fg:$dark2,header:$faded_blue,info:$faded_blue,pointer:$faded_red
     --color=marker:$faded_red,fg+:$dark2,prompt:$dark1,hl+:$faded_red
     --height 40%
-    --reverse 
+    --reverse
 "
 alias f="fzf --preview 'cat {}'"
