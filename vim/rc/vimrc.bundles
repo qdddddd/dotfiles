@@ -21,7 +21,6 @@
 
     command! -nargs=+ -bar Bundle call plug#(<args>)
     command! -nargs=1 -bar UnBundle call s:deregister(<args>)
-
 " }
 
 " Bundles {
@@ -45,10 +44,6 @@
     " }
 
     " File explorer {
-        "Bundle 'Xuyuanp/nerdtree-git-plugin'
-        "Bundle 'jistr/vim-nerdtree-tabs'
-        "Bundle 'scrooloose/nerdtree'
-        "Bundle 'Yggdroot/LeaderF'
         Bundle 'junegunn/fzf.vim'
         Bundle 'Shougo/defx.nvim'
         Bundle 'roxma/nvim-yarp'
@@ -57,6 +52,11 @@
                     \ }
         Bundle 'kristijanhusak/defx-git'
         "Bundle 'kristijanhusak/defx-icons'
+
+        "Bundle 'Xuyuanp/nerdtree-git-plugin'
+        "Bundle 'jistr/vim-nerdtree-tabs'
+        "Bundle 'scrooloose/nerdtree'
+        "Bundle 'Yggdroot/LeaderF'
     " }
 
     " Writing {
@@ -76,7 +76,7 @@
         Bundle 'octol/vim-cpp-enhanced-highlight'
     " }
 
-    " Snippets & AutoComplete {
+    " AutoComplete {
         Bundle 'honza/vim-snippets'
         " Source support_function.vim to support vim-snippets.
         if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
@@ -86,12 +86,16 @@
         Bundle 'Valloric/YouCompleteMe', {
                     \ 'do': 'python3 install.py --java-completer --clangd-completer --system-boost',
                     \ }
-        "Bundle 'Shougo/deoplete.nvim'
-        "Bundle 'Shougo/neocomplcache'
-        "Bundle 'Shougo/neocomplete.vim'
+        "Bundle 'prabirshrestha/asyncomplete.vim'
+        "Bundle 'prabirshrestha/asyncomplete-lsp.vim'
+
         "Bundle 'Shougo/neosnippet'
         "Bundle 'Shougo/neosnippet-snippets'
-        "Bundle 'honza/vim-snippets'
+        Bundle 'Shougo/deoplete.nvim'
+        Bundle 'lighttiger2505/deoplete-vim-lsp'
+
+        "Bundle 'Shougo/neocomplcache'
+        "Bundle 'Shougo/neocomplete.vim'
     " }
 
 
@@ -104,19 +108,22 @@
     " }
 
     " Go Lang {
-        Bundle 'fatih/vim-go'
+        "Bundle 'fatih/vim-go'
     " }
 
     " LSP {
-        "Plug 'autozimu/LanguageClient-neovim', {
-                "\ 'branch': 'next',
-                "\ 'do': './install.sh',
-                "\ }
+        "Bundle 'autozimu/LanguageClient-neovim', {
+                    "\ 'branch': 'next',
+                    "\ 'do': './install.sh',
+                    "\ }
+        Bundle 'prabirshrestha/async.vim'
+        Bundle 'prabirshrestha/vim-lsp'
+        if filereadable(expand("~/.vim/bundle/vim-lsp"))
+            source ~/.vim/bundle/vim-lsp/autoload/lsp.vim
+        endif
     " }
 
     " Misc {
-        "Bundle 'blueyed/vim-diminactive'
-        "Bundle 'vim-scripts/CycleColor'
         Bundle 'Konfekt/FastFold'
         Bundle 'Yggdroot/indentLine'
         Bundle 'airblade/vim-rooter'
@@ -131,6 +138,8 @@
         Bundle 'tpope/vim-cucumber'
         Bundle 'tpope/vim-markdown'
         Bundle 'w0rp/ale'
+        "Bundle 'blueyed/vim-diminactive'
+        "Bundle 'vim-scripts/CycleColor'
     " }
 " }
 

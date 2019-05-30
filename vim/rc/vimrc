@@ -1,4 +1,4 @@
-" vim: set sw=4 ts=4 sts=4 et foldmarker={,} foldlevel=1 foldmethod=marker:
+" vim: set sw=4 ts=4 sts=4 et foldmarker={,} foldlevel=0 foldmethod=marker:
 
 " Environment {
 
@@ -34,7 +34,6 @@
         source ~/.vim/vimrc.bundles
     endif
 " }
-
 
 " General {
     set background=light         " Assume a light background
@@ -491,23 +490,30 @@
                 execute 'vertical resize '.(l:max == winwidth('.') ? l:original : l:max)
             endfunction
 
-            call defx#custom#option('_', {
-                        \ 'root_marker': '',
-                        \ 'split': 'vertical',
-                        \ 'winwidth': &columns/4,
-                        \ 'direction': 'topleft',
-                        \ 'columns': 'git:icons:filename',
+            call defx#custom#column('indent', {
+                        \ 'indent': '  ',
                         \ })
 
-            call defx#custom#column('filename', {
-                        \ 'root_marker_highlight': 'Constant',
+            call defx#custom#column('icon', {
                         \ 'directory_icon': '',
                         \ 'opened_icon': '',
                         \ 'root_icon': '',
-                        \ 'min_width': &columns/4-12,
-                        \ 'max_width': &columns/3,
-                        \ 'indent': '  ',
                         \ })
+
+            call defx#custom#option('_', {
+                        \ 'root_marker': ' ',
+                        \ 'split': 'vertical',
+                        \ 'winwidth': &columns/4,
+                        \ 'direction': 'topleft',
+                        \ 'columns': 'git:indent:icon:filename',
+                        \ })
+
+            call defx#custom#column('filename', {
+                        \ 'root_marker_highlight': 'Ignore',
+                        \ 'min_width': 40,
+                        \ 'max_width': 40,
+                        \ })
+
 
             nnoremap <silent><leader>e :Defx -toggle
                         \ -ignored-files=*.py[cd],*~,*.swo,*.swp,.git,.hg,.svn,*.bzr,*.DS_Store,build,gradle,.gradle,.idea,bin,cmake-build*,CMakeCache.txt,CMakeFiles,.github,.travis,.clangd*
@@ -521,7 +527,8 @@
                 nnoremap <silent><buffer><expr> oo      defx#do_action('multi', ['drop', 'quit'])
                 nnoremap <silent><buffer><expr> o       defx#do_action('drop')
                 nnoremap <silent><buffer><expr> <CR>    defx#is_directory() ?
-                                                        \ defx#async_action('open_or_close_tree') : defx#async_action('drop')
+                                                        \ defx#do_action('open_or_close_tree') :
+                                                        \ defx#do_action('drop')
                 nnoremap <silent><buffer><expr> v       defx#do_action('open','vsplit')
                 nnoremap <silent><buffer><expr> vv      defx#do_action('multi', [['drop', 'vsplit'], 'quit'])
                 nnoremap <silent><buffer><expr> h       defx#do_action('cd',['..'])
@@ -531,7 +538,6 @@
                 nnoremap <silent><buffer><expr> p       defx#do_action('paste')
                 nnoremap <silent><buffer><expr> aa      defx#do_action('new_directory')
                 nnoremap <silent><buffer><expr> a       defx#do_action('new_file')
-                nnoremap <silent><buffer><expr> c       defx#do_action('toggle_columns','git:filename:size')
                 nnoremap <silent><buffer><expr> S       defx#do_action('toggle_sort','time')
                 nnoremap <silent><buffer><expr> d       defx#do_action('remove')
                 nnoremap <silent><buffer><expr> r       defx#do_action('rename')
@@ -542,8 +548,6 @@
                 nnoremap <silent><buffer><expr> .       defx#do_action('toggle_ignored_files')
                 nnoremap <silent><buffer><expr> ;       defx#do_action('repeat')
                 nnoremap <silent><buffer><expr> q       defx#do_action('quit')
-                nnoremap <silent><buffer><expr> <Space> defx#do_action('toggle_select') . 'j'
-                nnoremap <silent><buffer><expr> *       defx#do_action('toggle_select_all')
                 nnoremap <silent><buffer><expr> j       line('.') == line('$') ? 'gg' : 'j'
                 nnoremap <silent><buffer><expr> k       line('.') == 1 ? 'G' : 'k'
                 nnoremap <silent><buffer><expr> <C-l>   defx#do_action('redraw')
@@ -659,100 +663,6 @@
             let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
         endif
     "}
-
-    " YouCompleteMe {
-        " Disable
-        "let g:loaded_youcompleteme = 1
-        if isdirectory(expand("~/.vim/bundle/YouCompleteMe/"))
-            let g:acp_enableAtStartup = 0
-
-            let g:ycm_global_ycm_extra_conf = '$HOME/.vim/ycm_extra_conf.py'
-            let g:ycm_confirm_extra_conf = 0
-
-            let g:ycm_always_populate_location_list = 1
-            let g:ycm_complete_in_comments = 1
-            let g:ycm_collect_identifiers_from_comments_and_strings = 0
-            let g:ycm_collect_identifiers_from_tags_files = 0
-            let g:ycm_max_num_candidates = 20
-            let g:ycm_max_num_identifier_candidates = 20
-            let g:ycm_add_preview_to_completeopt = 0
-            let g:ycm_autoclose_preview_window_after_completion = 0
-            let g:ycm_autoclose_preview_window_after_insertion = 1
-
-            nnoremap <C-j> :lnext <CR>
-            nnoremap <C-k> :lprevious <CR>
-
-            " clangd config
-            " Let clangd fully control code completion
-            let g:ycm_clangd_uses_ycmd_caching = 1
-            " Use installed clangd, not YCM-bundled clangd which doesn't get updates.
-            let g:ycm_clangd_binary_path = exepath("clangd")
-            let g:ycm_clangd_args = [
-                        \ '-log=error',
-                        \ '-pretty',
-                        "\ '-background-index',
-                        \ '-j=2',
-                        \ '-pch-storage=memory',
-                        \ '-function-arg-placeholders=1',
-                        \ '-header-insertion-decorators=1'
-                        \ ]
-
-            " Enable omni completion.
-            "autocmd! FileType css setlocal omnifunc=csscomplete#CompleteCSS
-            autocmd! FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-            "autocmd! FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-            autocmd! FileType python setlocal omnifunc=pythoncomplete#Complete
-            "autocmd! FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-            "autocmd! FileType ruby setlocal omnifunc=rubycomplete#Complete
-            "autocmd! FileType haskell setlocal omnifunc=necoghc#omnifunc
-
-            " For snippet_complete marker.
-            if has('conceal')
-                set conceallevel=2 concealcursor=i
-            endif
-
-            nnoremap <silent> <leader>dl :YcmCompleter GoTo <CR>
-            nnoremap <silent> <leader>df :YcmCompleter GoToDefinition <CR>
-            nnoremap <silent> <leader>fi :YcmCompleter FixIt <CR>
-            nnoremap <silent> <leader>re :YcmCompleter GoToReferences <CR>
-            nnoremap <silent> <leader>fo :YcmCompleter Format <CR>
-            vnoremap <silent> <leader>fo :YcmCompleter Format <CR>
-            nnoremap <leader>rn :YcmCompleter RefactorRename<space>
-            nnoremap <leader>d :YcmRestartServer<CR>
-
-            " Disable the neosnippet preview candidate window
-            " When enabled, there can be too much visual noise
-            " especially when splits are used.
-            set completeopt-=preview
-        endif
-
-        " remap Ultisnips for compatibility for YCM
-        let g:UltiSnipsExpandTrigger = '<C-j>'
-        let g:UltiSnipsJumpForwardTrigger = '<C-j>'
-        let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
-    " }
-
-    " OmniComplete {
-        if has("autocmd") && exists("+omnifunc")
-            autocmd! Filetype *
-                \if &omnifunc == "" |
-                \setlocal omnifunc=syntaxcomplete#Complete |
-                \endif
-        endif
-
-        " Some convenient mappings
-        "inoremap <expr> <Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
-        inoremap <expr> <CR>     pumvisible() ? "\<C-y>" : "\<CR>"
-        inoremap <expr> <Down>   pumvisible() ? "\<C-n>" : "\<Down>"
-        inoremap <expr> <Up>     pumvisible() ? "\<C-p>" : "\<Up>"
-        inoremap <expr> <C-d>    pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-        inoremap <expr> <C-u>    pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
-
-        " Automatically open and close the popup menu / preview window
-        au! CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-        set completeopt=menu,longest
-    " }
-
 
     " Airline {
         " Use the powerline theme and optionally enable powerline symbols.
@@ -871,25 +781,23 @@
 
             let g:ale_linters = {
                         \ 'java': [],
-                        \ 'cpp': [],
+                        \ 'cpp': ['clangd'],
                         \ 'python': ['flake8', 'pylint'],
                         \}
 
             let g:ale_fixers = {
                         \ '*': ['remove_trailing_lines', 'trim_whitespace'],
                         \}
+            let g:ale_fix_on_save = 1
 
             if g:ale_completion_enabled == 1
                 nnoremap <silent> <leader>dl :ALEGoToDefinition <CR>
                 nnoremap <silent> <leader>re :ALEFindReferences <CR>
                 nnoremap <silent> <leader>fo :ALEFix<CR>
-                nnoremap <leader>rn :YcmCompleter RefactorRename<space>
 
                 set omnifunc=ale#completion#OmniFunc
                 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
                 nmap <silent> <C-j> <Plug>(ale_next_wrap)
-
-                let g:ale_fix_on_save = 0
             endif
         endif
     " }
@@ -1038,19 +946,125 @@
         nnoremap <silent> « :TmuxNavigatePrevious<cr>
     " }
 
-    " Deoplete {
-        let g:deoplete#enable_at_startup = 0
-        if isdirectory(expand("~/.vim/bundle/deoplete.nvim/")) && g:deoplete#enable_at_startup == 1
-            call deoplete#custom#source('LanguageClient',
-                        \ 'min_pattern_length',
-                        \ 2)
-        endif
+    " Completion {
+
+        " Tab completion
+        imap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+        " remap Ultisnips
+        let g:UltiSnipsExpandTrigger = '<C-j>'
+        let g:UltiSnipsJumpForwardTrigger = '<C-j>'
+        let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
+
+        " OmniComplete {
+            if has("autocmd") && exists("+omnifunc")
+                autocmd! Filetype *
+                    \if &omnifunc == "" |
+                    \setlocal omnifunc=syntaxcomplete#Complete |
+                    \endif
+            endif
+
+            " Some convenient mappings
+            "inoremap <expr> <Esc>    pumvisible() ? "\<C-e>" : "\<Esc>"
+            inoremap <expr> <CR>     pumvisible() ? "\<C-y>" : "\<CR>"
+            inoremap <expr> <Down>   pumvisible() ? "\<C-n>" : "\<Down>"
+            inoremap <expr> <Up>     pumvisible() ? "\<C-p>" : "\<Up>"
+            inoremap <expr> <C-d>    pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+            inoremap <expr> <C-u>    pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+
+            " Automatically open and close the popup menu / preview window
+            au! CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+            set completeopt=menu,longest
+        " }
+
+        " YouCompleteMe {
+            " Disable
+            let g:loaded_youcompleteme = 1
+            if isdirectory(expand("~/.vim/bundle/YouCompleteMe/"))
+                let g:acp_enableAtStartup = 0
+
+                let g:ycm_global_ycm_extra_conf = '$HOME/.vim/ycm_extra_conf.py'
+                let g:ycm_confirm_extra_conf = 0
+
+                let g:ycm_always_populate_location_list = 1
+                let g:ycm_complete_in_comments = 1
+                let g:ycm_collect_identifiers_from_comments_and_strings = 0
+                let g:ycm_collect_identifiers_from_tags_files = 0
+                let g:ycm_max_num_candidates = 20
+                let g:ycm_max_num_identifier_candidates = 20
+                let g:ycm_add_preview_to_completeopt = 0
+                let g:ycm_autoclose_preview_window_after_completion = 0
+                let g:ycm_autoclose_preview_window_after_insertion = 1
+
+                nnoremap <C-j> :lnext <CR>
+                nnoremap <C-k> :lprevious <CR>
+
+                " clangd config
+                " Let clangd fully control code completion
+                let g:ycm_clangd_uses_ycmd_caching = 1
+                " Use installed clangd, not YCM-bundled clangd which doesn't get updates.
+                let g:ycm_clangd_binary_path = exepath("clangd")
+                let g:ycm_clangd_args = [
+                            \ '-log=error',
+                            \ '-pretty',
+                            "\ '-background-index',
+                            \ '-j=2',
+                            \ '-pch-storage=memory',
+                            \ '-function-arg-placeholders=1',
+                            \ '-header-insertion-decorators=1'
+                            \ ]
+
+                " Enable omni completion.
+                "autocmd! FileType css setlocal omnifunc=csscomplete#CompleteCSS
+                autocmd! FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+                "autocmd! FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+                autocmd! FileType python setlocal omnifunc=pythoncomplete#Complete
+                "autocmd! FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+                "autocmd! FileType ruby setlocal omnifunc=rubycomplete#Complete
+                "autocmd! FileType haskell setlocal omnifunc=necoghc#omnifunc
+
+                " For snippet_complete marker.
+                if has('conceal')
+                    set conceallevel=2 concealcursor=i
+                endif
+
+                nnoremap <silent> <leader>dl :YcmCompleter GoTo <CR>
+                nnoremap <silent> <leader>df :YcmCompleter GoToDefinition <CR>
+                nnoremap <silent> <leader>fi :YcmCompleter FixIt <CR>
+                nnoremap <silent> <leader>re :YcmCompleter GoToReferences <CR>
+                nnoremap <silent> <leader>fo :YcmCompleter Format <CR>
+                vnoremap <silent> <leader>fo :YcmCompleter Format <CR>
+                nnoremap <leader>rn :YcmCompleter RefactorRename<space>
+                nnoremap <leader>d :YcmRestartServer<CR>
+
+                " Disable the neosnippet preview candidate window
+                " When enabled, there can be too much visual noise
+                " especially when splits are used.
+                set completeopt-=preview
+            endif
+        " }
+
+        " Deoplete {
+            let g:deoplete#enable_at_startup = 1
+            if isdirectory(expand("~/.vim/bundle/deoplete.nvim/")) && g:deoplete#enable_at_startup == 1
+                call deoplete#custom#source('lsp',
+                            \ 'min_pattern_length', 2)
+            endif
+        " }
+
+        " Asyncomplete {
+            let g:asyncomplete_auto_popup = 0
+            if isdirectory(expand("~/.vim/bundle/asyncomplete.vim/")) && g:asyncomplete_auto_popup == 1
+                let g:asyncomplete_popup_delay = 0
+                set shortmess+=c
+            endif
+        " }
     " }
 
     " LSP {
-        if isdirectory(expand("~/.vim/bundle/LanguageClient-neovim")) && g:deoplete#enable_at_startup == 1
+        let g:LanguageClient_autoStart = 0
+        if isdirectory(expand("~/.vim/bundle/LanguageClient-neovim")) && g:LanguageClient_autoStart == 1
             let g:LanguageClient_serverCommands = {
-                \ 'cpp': ['clangd',
+                \ 'cpp': ['/usr/local/opt/llvm/bin/clangd',
                         \ '-log=verbose',
                         \ '-pretty',
                         \ '-pch-storage=memory',
@@ -1063,18 +1077,65 @@
                     \ 'cpp': ['.git'],
                     \ }
 
+            let g:LanguageClient_hoverPreview = 'Never'
+
             nnoremap <silent> <leader>dl :call LanguageClient#textDocument_definition() <CR>
-            nnoremap <silent> <leader>dd :call LanguageClient#textDocument_hover()<CR>
+            nnoremap <silent> <leader>df :call LanguageClient#textDocument_implementation() <CR>
+            nnoremap <silent> <leader>ho :call LanguageClient#textDocument_hover()<CR>
             nnoremap <leader>rn :call LanguageClient#textDocument_rename()<CR>
             nnoremap <silent> <leader>fo :call LanguageClient#textDocument_formatting() <CR>
             nnoremap <silent> <leader>re :call LanguageClient#textDocument_references() <CR>
-            nnoremap <silent> <leader>fi :YcmCompleter FixIt <CR>
+            nnoremap <silent> <leader>fi :call LanguageClient#textDocument_codeAction() <CR>
+        endif
+
+        let g:lsp_auto_enable = 1
+        if isdirectory(expand("~/.vim/bundle/vim-lsp")) && g:lsp_auto_enable == 1
+            " Register lsp server
+            if executable('clangd')
+                augroup LspCpp
+                    autocmd!
+                    autocmd User lsp_setup call lsp#register_server({
+                            \ 'name': 'clangd',
+                            \ 'cmd': {server_info->['clangd',
+                                                    \ '-log=verbose',
+                                                    \ '-pretty',
+                                                    \ '-pch-storage=memory',
+                                                    \ '-function-arg-placeholders=1',
+                                                    \ '-header-insertion-decorators=1',
+                                                    \ ]},
+                            \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+                            \ })
+            endif
+            "au! BufEnter *.cpp,*.hpp,*.h :set omnifunc=lsp#complete
+
+            " settings
+            let g:lsp_diagnostics_enabled = 1
+            let g:lsp_signs_enabled = 1
+            "let g:lsp_diagnostics_echo_cursor = 1
+            "let g:lsp_signs_error = {'text': '✗'}
+            "let g:lsp_signs_warning = {'text': '◇'}
+            "let g:lsp_signs_hint = {'text': '◇'}
+
+            "highlight link LspErrorText GruvboxRedSign
+            "highlight link LspWarningText GruvboxYellowSign
+            "highlight clear LspWarningLine
+
+            " key mappings
+            nnoremap <silent> <leader>dl :LspDefinition <CR>
+            nnoremap <silent> <leader>ho :LspHover <CR>
+            nnoremap <leader>rn          :LspRename <CR>
+            nnoremap <silent> <leader>re :LspReferences <CR>
+            nnoremap <silent> <leader>fi :LspCodeAction <CR>
+            nnoremap <silent> <leader>fo :LspDocumentFormat <CR>
+            vnoremap <silent> <leader>fo :LspDocumentRangeFormat <CR>
+            nnoremap <C-j> :LspNextError <CR>
+            nnoremap <C-k> :LspPreviousError <CR>
         endif
     " }
 
     " FZF {
         if executable("fzf")
-            let g:fzf_layout = { 
+            let g:fzf_layout = {
                         \ 'down': '~30%',
                         \ }
             let g:fzf_colors =
@@ -1112,7 +1173,6 @@
                         \ { 'options': ['--color', 'hl:#9d0006,hl+:#9d0006'] },
                         \ ) <CR>
         endif
-
     " }
 
 " GUI Settings {
