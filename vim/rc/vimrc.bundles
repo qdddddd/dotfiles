@@ -86,13 +86,12 @@
         Bundle 'Valloric/YouCompleteMe', {
                     \ 'do': 'python3 install.py --java-completer --clangd-completer --system-boost',
                     \ }
-        "Bundle 'prabirshrestha/asyncomplete.vim'
-        "Bundle 'prabirshrestha/asyncomplete-lsp.vim'
 
         "Bundle 'Shougo/neosnippet'
         "Bundle 'Shougo/neosnippet-snippets'
         Bundle 'Shougo/deoplete.nvim'
         Bundle 'lighttiger2505/deoplete-vim-lsp'
+        Bundle 'Shougo/echodoc.vim'
 
         "Bundle 'Shougo/neocomplcache'
         "Bundle 'Shougo/neocomplete.vim'
@@ -138,7 +137,6 @@
         Bundle 'tpope/vim-cucumber'
         Bundle 'tpope/vim-markdown'
         Bundle 'w0rp/ale'
-        "Bundle 'blueyed/vim-diminactive'
         "Bundle 'vim-scripts/CycleColor'
     " }
 " }

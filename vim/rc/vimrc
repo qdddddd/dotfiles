@@ -279,7 +279,6 @@
 
         " Fix term colors
         if has("termguicolors")
-                    "\ && ($TERM_PROGRAM == 'iTerm.app')
             let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
             let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
             " enable true color
@@ -781,7 +780,7 @@
 
             let g:ale_linters = {
                         \ 'java': [],
-                        \ 'cpp': ['clangd'],
+                        \ 'cpp': [],
                         \ 'python': ['flake8', 'pylint'],
                         \}
 
@@ -1046,16 +1045,20 @@
         " Deoplete {
             let g:deoplete#enable_at_startup = 1
             if isdirectory(expand("~/.vim/bundle/deoplete.nvim/")) && g:deoplete#enable_at_startup == 1
-                call deoplete#custom#source('lsp',
-                            \ 'min_pattern_length', 2)
+                call deoplete#custom#source(
+                            \ '_', 'converters', ['converter_auto_paren', 'converter_remove_overlap'],
+                            \ '_', 'min_pattern_length', 2,
+                            \ )
+                call deoplete#custom#option(
+                            \ 'auto_refresh_delay', 1,
+                            \ )
             endif
         " }
 
-        " Asyncomplete {
-            let g:asyncomplete_auto_popup = 0
-            if isdirectory(expand("~/.vim/bundle/asyncomplete.vim/")) && g:asyncomplete_auto_popup == 1
-                let g:asyncomplete_popup_delay = 0
-                set shortmess+=c
+        " echodoc {
+            let g:echodoc#enable_at_startup = 1
+            if isdirectory(expand("~/.vim/bundle/echodoc.vim")) && g:echodoc#enable_at_startup == 1
+                let g:echodoc#type = "echo"
             endif
         " }
     " }
@@ -1106,19 +1109,20 @@
                             \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
                             \ })
             endif
-            "au! BufEnter *.cpp,*.hpp,*.h :set omnifunc=lsp#complete
 
             " settings
             let g:lsp_diagnostics_enabled = 1
             let g:lsp_signs_enabled = 1
-            "let g:lsp_diagnostics_echo_cursor = 1
-            "let g:lsp_signs_error = {'text': '✗'}
-            "let g:lsp_signs_warning = {'text': '◇'}
-            "let g:lsp_signs_hint = {'text': '◇'}
+            let g:lsp_diagnostics_echo_cursor = 1
+            let g:lsp_signs_error = {'text': '✗'}
+            let g:lsp_signs_warning = {'text': '▲'}
+            let g:lsp_signs_hint = {'text': '●'}
+            let g:lsp_signs_information = {'text': '◇'}
 
-            "highlight link LspErrorText GruvboxRedSign
-            "highlight link LspWarningText GruvboxYellowSign
-            "highlight clear LspWarningLine
+            highlight link LspErrorText GruvboxRedSign
+            highlight link LspWarningText GruvboxYellowSign
+            highlight link LspInformationText GruvboxYellowSign
+            highlight clear LspWarningLine
 
             " key mappings
             nnoremap <silent> <leader>dl :LspDefinition <CR>

@@ -10,6 +10,6 @@ if [[ -f /etc/zsh/zshenv ]]; then
     source /etc/zsh/zshenv
 fi
 
-if [[ -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
-    source "${ZDOTDIR:-$HOME}/.zprofile"
+if [[ -f "$HOME/.zprofile" ]]; then
+    source "$HOME/.zprofile"
 fi
