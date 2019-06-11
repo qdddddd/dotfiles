@@ -669,11 +669,11 @@
 
         if isdirectory(expand("~/.vim/bundle/vim-airline-themes/"))
             if !exists('g:airline_theme')
-                let g:airline_theme = 'solarized'
+                let g:airline_theme = 'gruvbox'
             endif
 
             let g:airline_highlighting_cache = 1
-            let g:airline_powerline_fonts = 1
+            let g:airline_powerline_fonts = 0
             let g:airline#extensions#tabline#enabled = 1
             let g:airline#extensions#tabline#fnamemod = ':t'
             let g:bufferline_echo = 0
@@ -701,7 +701,7 @@
             let g:airline#extensions#whitespace#mixed_indent_algo = 2
             let g:airline#extensions#ale#enabled = 1
 
-            function! s:truncate_status_symbol()"{
+            function! s:truncate_status_symbol()
                 if winwidth(0) < 120
                     let g:airline_mode_map = {
                           \ '__' : '-',
@@ -739,7 +739,7 @@
                         \ }
                 endif
                 AirlineRefresh
-            endfunction"}
+            endfunction
             "autocmd! VimResized * call s:truncate_status_symbol()
 
             set noshowmode
@@ -757,9 +757,8 @@
             nmap ≠ <Plug>AirlineSelectNextTab
 
             " Sections
-            let g:airline_section_y = airline#section#create_right(['filetype'])
-            let g:airline_section_x = airline#section#create_right(['tagbar'])
-            let g:airline_section_z = '%3p%% %{g:airline_symbols.linenr} %l/%L:%c'
+            let g:airline_section_y = airline#section#create(['tagbar'])
+            "let g:airline_section_z = '%3p%% %{g:airline_symbols.linenr} %l/%L : %c'
         endif
     " }
 
