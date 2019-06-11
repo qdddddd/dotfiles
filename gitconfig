@@ -18,3 +18,5 @@
     log-graph = log --graph --abbrev-commit --decorate --all --format=format:'%C(bold blue)%h%C(reset) %C(auto)%d%C(reset) %C(auto)%s%C(reset) %C(dim white)- %an (%cr)%C(reset)'
 [color "status"]
     unmerged  = yellow
+[push]
+	default = simple
