@@ -44,6 +44,7 @@
     " }
 
     " File explorer {
+        Bundle '/usr/local/opt/fzf'
         Bundle 'junegunn/fzf.vim'
         Bundle 'Shougo/defx.nvim'
         Bundle 'roxma/nvim-yarp'
