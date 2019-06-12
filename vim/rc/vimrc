@@ -265,17 +265,12 @@
 
     "Search pattern with start of words
     "nnoremap / /\v
-
-    set rtp+=/usr/local/opt/fzf
 " }
 
 " Displays {
     function! GruvBoxSettings()
         let g:gruvbox_invert_selection = 0
         let g:airline_theme = 'gruvbox'
-        if !has('gui_macvim')
-            "let g:airline_theme = 'biogoo'
-        endif
 
         " Fix term colors
         if has("termguicolors")
@@ -287,16 +282,13 @@
 
         colo gruvbox
 
-        hi GruvboxGreenSign ctermfg=100 ctermbg=NONE guifg=#79740e guibg=bg
-        hi GruvboxRedSign ctermfg=88 ctermbg=NONE cterm=bold guifg=#9d0006 guibg=bg
-        hi GruvboxAquaSign ctermfg=66 ctermbg=NONE cterm=bold guifg=#427b58 guibg=bg
-        hi GruvboxYellowSign ctermfg=136 ctermbg=NONE guifg=#b57614 guibg=bg
-        hi Normal ctermbg=NONE ctermfg=237 guifg=#3c3836 guibg=#fbf1c7
-        hi CursorLine ctermbg=white term=underline guibg=#ebdbb2
-        hi CursorLineNr ctermbg=white ctermfg=136 term=bold guifg=#b57614 guibg=#ebdbb2
-        hi VertSplit term=reverse ctermfg=lightgray ctermbg=NONE guifg=#bdae93 guibg=#fbf1c7
-        hi PmenuSbar  guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermbg=lightgray cterm=NONE
-        hi PmenuThumb guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=darkcyan cterm=NONE
+        hi GruvboxGreenSign  guifg=#79740e guibg=bg      ctermbg=NONE      ctermfg=100
+        hi GruvboxRedSign    guifg=#9d0006 guibg=bg      ctermbg=NONE      ctermfg=88
+        hi GruvboxAquaSign   guifg=#427b58 guibg=bg      ctermbg=NONE      ctermfg=66
+        hi GruvboxYellowSign guifg=#b57614 guibg=bg      ctermbg=NONE      ctermfg=136
+        "hi PmenuSbar         guifg=#8A95A7 guibg=#F8F8F8 ctermbg=lightgray ctermfg=darkcyan  cterm=NONE gui=NONE
+        "hi PmenuThumb        guifg=#F8F8F8 guibg=#8A95A7 ctermbg=darkcyan  ctermfg=lightgray cterm=NONE gui=NONE
+
         hi! def link Function GruvboxBlue
     endfunction
 
@@ -311,7 +303,7 @@
         call GruvBoxSettings()
         highlight clear SignColumn      " SignColumn should match background
         set conceallevel=1
-        "let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`'}
+        let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`'}
     endfunction
 
     "function! SetTexDisplays()
@@ -336,8 +328,6 @@
     call SetDefaultDisplays()
 
     set tabpagemax=15               " Only show 15 tabs
-    set showmode                    " Display the current mode
-
     set cursorline                  " Highlight current line
     set backspace=indent,eol,start  " Backspace for dummies
     set linespace=0                 " No extra spaces between rows
@@ -358,31 +348,33 @@
     set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespaces
     set lazyredraw                  " Speed up scrolling with large files
     set ttyfast                     " Send more characters to the screen for redrawing
-
+    set noshowmode                  " Disable mode message
 " }
 
 " Plugins {
 
     " GoLang {
-        let g:go_version_warning = 0
-        let g:go_highlight_functions = 1
-        let g:go_highlight_methods = 1
-        let g:go_highlight_structs = 1
-        let g:go_highlight_operators = 1
-        let g:go_highlight_build_constraints = 1
-        let g:go_fmt_command = "goimports"
-        let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-        let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-        au FileType go nmap <Leader>s <Plug>(go-implements)
-        au FileType go nmap <Leader>i <Plug>(go-info)
-        au FileType go nmap <Leader>e <Plug>(go-rename)
-        au FileType go nmap <leader>r <Plug>(go-run)
-        au FileType go nmap <leader>b <Plug>(go-build)
-        au FileType go nmap <leader>t <Plug>(go-test)
-        au FileType go nmap <Leader>gd <Plug>(go-doc)
-        au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
-        au FileType go nmap <leader>co <Plug>(go-coverage)
-        " }
+        if isdirectory(expand("~/.vim/bundle/vim-go/"))
+            let g:go_version_warning = 0
+            let g:go_highlight_functions = 1
+            let g:go_highlight_methods = 1
+            let g:go_highlight_structs = 1
+            let g:go_highlight_operators = 1
+            let g:go_highlight_build_constraints = 1
+            let g:go_fmt_command = "goimports"
+            let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+            let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+            au FileType go nmap <Leader>s <Plug>(go-implements)
+            au FileType go nmap <Leader>i <Plug>(go-info)
+            au FileType go nmap <Leader>e <Plug>(go-rename)
+            au FileType go nmap <leader>r <Plug>(go-run)
+            au FileType go nmap <leader>b <Plug>(go-build)
+            au FileType go nmap <leader>t <Plug>(go-test)
+            au FileType go nmap <Leader>gd <Plug>(go-doc)
+            au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+            au FileType go nmap <leader>co <Plug>(go-coverage)
+        endif
+    " }
 
     " Matchit {
         if isdirectory(expand("~/.vim/bundle/matchit.zip"))
@@ -406,11 +398,13 @@
     " }
 
     " Vim-rooter {
-        let g:rooter_targets = 'Projects/,Course\ Work/,*'
-        let g:rooter_patterns = ['.git/']
-        let g:rooter_change_directory_for_non_project_files = 'current'
-        let g:rooter_silent_chdir = 1
-        let g:rooter_resolve_links = 1
+        if isdirectory(expand("~/.vim/bundle/vim-rooter/"))
+            let g:rooter_targets = 'Projects/,Course\ Work/,*'
+            let g:rooter_patterns = ['.git/']
+            let g:rooter_change_directory_for_non_project_files = 'current'
+            let g:rooter_silent_chdir = 1
+            let g:rooter_resolve_links = 1
+        endif
     " }
 
     " AutoCloseTag {
@@ -494,28 +488,27 @@
                         \ })
 
             call defx#custom#column('icon', {
+                        "\ 'root_icon': '√ ',
                         \ 'directory_icon': '',
                         \ 'opened_icon': '',
-                        \ 'root_icon': '',
                         \ })
 
             call defx#custom#option('_', {
-                        \ 'root_marker': ' ',
+                        "\ 'root_marker': '√ ',
                         \ 'split': 'vertical',
-                        \ 'winwidth': &columns/4,
+                        \ 'winwidth': &columns/5,
                         \ 'direction': 'topleft',
                         \ 'columns': 'git:indent:icon:filename',
                         \ })
 
             call defx#custom#column('filename', {
-                        \ 'root_marker_highlight': 'Ignore',
                         \ 'min_width': 40,
                         \ 'max_width': 40,
                         \ })
 
 
             nnoremap <silent><leader>e :Defx -toggle
-                        \ -ignored-files=*.py[cd],*~,*.swo,*.swp,.git,.hg,.svn,*.bzr,*.DS_Store,build,gradle,.gradle,.idea,bin,cmake-build*,CMakeCache.txt,CMakeFiles,.github,.travis,.clangd*
+                        \ -ignored-files="*.py[cd],*~,*.swo,*.swp,.git,.hg,.svn,*.bzr,*.DS_Store,build,gradle,.gradle,.idea,bin,cmake-build*,CMakeCache.txt,CMakeFiles,.github,.travis,.clangd*"
                         \ -search=`resolve(expand('%:p'))` `getcwd()`
                         \ <CR>
 
@@ -742,7 +735,6 @@
             endfunction
             "autocmd! VimResized * call s:truncate_status_symbol()
 
-            set noshowmode
             " Tabline key mappings
             nmap <leader>1 <Plug>AirlineSelectTab1
             nmap <leader>2 <Plug>AirlineSelectTab2
@@ -848,7 +840,7 @@
     " }
 
     " Auto-pairs {
-        if isdirectory(expand("~/.vim/bundle/auto-pairs/"))
+        if isdirectory(expand("~/.vim/bundle/auto-pairs"))
             let g:AutoPairsShortcutFastWrap = '<Leader>/'
             let g:AutoPairsShortcutBackInsert = '<Leader>]'
             let g:AutoPairsShortcutJump = '<Leader>.'
@@ -868,16 +860,16 @@
     " IndentLine {
         if isdirectory(expand("~/.vim/bundle/indentLine/"))
             let g:indentLine_enabled = 1
-            let g:indentLine_faster = 1
-            let g:indentLine_char = '⎸'    " Can be ¦, ┆, │, ⎸, or ▏
-            let g:indentLine_fileTypeExclude = ['startify', 'defx']
+            let g:indentLine_faster = 0
+            let g:indentLine_char = '│'    " Can be ¦, ┆, │, ⎸, or ▏
+            let g:indentLine_fileTypeExclude = ['startify', 'defx', 'text']
+            let g:indentLine_bufTypeExclude = ['help', 'terminal']
             let g:indentLine_concealcursor = ''
         endif
     " }
 
     " Startify {
         if isdirectory(expand("~/.vim/bundle/vim-startify/"))
-            "let s:FILE = SpaceVim#api#import('file')
             let g:startify_custom_header = [
                             \'',
                             \'',
@@ -948,7 +940,19 @@
 
         " Tab completion
         imap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-        " remap Ultisnips
+
+        " Some convenient mappings
+        inoremap <expr> <CR>     pumvisible() ? "\<C-y>" : "\<CR>"
+        inoremap <expr> <Down>   pumvisible() ? "\<C-n>" : "\<Down>"
+        inoremap <expr> <Up>     pumvisible() ? "\<C-p>" : "\<Up>"
+        inoremap <expr> <C-d>    pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+        inoremap <expr> <C-u>    pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+
+        " Automatically open and close the popup menu / preview window
+        au! CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+        set completeopt=menu,longest
+
+        " Remap Ultisnips
         let g:UltiSnipsExpandTrigger = '<C-j>'
         let g:UltiSnipsJumpForwardTrigger = '<C-j>'
         let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
@@ -956,27 +960,14 @@
         " OmniComplete {
             if has("autocmd") && exists("+omnifunc")
                 autocmd! Filetype *
-                    \if &omnifunc == "" |
-                    \setlocal omnifunc=syntaxcomplete#Complete |
-                    \endif
+                    \ if &omnifunc == "" |
+                    \ setlocal omnifunc=syntaxcomplete#Complete |
+                    \ endif
             endif
-
-            " Some convenient mappings
-            "inoremap <expr> <Esc>    pumvisible() ? "\<C-e>" : "\<Esc>"
-            inoremap <expr> <CR>     pumvisible() ? "\<C-y>" : "\<CR>"
-            inoremap <expr> <Down>   pumvisible() ? "\<C-n>" : "\<Down>"
-            inoremap <expr> <Up>     pumvisible() ? "\<C-p>" : "\<Up>"
-            inoremap <expr> <C-d>    pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-            inoremap <expr> <C-u>    pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
-
-            " Automatically open and close the popup menu / preview window
-            au! CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-            set completeopt=menu,longest
         " }
 
         " YouCompleteMe {
-            " Disable
-            let g:loaded_youcompleteme = 1
+            let g:loaded_youcompleteme = 1  " Disable
             if isdirectory(expand("~/.vim/bundle/YouCompleteMe/"))
                 let g:acp_enableAtStartup = 0
 
@@ -1063,35 +1054,8 @@
     " }
 
     " LSP {
-        let g:LanguageClient_autoStart = 0
-        if isdirectory(expand("~/.vim/bundle/LanguageClient-neovim")) && g:LanguageClient_autoStart == 1
-            let g:LanguageClient_serverCommands = {
-                \ 'cpp': ['/usr/local/opt/llvm/bin/clangd',
-                        \ '-log=verbose',
-                        \ '-pretty',
-                        \ '-pch-storage=memory',
-                        \ '-function-arg-placeholders=1',
-                        \ '-header-insertion-decorators=1',
-                        \ ],
-                    \ }
-
-            let g:LanguageClient_rootMarkers = {
-                    \ 'cpp': ['.git'],
-                    \ }
-
-            let g:LanguageClient_hoverPreview = 'Never'
-
-            nnoremap <silent> <leader>dl :call LanguageClient#textDocument_definition() <CR>
-            nnoremap <silent> <leader>df :call LanguageClient#textDocument_implementation() <CR>
-            nnoremap <silent> <leader>ho :call LanguageClient#textDocument_hover()<CR>
-            nnoremap <leader>rn :call LanguageClient#textDocument_rename()<CR>
-            nnoremap <silent> <leader>fo :call LanguageClient#textDocument_formatting() <CR>
-            nnoremap <silent> <leader>re :call LanguageClient#textDocument_references() <CR>
-            nnoremap <silent> <leader>fi :call LanguageClient#textDocument_codeAction() <CR>
-        endif
-
         let g:lsp_auto_enable = 1
-        if isdirectory(expand("~/.vim/bundle/vim-lsp")) && g:lsp_auto_enable == 1
+        if isdirectory(expand("~/.vim/bundle/vim-lsp/")) && g:lsp_auto_enable == 1
             " Register lsp server
             if executable('clangd')
                 augroup LspCpp
@@ -1138,6 +1102,8 @@
 
     " FZF {
         if executable("fzf")
+            set rtp+=/usr/local/opt/fzf
+
             let g:fzf_layout = {
                         \ 'down': '~30%',
                         \ }

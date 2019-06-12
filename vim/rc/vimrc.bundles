@@ -46,7 +46,9 @@
     " File explorer {
         Bundle '/usr/local/opt/fzf'
         Bundle 'junegunn/fzf.vim'
-        Bundle 'Shougo/defx.nvim'
+        Bundle 'Shougo/defx.nvim', {
+                    \ 'do': 'pip3 install pynvim'
+                    \ }
         Bundle 'roxma/nvim-yarp'
         Bundle 'roxma/vim-hug-neovim-rpc', {
                     \ 'do': 'pip3 install neovim'
@@ -79,23 +81,21 @@
 
     " AutoComplete {
         Bundle 'honza/vim-snippets'
-        " Source support_function.vim to support vim-snippets.
         if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
             source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
         endif
         Bundle 'SirVer/ultisnips'
-        Bundle 'Valloric/YouCompleteMe', {
-                    \ 'do': 'python3 install.py --java-completer --clangd-completer --system-boost',
-                    \ }
-
-        "Bundle 'Shougo/neosnippet'
-        "Bundle 'Shougo/neosnippet-snippets'
         Bundle 'Shougo/deoplete.nvim'
         Bundle 'lighttiger2505/deoplete-vim-lsp'
         Bundle 'Shougo/echodoc.vim'
 
+        "Bundle 'Valloric/YouCompleteMe', {
+                    "\ 'do': 'python3 install.py --java-completer --clangd-completer --system-boost',
+                    "\ }
         "Bundle 'Shougo/neocomplcache'
         "Bundle 'Shougo/neocomplete.vim'
+        "Bundle 'Shougo/neosnippet'
+        "Bundle 'Shougo/neosnippet-snippets'
     " }
 
 
@@ -112,10 +112,6 @@
     " }
 
     " LSP {
-        "Bundle 'autozimu/LanguageClient-neovim', {
-                    "\ 'branch': 'next',
-                    "\ 'do': './install.sh',
-                    "\ }
         Bundle 'prabirshrestha/async.vim'
         Bundle 'prabirshrestha/vim-lsp'
         if filereadable(expand("~/.vim/bundle/vim-lsp"))
