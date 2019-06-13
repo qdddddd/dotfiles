@@ -36,39 +36,35 @@
 " }
 
 " General {
-    set background=light         " Assume a light background
+    set background=light      " Assume a light background
 
      if !has('gui')
-        set term=$TERM          " Make arrow and other keys work
+        set term=$TERM        " Make arrow and other keys work
      endif
-    filetype plugin indent on   " Automatically detect file types.
-    syntax on                   " Syntax highlighting
-    set mouse=a                 " Automatically enable mouse usage
-    set mousehide               " Hide the mouse cursor while typing
-    set guioptions=             " Hide scroll bar in GVim
+    filetype plugin indent on " Automatically detect file types.
+    syntax on                 " Syntax highlighting
+    set mouse=a               " Automatically enable mouse usage
+    set mousehide             " Hide the mouse cursor while typing
+    set guioptions=           " Hide scroll bar in GVim
     scriptencoding utf-8
 
     if has('clipboard')
-        if has('unnamedplus')  " When possible use + register for copy-paste
+        if has('unnamedplus')                 " When possible use + register for copy-paste
             set clipboard=unnamed,unnamedplus
-        else         " On mac and Windows, use * register for copy-paste
+        else                                  " On mac and Windows, use * register for copy-paste
             set clipboard=unnamed
         endif
     endif
 
-    " Automatically switch to the current file directory when
-    " a new buffer is opened
-    "autocmd! BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
-
-    set shortmess+=filmnrxoOtT          " Abbrev. of messages (avoids 'hit enter')
+    set shortmess+=cfilmnrxoOtT                     " Abbrev. of messages (avoids 'hit enter')
     set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
-    set virtualedit=onemore             " Allow for cursor beyond last character
-    set history=1000                    " Store a ton of history (default is 20)
-    set nospell                         " Spell checking off
-    set hidden                          " Allow buffer switching without saving
-    set iskeyword-=.                    " '.' is an end of word designator
-    set iskeyword-=#                    " '#' is an end of word designator
-    set iskeyword-=-                    " '-' is an end of word designator
+    set virtualedit=onemore                         " Allow for cursor beyond last character
+    set history=1000                                " Store a ton of history (default is 20)
+    set nospell                                     " Spell checking off
+    set hidden                                      " Allow buffer switching without saving
+    set iskeyword-=.                                " '.' is an end of word designator
+    set iskeyword-=#                                " '#' is an end of word designator
+    set iskeyword-=-                                " '-' is an end of word designator
 
     " Instead of reverting the cursor to the last position in the buffer, we
     " set it to the first line when editing a git commit message
@@ -86,14 +82,13 @@
         autocmd! BufWinEnter * call ResCur()
     augroup END
 
-    " Setting up the directories {
-        set backup                  " Backups are nice ...
-        if has('persistent_undo')
-            set undofile                " So is persistent undo ...
-            set undolevels=1000         " Maximum number of changes that can be undone
-            set undoreload=10000        " Maximum number lines to save for undo on a buffer reload
-        endif
-    " }
+    " Setting up the directories
+    set backup                  " Backups are nice ...
+    if has('persistent_undo')
+        set undofile                " So is persistent undo ...
+        set undolevels=1000         " Maximum number of changes that can be undone
+        set undoreload=10000        " Maximum number lines to save for undo on a buffer reload
+    endif
 
     " Initialize directories
     function! InitializeDirectories()
@@ -143,6 +138,7 @@
     set splitbelow                  " Puts new split windows to the bottom of the current
     set breakindent
     set equalalways
+    set tw=120
 
     set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
 
@@ -265,6 +261,9 @@
 
     "Search pattern with start of words
     "nnoremap / /\v
+
+    " Switch between .h and .cpp files
+    nnoremap <leader>ch :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
 " }
 
 " Displays {
@@ -749,7 +748,8 @@
             nmap ≠ <Plug>AirlineSelectNextTab
 
             " Sections
-            let g:airline_section_y = airline#section#create(['tagbar'])
+            let g:airline_section_x = airline#section#create_right(['tagbar'])
+            let g:airline_section_y = airline#section#create(['filetype'])
             "let g:airline_section_z = '%3p%% %{g:airline_symbols.linenr} %l/%L : %c'
         endif
     " }
@@ -841,9 +841,9 @@
 
     " Auto-pairs {
         if isdirectory(expand("~/.vim/bundle/auto-pairs"))
-            let g:AutoPairsShortcutFastWrap = '<Leader>/'
-            let g:AutoPairsShortcutBackInsert = '<Leader>]'
-            let g:AutoPairsShortcutJump = '<Leader>.'
+            "let g:AutoPairsShortcutFastWrap = '<Leader>/'
+            "let g:AutoPairsShortcutBackInsert = '<Leader>]'
+            "let g:AutoPairsShortcutJump = '<Leader>.'
             let g:AutoPairsFlyMode = 0
         endif
     " }
@@ -1051,97 +1051,129 @@
                 let g:echodoc#type = "echo"
             endif
         " }
-    " }
 
-    " LSP {
-        let g:lsp_auto_enable = 1
-        if isdirectory(expand("~/.vim/bundle/vim-lsp/")) && g:lsp_auto_enable == 1
-            " Register lsp server
-            if executable('clangd')
-                augroup LspCpp
-                    autocmd!
-                    autocmd User lsp_setup call lsp#register_server({
-                            \ 'name': 'clangd',
-                            \ 'cmd': {server_info->['clangd',
-                                                    \ '-log=verbose',
-                                                    \ '-pretty',
-                                                    \ '-pch-storage=memory',
-                                                    \ '-function-arg-placeholders=1',
-                                                    \ '-header-insertion-decorators=1',
-                                                    \ ]},
-                            \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-                            \ })
+        " LSP {
+            let g:lsp_auto_enable = 1
+            if isdirectory(expand("~/.vim/bundle/vim-lsp/")) && g:lsp_auto_enable == 1
+                " Register lsp server
+                if executable('clangd')
+                    augroup LspCpp
+                        autocmd!
+                        autocmd User lsp_setup call lsp#register_server({
+                                \ 'name': 'clangd',
+                                \ 'cmd': {server_info->['clangd',
+                                                        \ '-log=verbose',
+                                                        \ '-pretty',
+                                                        \ '-pch-storage=memory',
+                                                        \ '-function-arg-placeholders=1',
+                                                        \ '-header-insertion-decorators=1',
+                                                        \ ]},
+                                \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+                                \ })
+                endif
+
+                let s:java_lsp_path = $HOME . '/.dotfiles/lsp/eclipse.jdt.ls'
+                let s:lsp_jar_path = s:java_lsp_path . '/plugins/org.eclipse.equinox.launcher_1.5.300.v20190213-1655.jar'
+
+                if OSX()
+                    let s:java_lsp_config = '/config_mac'
+                elseif LINUX()
+                    let s:java_lsp_config = '/config_linux'
+                else
+                    let s:java_lsp_config = '/config_win'
+                endif
+
+                if executable('java') && filereadable(expand(s:lsp_jar_path))
+                    augroup LspJava
+                        autocmd!
+                        autocmd User lsp_setup call lsp#register_server({
+                                \ 'name': 'eclipse.jdt.ls',
+                                \ 'cmd': {server_info->['java',
+                                                        \ '-Declipse.application=org.eclipse.jdt.ls.core.id1',
+                                                        \ '-Dosgi.bundles.defaultStartLevel=4',
+                                                        \ '-Declipse.product=org.eclipse.jdt.ls.core.product',
+                                                        \ '-Dlog.level=ALL',
+                                                        \ '-noverify',
+                                                        \ '-Dfile.encoding=UTF-8',
+                                                        \ '-Xmx1G',
+                                                        \ '-jar', expand(s:lsp_jar_path),
+                                                        \ '-configuration', expand(s:java_lsp_path . s:java_lsp_config),
+                                                        \ '-data', getcwd()
+                                                        \ ]},
+                                \ 'whitelist': ['java'],
+                                \ })
+                endif
+
+                " settings
+                let g:lsp_diagnostics_enabled = 1
+                let g:lsp_signs_enabled = 1
+                let g:lsp_diagnostics_echo_cursor = 1
+                let g:lsp_signs_error = {'text': '✗'}
+                let g:lsp_signs_warning = {'text': '▲'}
+                let g:lsp_signs_hint = {'text': '●'}
+                let g:lsp_signs_information = {'text': '◇'}
+
+                highlight link LspErrorText GruvboxRedSign
+                highlight link LspWarningText GruvboxYellowSign
+                highlight link LspInformationText GruvboxYellowSign
+                highlight clear LspWarningLine
+
+                " key mappings
+                nnoremap <silent> <leader>dl :LspDefinition <CR>
+                nnoremap <silent> <leader>ho :LspHover <CR>
+                nnoremap <leader>rn          :LspRename <CR>
+                nnoremap <silent> <leader>re :LspReferences <CR>
+                nnoremap <silent> <leader>fi :LspCodeAction <CR>
+                nnoremap <silent> <leader>fo :LspDocumentFormat <CR>
+                vnoremap <silent> <leader>fo :LspDocumentRangeFormat <CR>
+                nnoremap <C-j> :LspNextError <CR>
+                nnoremap <C-k> :LspPreviousError <CR>
             endif
+        " }
 
-            " settings
-            let g:lsp_diagnostics_enabled = 1
-            let g:lsp_signs_enabled = 1
-            let g:lsp_diagnostics_echo_cursor = 1
-            let g:lsp_signs_error = {'text': '✗'}
-            let g:lsp_signs_warning = {'text': '▲'}
-            let g:lsp_signs_hint = {'text': '●'}
-            let g:lsp_signs_information = {'text': '◇'}
+        " FZF {
+            if executable("fzf")
+                set rtp+=/usr/local/opt/fzf
 
-            highlight link LspErrorText GruvboxRedSign
-            highlight link LspWarningText GruvboxYellowSign
-            highlight link LspInformationText GruvboxYellowSign
-            highlight clear LspWarningLine
+                let g:fzf_layout = {
+                            \ 'down': '~30%',
+                            \ }
+                let g:fzf_colors =
+                            \ { 'fg':    ['fg', 'Normal'],
+                            \ 'bg':      ['bg', 'Normal'],
+                            \ 'hl':      ['fg', 'Comment'],
+                            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+                            \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+                            \ 'hl+':     ['fg', 'Statement'],
+                            \ 'info':    ['fg', 'PreProc'],
+                            \ 'border':  ['fg', 'Ignore'],
+                            \ 'prompt':  ['fg', 'Conditional'],
+                            \ 'pointer': ['fg', 'Exception'],
+                            \ 'marker':  ['fg', 'Keyword'],
+                            \ 'spinner': ['fg', 'Label'],
+                            \ 'header':  ['fg', 'Comment'] }
 
-            " key mappings
-            nnoremap <silent> <leader>dl :LspDefinition <CR>
-            nnoremap <silent> <leader>ho :LspHover <CR>
-            nnoremap <leader>rn          :LspRename <CR>
-            nnoremap <silent> <leader>re :LspReferences <CR>
-            nnoremap <silent> <leader>fi :LspCodeAction <CR>
-            nnoremap <silent> <leader>fo :LspDocumentFormat <CR>
-            vnoremap <silent> <leader>fo :LspDocumentRangeFormat <CR>
-            nnoremap <C-j> :LspNextError <CR>
-            nnoremap <C-k> :LspPreviousError <CR>
-        endif
-    " }
+                command! -bang -nargs=* Ag call fzf#vim#ag
+                            \ (
+                            \ <q-args>,
+                            \ '--color-path "0;34" --color-line-number "0;35" --color-match "1;33"',
+                            \ { 'options': ['--color', 'hl:#9d0006,hl+:#9d0006'] },
+                            \ <bang>0
+                            \ )
 
-    " FZF {
-        if executable("fzf")
-            set rtp+=/usr/local/opt/fzf
-
-            let g:fzf_layout = {
-                        \ 'down': '~30%',
-                        \ }
-            let g:fzf_colors =
-                        \ { 'fg':    ['fg', 'Normal'],
-                        \ 'bg':      ['bg', 'Normal'],
-                        \ 'hl':      ['fg', 'Comment'],
-                        \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-                        \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-                        \ 'hl+':     ['fg', 'Statement'],
-                        \ 'info':    ['fg', 'PreProc'],
-                        \ 'border':  ['fg', 'Ignore'],
-                        \ 'prompt':  ['fg', 'Conditional'],
-                        \ 'pointer': ['fg', 'Exception'],
-                        \ 'marker':  ['fg', 'Keyword'],
-                        \ 'spinner': ['fg', 'Label'],
-                        \ 'header':  ['fg', 'Comment'] }
-
-            command! -bang -nargs=* Ag call fzf#vim#ag
-                        \ (
-                        \ <q-args>,
-                        \ '--color-path "1;34" --color-line-number "1;35" --color-match "1;35"',
-                        \ { 'options': ['--color', 'hl:#9d0006,hl+:#9d0006'] },
-                        \ <bang>0
-                        \ )
-
-            " key mappings
-            nnoremap <leader>f<space> :FZF <CR>
-            nnoremap <leader>r<space> :History <CR>
-            nnoremap <leader>ff :BTags <CR>
-            " Bind K to grep word under cursor
-            nnoremap K :call fzf#vim#ag
-                        \ (
-                        \ expand('<cword>'),
-                        \ '--color-path "1;34" --color-line-number "1;35" --color-match "1;35"',
-                        \ { 'options': ['--color', 'hl:#9d0006,hl+:#9d0006'] },
-                        \ ) <CR>
-        endif
+                " key mappings
+                nnoremap <leader>f<space> :FZF <CR>
+                nnoremap <leader>r<space> :History <CR>
+                nnoremap <leader>ff :BTags <CR>
+                " Bind K to grep word under cursor
+                nnoremap K :call fzf#vim#ag
+                            \ (
+                            \ expand('<cword>'),
+                            \ '--color-path "0;34" --color-line-number "0;35" --color-match "1;33"',
+                            \ { 'options': ['--color', 'hl:#9d0006,hl+:#9d0006'] },
+                            \ ) <CR>
+            endif
+        " }
     " }
 
 " GUI Settings {
