@@ -59,7 +59,6 @@
         "Bundle 'Xuyuanp/nerdtree-git-plugin'
         "Bundle 'jistr/vim-nerdtree-tabs'
         "Bundle 'scrooloose/nerdtree'
-        "Bundle 'Yggdroot/LeaderF'
     " }
 
     " Writing {
@@ -85,9 +84,13 @@
             source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
         endif
         Bundle 'SirVer/ultisnips'
-        Bundle 'Shougo/deoplete.nvim'
-        Bundle 'lighttiger2505/deoplete-vim-lsp'
         Bundle 'Shougo/echodoc.vim'
+
+        function! BuildCoc(info)
+            !./install.sh
+            CocInstall coc-java
+        endfunction
+        Bundle 'neoclide/coc.nvim', {'tag': '*', 'do': function('BuildCoc')}
 
         "Bundle 'Valloric/YouCompleteMe', {
                     "\ 'do': 'python3 install.py --java-completer --clangd-completer --system-boost',
@@ -109,14 +112,6 @@
 
     " Go Lang {
         "Bundle 'fatih/vim-go'
-    " }
-
-    " LSP {
-        Bundle 'prabirshrestha/async.vim'
-        Bundle 'prabirshrestha/vim-lsp'
-        if filereadable(expand("~/.vim/bundle/vim-lsp"))
-            source ~/.vim/bundle/vim-lsp/autoload/lsp.vim
-        endif
     " }
 
     " Misc {

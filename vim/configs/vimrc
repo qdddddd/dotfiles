@@ -139,6 +139,7 @@
     set breakindent
     set equalalways
     set tw=120
+    set updatetime=300
 
     set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
 
@@ -469,25 +470,25 @@
 
     " defx {
         if isdirectory(expand("~/.vim/bundle/defx.nvim"))
-            " Toggle between defx window width and longest line
-            function! g:DefxToggleWidth(context) abort
+            function! g:MaxLineLength()
                 let l:max = 0
-                let l:original = a:context['winwidth']
                 for l:line in range(1, line('$'))
                     let l:len = len(getline(l:line))
                     if l:len > l:max
                         let l:max = l:len
                     endif
                 endfor
-                execute 'vertical resize '.(l:max == winwidth('.') ? l:original : l:max)
+                return l:max
             endfunction
 
-            call defx#custom#column('indent', {
-                        \ 'indent': '  ',
-                        \ })
+            " Toggle between defx window width and longest line
+            function! g:DefxToggleWidth(context) abort
+                let l:max = MaxLineLength()
+                execute 'vertical resize '. (l:max == winwidth('.') ? a:context['winwidth'] : l:max)
+            endfunction
 
             call defx#custom#column('icon', {
-                        "\ 'root_icon': '√ ',
+                        \ 'root_icon': '√ ',
                         \ 'directory_icon': '',
                         \ 'opened_icon': '',
                         \ })
@@ -505,11 +506,8 @@
                         \ 'max_width': 40,
                         \ })
 
-
-            nnoremap <silent><leader>e :Defx -toggle
-                        \ -ignored-files="*.py[cd],*~,*.swo,*.swp,.git,.hg,.svn,*.bzr,*.DS_Store,build,gradle,.gradle,.idea,bin,cmake-build*,CMakeCache.txt,CMakeFiles,.github,.travis,.clangd*"
-                        \ -search=`resolve(expand('%:p'))` `getcwd()`
-                        \ <CR>
+            let g:defx_ignore = "*.py[cd],*~,*.swo,*.swp,.git,.hg,.svn,*.bzr,*.DS_Store,build,gradle,.gradle,.idea,bin,cmake-build*,CMakeCache.txt,CMakeFiles,.github,.travis,.clangd*"
+            nnoremap <silent><leader>e :Defx -toggle -ignored-files=`g:defx_ignore` -search=`resolve(expand('%:p'))` `getcwd()` <CR>
 
             au! FileType defx call s:defx_my_settings()
             function! s:defx_my_settings() abort
@@ -666,10 +664,22 @@
 
             let g:airline_highlighting_cache = 1
             let g:airline_powerline_fonts = 0
-            let g:airline#extensions#tabline#enabled = 1
-            let g:airline#extensions#tabline#fnamemod = ':t'
             let g:bufferline_echo = 0
             let g:airline_detect_spell = 0
+
+            " extensions
+            let g:airline#extensions#bufferline#enabled = 0
+            let g:airline#extensions#tabline#enabled = 1
+            let g:airline#extensions#tabline#fnamemod = ':t'
+            let g:airline#extensions#tabline#left_alt_sep = '│'
+            let g:airline#extensions#tabline#buffer_idx_mode = 1
+            let g:airline#extensions#branch#enabled = 1
+            let g:airline#extensions#branch#format = 2
+            let g:airline#extensions#tagbar#enabled = 1
+            let g:airline#extensions#whitespace#mixed_indent_algo = 2
+            let g:airline#extensions#ale#enabled = 1
+            let g:airline#extensions#coc#enabled = 1
+
 
             " Unicode symbols
             if !exists('g:airline_symbols')
@@ -684,55 +694,6 @@
             let g:airline_symbols.whitespace = 'Ξ'
             let g:airline_symbols.space = "\ua0"
             let g:airline_symbols.linenr = '⭡'
-
-            let g:airline#extensions#bufferline#enabled = 0
-            let g:airline#extensions#branch#enabled = 1
-            let g:airline#extensions#branch#format = 2
-            let g:airline#extensions#tagbar#enabled = 1
-            let g:airline#extensions#tabline#buffer_idx_mode = 1
-            let g:airline#extensions#whitespace#mixed_indent_algo = 2
-            let g:airline#extensions#ale#enabled = 1
-
-            function! s:truncate_status_symbol()
-                if winwidth(0) < 120
-                    let g:airline_mode_map = {
-                          \ '__' : '-',
-                          \ 'n'  : 'N',
-                          \ 'i'  : 'I',
-                          \ 'R'  : 'R',
-                          \ 'c'  : 'C',
-                          \ 'v'  : 'V',
-                          \ 'V'  : 'V',
-                          \ '' : 'V',
-                          \ 's'  : 'S',
-                          \ 'S'  : 'S',
-                          \ ''   : 'S',
-                          \ 't'  : 'T',
-                          \ }
-                else
-                    let g:airline_mode_map = {
-                        \ '__' : '------',
-                        \ 'i'  : 'INSERT',
-                        \ 'ic' : 'INSERT COMPL',
-                        \ 'ix' : 'INSERT COMPL',
-                        \ 'n'  : 'NORMAL',
-                        \ 'ni' : '(INSERT)',
-                        \ 'no' : 'OP PENDING',
-                        \ 'R'  : 'REPLACE',
-                        \ 'v'  : 'VISUAL',
-                        \ 'V'  : 'V-LINE',
-                        \ 'c'  : 'COMMAND',
-                        \ '' : 'V-BLOCK',
-                        \ 's'  : 'SELECT',
-                        \ 'S'  : 'S-LINE',
-                        \ ''   : 'S-BLOCK',
-                        \ 't'  : 'TERMINAL',
-                        \ 'Rv' : 'V REPLACE',
-                        \ }
-                endif
-                AirlineRefresh
-            endfunction
-            "autocmd! VimResized * call s:truncate_status_symbol()
 
             " Tabline key mappings
             nmap <leader>1 <Plug>AirlineSelectTab1
@@ -762,12 +723,14 @@
             let g:ale_set_loclist = 1
             let g:ale_set_quickfix = 0
             let g:ale_sign_error = '✗'
-            let g:ale_sign_warning = '◇'
+            let g:ale_sign_warning = '▲'
+            let g:ale_sign_info = '●'
             if g:colors_name == 'gruvbox'
                 highlight link ALEErrorSign GruvboxRedSign
                 highlight link ALEWarningSign GruvboxYellowSign
+                highlight link ALEInfoSign GruvboxAquaSign
             endif
-            let g:ale_statusline_format = ['✗ %d', '⚠ %d', '✓ OK']
+            let g:ale_statusline_format = ['✗ %d', '▲ %d', '✓ OK']
 
             let g:ale_linters = {
                         \ 'java': [],
@@ -939,32 +902,24 @@
     " Completion {
 
         " Tab completion
-        imap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+        inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+        inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
         " Some convenient mappings
-        inoremap <expr> <CR>     pumvisible() ? "\<C-y>" : "\<CR>"
+        inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
         inoremap <expr> <Down>   pumvisible() ? "\<C-n>" : "\<Down>"
         inoremap <expr> <Up>     pumvisible() ? "\<C-p>" : "\<Up>"
         inoremap <expr> <C-d>    pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
         inoremap <expr> <C-u>    pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
         " Automatically open and close the popup menu / preview window
-        au! CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+        au! CompleteDone,CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
         set completeopt=menu,longest
 
         " Remap Ultisnips
         let g:UltiSnipsExpandTrigger = '<C-j>'
         let g:UltiSnipsJumpForwardTrigger = '<C-j>'
         let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
-
-        " OmniComplete {
-            if has("autocmd") && exists("+omnifunc")
-                autocmd! Filetype *
-                    \ if &omnifunc == "" |
-                    \ setlocal omnifunc=syntaxcomplete#Complete |
-                    \ endif
-            endif
-        " }
 
         " YouCompleteMe {
             let g:loaded_youcompleteme = 1  " Disable
@@ -1023,7 +978,7 @@
                 nnoremap <silent> <leader>fo :YcmCompleter Format <CR>
                 vnoremap <silent> <leader>fo :YcmCompleter Format <CR>
                 nnoremap <leader>rn :YcmCompleter RefactorRename<space>
-                nnoremap <leader>d :YcmRestartServer<CR>
+                nnoremap <leader>rs :YcmRestartServer<CR>
 
                 " Disable the neosnippet preview candidate window
                 " When enabled, there can be too much visual noise
@@ -1032,149 +987,89 @@
             endif
         " }
 
-        " Deoplete {
-            let g:deoplete#enable_at_startup = 1
-            if isdirectory(expand("~/.vim/bundle/deoplete.nvim/")) && g:deoplete#enable_at_startup == 1
-                call deoplete#custom#source(
-                            \ '_', 'converters', ['converter_auto_paren', 'converter_remove_overlap'],
-                            \ '_', 'min_pattern_length', 2,
-                            \ )
-                call deoplete#custom#option(
-                            \ 'auto_refresh_delay', 1,
-                            \ )
-            endif
-        " }
+        " Coc {
+            if isdirectory(expand("~/.vim/bundle/coc.nvim/"))
+                function! s:show_documentation()
+                    if (index(['vim','help'], &filetype) >= 0)
+                        execute 'h '.expand('<cword>')
+                    else
+                        call CocAction('doHover')
+                    endif
+                endfunction
 
-        " echodoc {
-            let g:echodoc#enable_at_startup = 1
-            if isdirectory(expand("~/.vim/bundle/echodoc.vim")) && g:echodoc#enable_at_startup == 1
-                let g:echodoc#type = "echo"
-            endif
-        " }
+                nmap <silent> <leader>dl <Plug>(coc-definition)
+                nmap <silent> <leader>re <Plug>(coc-references)
+                nmap <silent> <leader>fi <Plug>(coc-fix-current)
+                xmap <silent> <leader>fo <Plug>(coc-format-selected)
+                nmap <silent> <C-j>      <Plug>(coc-diagnostic-next)
+                nmap <silent> <C-k>      <Plug>(coc-diagnostic-prev)
+                nmap <leader>rn <Plug>(coc-rename)
+                nnoremap <silent> <leader>fo :call CocAction('format') <CR>
+                nnoremap <silent> <leader>rs :CocRestart <CR>
+                nnoremap <silent> <leader>ho :call <SID>show_documentation() <CR>
+                nnoremap <silent> <leader>dd :<C-u>CocList diagnostics<cr>
 
-        " LSP {
-            let g:lsp_auto_enable = 1
-            if isdirectory(expand("~/.vim/bundle/vim-lsp/")) && g:lsp_auto_enable == 1
-                " Register lsp server
-                if executable('clangd')
-                    augroup LspCpp
-                        autocmd!
-                        autocmd User lsp_setup call lsp#register_server({
-                                \ 'name': 'clangd',
-                                \ 'cmd': {server_info->['clangd',
-                                                        \ '-log=verbose',
-                                                        \ '-pretty',
-                                                        \ '-pch-storage=memory',
-                                                        \ '-function-arg-placeholders=1',
-                                                        \ '-header-insertion-decorators=1',
-                                                        \ ]},
-                                \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-                                \ })
-                endif
-
-                let s:java_lsp_path = $HOME . '/.dotfiles/lsp/eclipse.jdt.ls'
-                let s:lsp_jar_path = s:java_lsp_path . '/plugins/org.eclipse.equinox.launcher_1.5.300.v20190213-1655.jar'
-
-                if OSX()
-                    let s:java_lsp_config = '/config_mac'
-                elseif LINUX()
-                    let s:java_lsp_config = '/config_linux'
-                else
-                    let s:java_lsp_config = '/config_win'
-                endif
-
-                if executable('java') && filereadable(expand(s:lsp_jar_path))
-                    augroup LspJava
-                        autocmd!
-                        autocmd User lsp_setup call lsp#register_server({
-                                \ 'name': 'eclipse.jdt.ls',
-                                \ 'cmd': {server_info->['java',
-                                                        \ '-Declipse.application=org.eclipse.jdt.ls.core.id1',
-                                                        \ '-Dosgi.bundles.defaultStartLevel=4',
-                                                        \ '-Declipse.product=org.eclipse.jdt.ls.core.product',
-                                                        \ '-Dlog.level=ALL',
-                                                        \ '-noverify',
-                                                        \ '-Dfile.encoding=UTF-8',
-                                                        \ '-Xmx1G',
-                                                        \ '-jar', expand(s:lsp_jar_path),
-                                                        \ '-configuration', expand(s:java_lsp_path . s:java_lsp_config),
-                                                        \ '-data', getcwd()
-                                                        \ ]},
-                                \ 'whitelist': ['java'],
-                                \ })
-                endif
-
-                " settings
-                let g:lsp_diagnostics_enabled = 1
-                let g:lsp_signs_enabled = 1
-                let g:lsp_diagnostics_echo_cursor = 1
-                let g:lsp_signs_error = {'text': '✗'}
-                let g:lsp_signs_warning = {'text': '▲'}
-                let g:lsp_signs_hint = {'text': '●'}
-                let g:lsp_signs_information = {'text': '◇'}
-
-                highlight link LspErrorText GruvboxRedSign
-                highlight link LspWarningText GruvboxYellowSign
-                highlight link LspInformationText GruvboxYellowSign
-                highlight clear LspWarningLine
-
-                " key mappings
-                nnoremap <silent> <leader>dl :LspDefinition <CR>
-                nnoremap <silent> <leader>ho :LspHover <CR>
-                nnoremap <leader>rn          :LspRename <CR>
-                nnoremap <silent> <leader>re :LspReferences <CR>
-                nnoremap <silent> <leader>fi :LspCodeAction <CR>
-                nnoremap <silent> <leader>fo :LspDocumentFormat <CR>
-                vnoremap <silent> <leader>fo :LspDocumentRangeFormat <CR>
-                nnoremap <C-j> :LspNextError <CR>
-                nnoremap <C-k> :LspPreviousError <CR>
-            endif
-        " }
-
-        " FZF {
-            if executable("fzf")
-                set rtp+=/usr/local/opt/fzf
-
-                let g:fzf_layout = {
-                            \ 'down': '~30%',
-                            \ }
-                let g:fzf_colors =
-                            \ { 'fg':    ['fg', 'Normal'],
-                            \ 'bg':      ['bg', 'Normal'],
-                            \ 'hl':      ['fg', 'Comment'],
-                            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-                            \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-                            \ 'hl+':     ['fg', 'Statement'],
-                            \ 'info':    ['fg', 'PreProc'],
-                            \ 'border':  ['fg', 'Ignore'],
-                            \ 'prompt':  ['fg', 'Conditional'],
-                            \ 'pointer': ['fg', 'Exception'],
-                            \ 'marker':  ['fg', 'Keyword'],
-                            \ 'spinner': ['fg', 'Label'],
-                            \ 'header':  ['fg', 'Comment'] }
-
-                command! -bang -nargs=* Ag call fzf#vim#ag
-                            \ (
-                            \ <q-args>,
-                            \ '--color-path "0;34" --color-line-number "0;35" --color-match "1;33"',
-                            \ { 'options': ['--color', 'hl:#9d0006,hl+:#9d0006'] },
-                            \ <bang>0
-                            \ )
-
-                " key mappings
-                nnoremap <leader>f<space> :FZF <CR>
-                nnoremap <leader>r<space> :History <CR>
-                nnoremap <leader>ff :BTags <CR>
-                " Bind K to grep word under cursor
-                nnoremap K :call fzf#vim#ag
-                            \ (
-                            \ expand('<cword>'),
-                            \ '--color-path "0;34" --color-line-number "0;35" --color-match "1;33"',
-                            \ { 'options': ['--color', 'hl:#9d0006,hl+:#9d0006'] },
-                            \ ) <CR>
+                hi def link CocErrorSign GruvboxRedSign
+                hi def link CocWarningSign GruvboxYellowSign
+                hi def link CocInfoSign GruvboxAquaSign
+                hi def link CocHintSign GruvboxYellowSign
             endif
         " }
     " }
+
+    " echodoc {
+        let g:echodoc#enable_at_startup = 1
+        if isdirectory(expand("~/.vim/bundle/echodoc.vim")) && g:echodoc#enable_at_startup == 1
+            let g:echodoc#type = "echo"
+        endif
+    " }
+
+    " FZF {
+        if executable("fzf")
+            set rtp+=/usr/local/opt/fzf
+
+            let g:fzf_layout = {
+                        \ 'down': '~30%',
+                        \ }
+            let g:fzf_colors =
+                        \ { 'fg':    ['fg', 'Normal'],
+                        \ 'bg':      ['bg', 'Normal'],
+                        \ 'hl':      ['fg', 'Comment'],
+                        \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+                        \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+                        \ 'hl+':     ['fg', 'Statement'],
+                        \ 'info':    ['fg', 'PreProc'],
+                        \ 'border':  ['fg', 'Ignore'],
+                        \ 'prompt':  ['fg', 'Conditional'],
+                        \ 'pointer': ['fg', 'Exception'],
+                        \ 'marker':  ['fg', 'Keyword'],
+                        \ 'spinner': ['fg', 'Label'],
+                        \ 'header':  ['fg', 'Comment'] }
+
+            command! -bang -nargs=* Ag call fzf#vim#ag
+                        \ (
+                        \ <q-args>,
+                        \ '--color-path "0;34" --color-line-number "0;35" --color-match "1;33"',
+                        \ { 'options': ['--color', 'hl:#9d0006,hl+:#9d0006'] },
+                        \ <bang>0
+                        \ )
+
+            " key mappings
+            nnoremap <leader>f<space> :FZF <CR>
+            nnoremap <leader>r<space> :History <CR>
+            nnoremap <leader>ff :BTags <CR>
+            nnoremap <leader>b<space> :Buffers <CR>
+            nnoremap <leader>l<space> :Lines <CR>
+            " Bind K to grep word under cursor
+            nnoremap K :call fzf#vim#ag
+                        \ (
+                        \ expand('<cword>'),
+                        \ '--color-path "0;34" --color-line-number "0;35" --color-match "1;33"',
+                        \ { 'options': ['--color', 'hl:#9d0006,hl+:#9d0006'] },
+                        \ ) <CR>
+        endif
+    " }
+" }
 
 " GUI Settings {
 

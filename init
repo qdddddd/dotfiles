@@ -15,14 +15,19 @@ for xfile in ${PWD}/bin/*; do
     ln -s "$xfile" "$BINDIR/${xfile:t}"
 done
 
-# Create vim config sym links
+# Install vim-plug
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-for lcfile in ${PWD}/vim/rc/^*(README.md|init)*; do
+
+# Install dependencies for Coc
+curl -sL install-node.now.sh | sudo bash
+curl --compressed -o- -L https://yarnpkg.com/install.sh | bash
+
+# Create vim config sym links
+for lcfile in ${PWD}/vim/configs/^*(README.md|init)*; do
     ln -s "$lcfile" "$HOME/.vim/${lcfile:t}"
 done
-ln -s ${PWD}/vim/ycm_extra_conf.py "$HOME/.vim/ycm_extra_conf.py"
-vim +PlugInstall +qa!
+vim +PlugInstall +PlugClean +qa!
 rm -f $HOME/.fzf.zsh $HOME/.fzf.bash
 
 # Create zsh config sym links

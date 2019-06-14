@@ -64,6 +64,7 @@ path=(
     /usr/{bin,sbin}
     /bin
     /sbin
+    $HOME/.yarn/bin
 )
 
 # Ensure path arrays do not contain duplicates.
