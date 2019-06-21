@@ -255,7 +255,8 @@
     command! Ter ter zsh
 
     " Clear highlight
-    nnoremap <silent> \ :noh<CR>
+    nnoremap <silent> ' :let @/="" <CR>
+    nnoremap <silent> \ :let @/="" <CR>
 
     " Map redo to U
     nnoremap U :redo<cr>
@@ -265,6 +266,12 @@
 
     " Switch between .h and .cpp files
     nnoremap <leader>ch :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
+
+    " Insert mode navigation
+    inoremap <C-k> <C-o>gk
+    inoremap <C-h> <Left>
+    inoremap <C-l> <Right>
+    inoremap <C-j> <C-o>j
 " }
 
 " Displays {
@@ -282,12 +289,10 @@
 
         colo gruvbox
 
-        hi GruvboxGreenSign  guifg=#79740e guibg=bg      ctermbg=NONE      ctermfg=100
-        hi GruvboxRedSign    guifg=#9d0006 guibg=bg      ctermbg=NONE      ctermfg=88
-        hi GruvboxAquaSign   guifg=#427b58 guibg=bg      ctermbg=NONE      ctermfg=66
-        hi GruvboxYellowSign guifg=#b57614 guibg=bg      ctermbg=NONE      ctermfg=136
-        "hi PmenuSbar         guifg=#8A95A7 guibg=#F8F8F8 ctermbg=lightgray ctermfg=darkcyan  cterm=NONE gui=NONE
-        "hi PmenuThumb        guifg=#F8F8F8 guibg=#8A95A7 ctermbg=darkcyan  ctermfg=lightgray cterm=NONE gui=NONE
+        hi GruvboxGreenSign  guifg=#79740e guibg=bg ctermbg=NONE ctermfg=100
+        hi GruvboxRedSign    guifg=#9d0006 guibg=bg ctermbg=NONE ctermfg=88
+        hi GruvboxAquaSign   guifg=#427b58 guibg=bg ctermbg=NONE ctermfg=66
+        hi GruvboxYellowSign guifg=#b57614 guibg=bg ctermbg=NONE ctermfg=136
 
         hi! def link Function GruvboxBlue
     endfunction
@@ -340,7 +345,7 @@
     set smartcase                   " Case sensitive when uc present
     set wildmenu                    " Show list instead of just completing
     set wildmode=list:longest,full  " Command <Tab> completion, list matches, then longest common part, then all.
-    set whichwrap=b,s,h,l,<,>,[,]   " Backspace and cursor keys wrap too
+    set whichwrap=b,s,h,l,<,>,[,]   " Backspace and cursor keys wraep too
     set scrolljump=0                " Lines to scroll when cursor leaves screen
     set scrolloff=3                 " Minimum lines to keep above and below cursor
     set foldenable                  " Auto fold code
@@ -902,15 +907,15 @@
     " Completion {
 
         " Tab completion
-        inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+        inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
         inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
         " Some convenient mappings
-        inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-        inoremap <expr> <Down>   pumvisible() ? "\<C-n>" : "\<Down>"
-        inoremap <expr> <Up>     pumvisible() ? "\<C-p>" : "\<Up>"
-        inoremap <expr> <C-d>    pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-        inoremap <expr> <C-u>    pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+        inoremap <expr> <cr>   pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+        inoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"
+        inoremap <expr> <Up>   pumvisible() ? "\<C-p>" : "\<Up>"
+        inoremap <expr> <C-d>  pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+        inoremap <expr> <C-u>  pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
         " Automatically open and close the popup menu / preview window
         au! CompleteDone,CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
@@ -989,7 +994,8 @@
 
         " Coc {
             if isdirectory(expand("~/.vim/bundle/coc.nvim/"))
-                function! s:show_documentation()
+                set signcolumn=yes
+               function! s:show_documentation()
                     if (index(['vim','help'], &filetype) >= 0)
                         execute 'h '.expand('<cword>')
                     else
@@ -1001,13 +1007,14 @@
                 nmap <silent> <leader>re <Plug>(coc-references)
                 nmap <silent> <leader>fi <Plug>(coc-fix-current)
                 xmap <silent> <leader>fo <Plug>(coc-format-selected)
+                nmap <silent> <leader>dd <Plug>(coc-diagnostic-info)
                 nmap <silent> <C-j>      <Plug>(coc-diagnostic-next)
                 nmap <silent> <C-k>      <Plug>(coc-diagnostic-prev)
                 nmap <leader>rn <Plug>(coc-rename)
                 nnoremap <silent> <leader>fo :call CocAction('format') <CR>
                 nnoremap <silent> <leader>rs :CocRestart <CR>
                 nnoremap <silent> <leader>ho :call <SID>show_documentation() <CR>
-                nnoremap <silent> <leader>dd :<C-u>CocList diagnostics<cr>
+                nnoremap <silent> <leader>da :<C-u>CocList diagnostics<cr>
 
                 hi def link CocErrorSign GruvboxRedSign
                 hi def link CocWarningSign GruvboxYellowSign
@@ -1015,7 +1022,7 @@
                 hi def link CocHintSign GruvboxYellowSign
             endif
         " }
-    " }
+    "}
 
     " echodoc {
         let g:echodoc#enable_at_startup = 1

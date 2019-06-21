@@ -1,6 +1,6 @@
 {
     "suggest.minTriggerInputLength": 2,
-    "suggest.enablePreview": true,
+    "suggest.enablePreview": false,
     "suggest.echodocSupport": true,
     "suggest.languageSourcePriority": 1,
     "suggest.numberSelect": true,
@@ -10,14 +10,11 @@
     "diagnostic.warningSign": "▲",
     "diagnostic.infoSign": "●",
     "diagnostic.hintSign": "◇",
+    "diagnostic.checkCurrentLine": true,
+    "diagnostic.signOffset": 1,
 
     "list.nextKeymap": "<C-n>",
     "list.previousKeymap": "<C-p>",
-    "list.normalMappings": {
-        "d": "action:delete"
-    },
-
-    "coc.preferences.hoverTarget": "echo",
 
     "languageserver": {
         "clangd": {
