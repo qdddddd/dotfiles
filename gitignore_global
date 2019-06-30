@@ -137,3 +137,4 @@ ENV/
 keystore
 .clangd/
 *tags
+.metadata/

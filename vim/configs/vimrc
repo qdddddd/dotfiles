@@ -83,7 +83,7 @@
     augroup END
 
     " Setting up the directories
-    set backup                  " Backups are nice ...
+    set backup                      " Backups are nice ...
     if has('persistent_undo')
         set undofile                " So is persistent undo ...
         set undolevels=1000         " Maximum number of changes that can be undone
@@ -105,7 +105,7 @@
 
         " To specify a different directory in which to place the vimbackup,
         " vimviews, vimundo, and vimswap files/directories
-        let common_dir = $HOME . '/.vim/' . prefix
+        let common_dir = $HOME . '/.vim/tempfiles/' . prefix
 
         for [dirname, settingname] in items(dir_list)
             let directory = common_dir . dirname . '/'
@@ -122,6 +122,8 @@
                 exec "set " . settingname . "=" . directory
             endif
         endfor
+
+        set viminfo='100,n$HOME/.vim/tempfiles/viminfo
     endfunction
     call InitializeDirectories()
 " }
@@ -217,6 +219,13 @@
     command! -bang QA qa<bang>
     command! -bang Qa qa<bang>
 
+    " Command mode navigation
+    cnoremap <C-n> <Down>
+    cnoremap <C-p> <Up>
+    cnoremap <C-b> <Left>
+    cnoremap <C-f> <Right>
+    cnoremap <C-a> <Home>
+
     " Yank from the cursor to the end of the line, to be consistent with C and D.
     nnoremap Y y$
 
@@ -245,7 +254,6 @@
     set autowrite
     autocmd! BufEnter,BufNewFile *.cpp nnoremap <leader>s :w <bar> AsyncRun g++ -W -Wall -pedantic -o %:r % && ./%:r<CR>
     autocmd! BufEnter,BufNewFile *.c nnoremap <leader>s :w <bar> AsyncRun gcc -std=c99 -lm % -o %:p:h/%:t:r.out && ./%:r.out<CR>
-    "autocmd! BufEnter,BufNewFile *.java nnoremap <leader>s :w <bar> !javac -d . % && java -enableassertions %:r <CR>
     autocmd! BufEnter,BufNewFile *.java nnoremap <leader>s :w <bar> AsyncRun gradle build <CR>
     autocmd! BufEnter,BufNewFile *.py nnoremap <leader>s :w <bar> AsyncRun python % <CR>
     autocmd! BufEnter,BufNewFile *.vim,*vimrc* nnoremap <leader>s :w <bar> so % <CR>
@@ -259,7 +267,7 @@
     nnoremap <silent> \ :let @/="" <CR>
 
     " Map redo to U
-    nnoremap U :redo<cr>
+    nnoremap U :redo<CR>
 
     "Search pattern with start of words
     "nnoremap / /\v
@@ -272,6 +280,9 @@
     inoremap <C-h> <Left>
     inoremap <C-l> <Right>
     inoremap <C-j> <C-o>j
+
+    " Clear screen and redraw
+    nnoremap <silent> <C-l> :nohlsearch<CR>:diffupdate<CR>:syntax sync fromstart<CR>
 " }
 
 " Displays {
@@ -809,10 +820,8 @@
 
     " Auto-pairs {
         if isdirectory(expand("~/.vim/bundle/auto-pairs"))
-            "let g:AutoPairsShortcutFastWrap = '<Leader>/'
-            "let g:AutoPairsShortcutBackInsert = '<Leader>]'
-            "let g:AutoPairsShortcutJump = '<Leader>.'
             let g:AutoPairsFlyMode = 0
+            let g:AutoPairsMapCh = 0
         endif
     " }
 
@@ -919,6 +928,7 @@
 
         " Automatically open and close the popup menu / preview window
         au! CompleteDone,CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+
         set completeopt=menu,longest
 
         " Remap Ultisnips
@@ -995,7 +1005,7 @@
         " Coc {
             if isdirectory(expand("~/.vim/bundle/coc.nvim/"))
                 set signcolumn=yes
-               function! s:show_documentation()
+                function! s:show_documentation()
                     if (index(['vim','help'], &filetype) >= 0)
                         execute 'h '.expand('<cword>')
                     else
