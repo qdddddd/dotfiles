@@ -5,17 +5,14 @@
     "suggest.languageSourcePriority": 1,
     "suggest.numberSelect": true,
     "suggest.snippetIndicator": "▸",
-
     "diagnostic.errorSign": "✗",
     "diagnostic.warningSign": "▲",
     "diagnostic.infoSign": "●",
     "diagnostic.hintSign": "◇",
     "diagnostic.checkCurrentLine": true,
     "diagnostic.signOffset": 1,
-
     "list.nextKeymap": "<C-n>",
     "list.previousKeymap": "<C-p>",
-
     "languageserver": {
         "clangd": {
             "command": "clangd",

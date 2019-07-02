@@ -101,8 +101,8 @@ function prompt_bernoulli_setup {
     PROMPT_L='%{%F{$COLOR}%}'${USER}'@'${HOST}' » %{%~%}'
     lsize=${#${(S%%)PROMPT_L//$~invisibles/}}
 
-    PROMPT='${PROMPT_L} ${PROMPT_M} ${PROMPT_R}'
-    PROMPT+=$'\n  %f'
+    PROMPT='%B${PROMPT_L} ${PROMPT_M} ${PROMPT_R}'
+    PROMPT+=$'\n  %b%f'
 }
 
 prompt_bernoulli_setup "$@"
