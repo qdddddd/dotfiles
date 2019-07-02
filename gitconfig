@@ -8,8 +8,6 @@
     email = q.du@connect.ust.hk
 [credential]
     helper = osxkeychain
-[credential "https://github.com"]
-    username = qdddddd
 [core]
     excludesfile = ~/.gitignore_global
 [branch]
