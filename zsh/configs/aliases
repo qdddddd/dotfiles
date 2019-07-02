@@ -10,7 +10,6 @@ func_lnx() {
 
 case "$OSTYPE" in
     darwin*)
-        alias vim='mvim'
         alias sha2=func_osx
         alias fw='/usr/libexec/ApplicationFirewall/socketfilterfw'
         alias ctags="$(brew --prefix)/bin/ctags"
