@@ -298,16 +298,15 @@
 
         colo gruvbox
 
-        hi GruvboxGreenSign  guifg=#79740e guibg=bg ctermbg=NONE ctermfg=100
-        hi GruvboxRedSign    guifg=#9d0006 guibg=bg ctermbg=NONE ctermfg=88
-        hi GruvboxAquaSign   guifg=#427b58 guibg=bg ctermbg=NONE ctermfg=66
-        hi GruvboxYellowSign guifg=#b57614 guibg=bg ctermbg=NONE ctermfg=136
+        hi GruvboxGreenSign  guifg=#79740e guibg=bg
+        hi GruvboxRedSign    guifg=#9d0006 guibg=bg
+        hi GruvboxAquaSign   guifg=#427b58 guibg=bg
+        hi GruvboxYellowSign guifg=#b57614 guibg=bg
 
         hi! def link Function GruvboxBlue
     endfunction
 
     function! SetDefaultDisplays()
-        "let g:indentLine_color_gui = '#4c4c4b'
         if has('gui_macvim')
             "set lines=66 columns=120
             set guifont=Monaco\ Nerd\ Font:h13
@@ -1011,6 +1010,7 @@
                     endif
                 endfunction
 
+                " Key mappings
                 nmap <silent> <leader>dl <Plug>(coc-definition)
                 nmap <silent> <leader>re <Plug>(coc-references)
                 nmap <silent> <leader>fi <Plug>(coc-fix-current)
@@ -1024,10 +1024,23 @@
                 nnoremap <silent> <leader>ho :call <SID>show_documentation() <CR>
                 nnoremap <silent> <leader>da :<C-u>CocList diagnostics<cr>
 
+                " Highlight groups
                 hi def link CocErrorSign GruvboxRedSign
                 hi def link CocWarningSign GruvboxYellowSign
                 hi def link CocInfoSign GruvboxAquaSign
-                hi def link CocHintSign GruvboxYellowSign
+                hi def link CocHintSign CocWarningSign
+
+                let s:menu_bg = '#f3e5bc'
+                exe 'hi Pmenu guifg=#32302f guibg=' . s:menu_bg
+                hi PmenuSbar  guifg=#8a95a7 guibg=#f9f5d7
+                exe 'hi PmenuThumb guifg=' . s:menu_bg . ' guibg=#8a95a7'
+
+                hi def link CocFloating Pmenu
+                exe 'hi GruvboxGreenSign guifg=#79740e guibg=' . s:menu_bg
+                exe 'hi CocErrorFloat    guifg=#9d0006 guibg=' . s:menu_bg
+                exe 'hi CocInfoFloat     guifg=#427b58 guibg=' . s:menu_bg
+                exe 'hi CocWarningFloat  guifg=#b57614 guibg=' . s:menu_bg
+                hi def link CocHintFloat CocWarningFloat
             endif
         " }
     "}
@@ -1035,7 +1048,8 @@
     " echodoc {
         let g:echodoc#enable_at_startup = 1
         if isdirectory(expand("~/.vim/bundle/echodoc.vim")) && g:echodoc#enable_at_startup == 1
-            let g:echodoc#type = "echo"
+            let g:echodoc#type = "floating"
+            highlight link EchoDocFloat Pmenu
         endif
     " }
 
