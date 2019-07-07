@@ -19,6 +19,7 @@ for lcfile in ${PWD}/vim/configs/^*(README.md|init)*; do
     rm "$HOME/.vim/${lcfile:t}"
 done
 rm $HOME/.vim/ycm_extra_conf.py
+rm $HOME/.vim/tempfiles
 
 # Remove zsh files
 for rcfile in "${PWD}"/zsh/configs/*; do

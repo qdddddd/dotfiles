@@ -37,7 +37,7 @@ alias wallet52='open -a /Applications/Ethereum\ Wallet.app/ --args --rpc http://
 alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
 alias ss-load='launchctl load -w /Library/LaunchDaemons/com.shadowsocks.plist'
 alias ss-unload='launchctl unload -w /Library/LaunchDaemons/com.shadowsocks.plist'
-alias close_tunnel="pkill -f '8888:bernoulli.ieda.ust.hk:445'"
+alias close_tunnel="pkill -f '8888:iez035.ieda.ust.hk:445'"
 alias ss-load='launchctl load -w ~/Library/LaunchAgents/com.shadowsocks.plist'
 alias ss-unload='launchctl unload -w ~/Library/LaunchAgents/com.shadowsocks.plist'
 
