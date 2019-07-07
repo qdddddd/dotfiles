@@ -1,10 +1,4 @@
-" Modeline and Notes {
-
 " Environment {
-
-    " Basics {
-        set nocompatible        " Must be first line
-    " }
 
         " Setup Bundle Support {
         " The next three lines ensure that the ~/.vim/bundle/ system works
@@ -54,7 +48,7 @@
                     \ 'do': 'pip3 install neovim'
                     \ }
         Bundle 'kristijanhusak/defx-git'
-        "Bundle 'kristijanhusak/defx-icons'
+        Bundle 'kristijanhusak/defx-icons'
 
         "Bundle 'Xuyuanp/nerdtree-git-plugin'
         "Bundle 'jistr/vim-nerdtree-tabs'
@@ -101,19 +95,6 @@
         "Bundle 'Shougo/neosnippet-snippets'
     " }
 
-
-    " Python {
-        Bundle 'python-mode/python-mode', { 'branch': 'develop' }
-    " }
-
-    " Json {
-        Bundle 'elzr/vim-json'
-    " }
-
-    " Go Lang {
-        "Bundle 'fatih/vim-go'
-    " }
-
     " Misc {
         Bundle 'Konfekt/FastFold'
         Bundle 'Yggdroot/indentLine'
@@ -135,7 +116,6 @@
 
 if has('macunix')
     Bundle 'philpep/vim-rst-tables'
-    Bundle 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 endif
 
 call plug#end()

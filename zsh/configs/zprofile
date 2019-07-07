@@ -49,6 +49,7 @@ case "$OSTYPE" in
         )
         export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
         export CXXFLAGS="-I/usr/local/opt/llvm/include -I/usr/local/opt/llvm/include/c++/v1/"
+        export ASAN_OPTIONS="detect_leaks=1"
         ;;
     linux*)
         path=(

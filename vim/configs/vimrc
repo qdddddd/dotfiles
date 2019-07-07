@@ -14,22 +14,15 @@
     " Basics {
         set nocompatible        " Must be first line
     " }
-
-    " Arrow Key Fix {
-        if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
-            inoremap <silent> <C-[>OC <RIGHT>
-        endif
-    " }
-
 " }
 
-" Plugin setteings before loading {
+" Load bundles config {
+
+    " Plugin setteings before loading
     let g:ale_completion_enabled = 0
     "let g:ale_set_balloons = 1
     "let g:ale_completion_delay = 0
-" }
 
-" Use bundles config {
     if filereadable(expand("~/.vim/vimrc.bundles"))
         source ~/.vim/vimrc.bundles
     endif
@@ -38,9 +31,9 @@
 " General {
     set background=light      " Assume a light background
 
-     if !has('gui')
+    if !has('gui')
         set term=$TERM        " Make arrow and other keys work
-     endif
+    endif
     filetype plugin indent on " Automatically detect file types.
     syntax on                 " Syntax highlighting
     set mouse=a               " Automatically enable mouse usage
@@ -142,16 +135,34 @@
     set equalalways
     set tw=120
     set updatetime=300
-
+    set tabpagemax=15               " Only show 15 tabs
+    set cursorline                  " Highlight current line
+    set backspace=indent,eol,start  " Backspace for dummies
+    set linespace=0                 " No extra spaces between rows
+    set number relativenumber       " Line numbers on
+    set showmatch                   " Show matching brackets/parenthesis
+    set incsearch                   " Find as you type search
+    set hlsearch                    " Highlight search terms
+    set winminheight=0              " Windows can be 0 line high
+    set ignorecase                  " Case insensitive search
+    set smartcase                   " Case sensitive when uc present
+    set wildmenu                    " Show list instead of just completing
+    set wildmode=list:longest,full  " Command <Tab> completion, list matches, then longest common part, then all.
+    set whichwrap=b,s,h,l,<,>,[,]   " Backspace and cursor keys wraep too
+    set scrolljump=0                " Lines to scroll when cursor leaves screen
+    set scrolloff=3                 " Minimum lines to keep above and below cursor
+    set foldenable                  " Auto fold code
+    set list
+    set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespaces
+    set lazyredraw                  " Speed up scrolling with large files
+    set ttyfast                     " Send more characters to the screen for redrawing
+    set noshowmode                  " Disable mode message
     set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
 
-    autocmd! BufNewFile,BufRead *.html.twig set filetype=html.twig
-    autocmd! BufNewFile,BufRead *.coffee set filetype=coffee
+    autocmd! BufRead,BufNewFile *.html.twig set ft=html.twig
+    autocmd! BufRead,BufNewFile *.coffee set ft=coffee
     autocmd! BufRead,BufNewFile *.rst set ft=rst
-    autocmd! BufRead,BufNewFile *.go set nospell
-
-    "nnoremap <silent> <C-z> @=(foldlevel('.')?'za':"\<Space>")<CR>
-    vnoremap <C-z> zf
+    autocmd! BufRead,BufNewFile *.tex set ft=tex
 
     " Crontab {
         if $VIM_CRONTAB == 'true'
@@ -208,17 +219,6 @@
     noremap 0 g0
     noremap ^ g^
 
-    " Stupid shift key fixes
-    command! -bang -nargs=* -complete=file E e<bang> <args>
-    command! -bang -nargs=* -complete=file W w<bang> <args>
-    command! -bang -nargs=* -complete=file Wq wq<bang> <args>
-    command! -bang -nargs=* -complete=file WQ wq<bang> <args>
-    command! -bang Wa wa<bang>
-    command! -bang WA wa<bang>
-    command! -bang Q q<bang>
-    command! -bang QA qa<bang>
-    command! -bang Qa qa<bang>
-
     " Command mode navigation
     cnoremap <C-n> <Down>
     cnoremap <C-p> <Up>
@@ -252,10 +252,6 @@
 
     " Compile and run code
     set autowrite
-    autocmd! BufEnter,BufNewFile *.cpp nnoremap <leader>s :w <bar> AsyncRun g++ -W -Wall -pedantic -o %:r % && ./%:r<CR>
-    autocmd! BufEnter,BufNewFile *.c nnoremap <leader>s :w <bar> AsyncRun gcc -std=c99 -lm % -o %:p:h/%:t:r.out && ./%:r.out<CR>
-    autocmd! BufEnter,BufNewFile *.java nnoremap <leader>s :w <bar> AsyncRun gradle build <CR>
-    autocmd! BufEnter,BufNewFile *.py nnoremap <leader>s :w <bar> AsyncRun python % <CR>
     autocmd! BufEnter,BufNewFile *.vim,*vimrc* nnoremap <leader>s :w <bar> so % <CR>
 
     " Terminal mode
@@ -269,9 +265,6 @@
     " Map redo to U
     nnoremap U :redo<CR>
 
-    "Search pattern with start of words
-    "nnoremap / /\v
-
     " Switch between .h and .cpp files
     nnoremap <leader>ch :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
 
@@ -280,7 +273,7 @@
     inoremap <C-l> <Right>
 
     " Clear screen and redraw
-    nnoremap <silent> <C-l> :nohlsearch<CR>:diffupdate<CR>:syntax sync fromstart<CR>
+    nnoremap <silent> <C-l> :nohlsearch<CR>:diffupdate<CR>:syntax sync fromstart<CR>:AirlineRefresh<CR>
 " }
 
 " Displays {
@@ -298,116 +291,37 @@
 
         colo gruvbox
 
-        hi GruvboxGreenSign  guifg=#79740e guibg=bg
-        hi GruvboxRedSign    guifg=#9d0006 guibg=bg
-        hi GruvboxAquaSign   guifg=#427b58 guibg=bg
-        hi GruvboxYellowSign guifg=#b57614 guibg=bg
+        hi! GruvboxGreenSign  guifg=#79740e guibg=bg
+        hi! GruvboxRedSign    guifg=#9d0006 guibg=bg
+        hi! GruvboxAquaSign   guifg=#427b58 guibg=bg
+        hi! GruvboxYellowSign guifg=#b57614 guibg=bg
 
         hi! def link Function GruvboxBlue
     endfunction
 
-    function! SetDefaultDisplays()
-        if has('gui_macvim')
-            "set lines=66 columns=120
-            set guifont=Monaco\ Nerd\ Font:h13
-        else
-            set t_Co=256
-        endif
-        call GruvBoxSettings()
-        highlight clear SignColumn      " SignColumn should match background
-        set conceallevel=1
-        let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`'}
-    endfunction
+    if has('gui_macvim')
+        "set lines=66 columns=120
+        set guifont=Monaco\ Nerd\ Font:h13
+    else
+        set t_Co=256
+    endif
+    call GruvBoxSettings()
+    hi clear SignColumn      " SignColumn should match background
+    set conceallevel=1
 
-    "function! SetTexDisplays()
-        "set background=light
-        "colo solarized
-        "set guifont=Cousine\ for\ Powerline:h14
-        "let g:airline_theme = 'solarized'
-        "let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '$':'$'}
-        "set conceallevel=0
-    "endfunction
-
-    "function! SetDisplays()
-        "if (&ft=='tex')
-            "call SetTexDisplays()
-        "else
-            "call SetDefaultDisplays()
-        "endif
-        "AirlineRefresh
-    "endfunction
-
-    "au! BufEnter,BufRead * call SetDisplays()
-    call SetDefaultDisplays()
-
-    set tabpagemax=15               " Only show 15 tabs
-    set cursorline                  " Highlight current line
-    set backspace=indent,eol,start  " Backspace for dummies
-    set linespace=0                 " No extra spaces between rows
-    set number relativenumber       " Line numbers on
-    set showmatch                   " Show matching brackets/parenthesis
-    set incsearch                   " Find as you type search
-    set hlsearch                    " Highlight search terms
-    set winminheight=0              " Windows can be 0 line high
-    set ignorecase                  " Case insensitive search
-    set smartcase                   " Case sensitive when uc present
-    set wildmenu                    " Show list instead of just completing
-    set wildmode=list:longest,full  " Command <Tab> completion, list matches, then longest common part, then all.
-    set whichwrap=b,s,h,l,<,>,[,]   " Backspace and cursor keys wraep too
-    set scrolljump=0                " Lines to scroll when cursor leaves screen
-    set scrolloff=3                 " Minimum lines to keep above and below cursor
-    set foldenable                  " Auto fold code
-    set list
-    set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespaces
-    set lazyredraw                  " Speed up scrolling with large files
-    set ttyfast                     " Send more characters to the screen for redrawing
-    set noshowmode                  " Disable mode message
+    " Floating window
+    let s:menu_bg = '#f3e5bc'
+    exe 'hi Fmenu guifg=#32302f guibg=' . s:menu_bg
+    hi! def link FmenuSbar PmenuSbar
+    exe 'hi FmenuThumb guifg=' . s:menu_bg . ' guibg=#8a95a7'
 " }
 
 " Plugins {
-
-    " GoLang {
-        if isdirectory(expand("~/.vim/bundle/vim-go/"))
-            let g:go_version_warning = 0
-            let g:go_highlight_functions = 1
-            let g:go_highlight_methods = 1
-            let g:go_highlight_structs = 1
-            let g:go_highlight_operators = 1
-            let g:go_highlight_build_constraints = 1
-            let g:go_fmt_command = "goimports"
-            let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-            let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-            au FileType go nmap <Leader>s <Plug>(go-implements)
-            au FileType go nmap <Leader>i <Plug>(go-info)
-            au FileType go nmap <Leader>e <Plug>(go-rename)
-            au FileType go nmap <leader>r <Plug>(go-run)
-            au FileType go nmap <leader>b <Plug>(go-build)
-            au FileType go nmap <leader>t <Plug>(go-test)
-            au FileType go nmap <Leader>gd <Plug>(go-doc)
-            au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
-            au FileType go nmap <leader>co <Plug>(go-coverage)
-        endif
-    " }
 
     " Matchit {
         if isdirectory(expand("~/.vim/bundle/matchit.zip"))
             let b:match_ignorecase = 1
         endif
-    " }
-
-    " Ctags {
-        " Automatically generate tag files on save
-        "command! Gtags silent !ctags -R -o $HOME/.cache/tags $(pwd) &
-        "let g:auctaglangs = ['go']
-
-        "autocmd! BufWritePost <buffer>
-            "\ if &buftype != 'terminal' |
-                "\ if index(g:auctaglangs, &ft) > -1 |
-                    "\ exe 'Gtags' |
-                "\ endif |
-            "\ endif
-        ""set tags=./tags,tags;$HOME
-        "set tags=$HOME/.cache/tags
     " }
 
     " Vim-rooter {
@@ -417,67 +331,6 @@
             let g:rooter_change_directory_for_non_project_files = 'current'
             let g:rooter_silent_chdir = 1
             let g:rooter_resolve_links = 1
-        endif
-    " }
-
-    " AutoCloseTag {
-        " Make it so AutoCloseTag works for xml and xhtml files as well
-        au FileType xhtml,xml ru ftplugin/html/autoclosetag.vim
-        nmap <Leader>ac <Plug>ToggleAutoCloseMappings
-    " }
-
-    " NerdTree {
-        if isdirectory(expand("~/.vim/bundle/nerdtree"))
-            let NERDTreeMapActivateNode = 'oo'
-            let NERDTreeMapPreview = 'o'
-            let NERDTreeMapPreviewVSplit = 'v'
-            let NERDTreeMapOpenVSplit = 'vv'
-            let NERDTreeMapOpenSplit = 'ss'
-            let NERDTreeMapPreviewSplit = 's'
-            let NERDTreeAutoDeleteBuffer = 1
-            let NERDTreeMinimalUI = 1
-            let NERDTreeChDirMode = 2
-
-            map <C-q> <plug>NERDTreeTabsToggle<CR>
-            nmap <leader>e :NERDTreeFind<CR>
-
-            let NERDTreeShowBookmarks=1
-            let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
-            let NERDTreeIgnore+=['^\.DS_Store$', '^build$', '^gradle$', '^\.gradle$', '^\.idea$']
-            let NERDTreeIgnore+=['^bin$', '\.cmake$', '^CMakeCache\.txt$', '^CMakeFiles$']
-            let NERDTreeQuitOnOpen=1
-            let NERDTreeMouseMode=2
-            let NERDTreeShowHidden=1
-            let NERDTreeKeepTreeInNewTab=1
-            let g:nerdtree_tabs_open_on_gui_startup=0
-
-            let g:NERDShutUp=1
-            let g:NERDTreeIndicatorMapCustom = {
-                        \ "Modified"  : "✹",
-                        \ "Staged"    : "✚",
-                        \ "Untracked" : "✭",
-                        \ "Renamed"   : "➜",
-                        \ "Unmerged"  : "═",
-                        \ "Deleted"   : "✖",
-                        \ "Dirty"     : "✗",
-                        \ "Clean"     : "✔︎",
-                        \ 'Ignored'   : '☒',
-                        \ "Unknown"   : "?"
-                        \ }
-
-            " Initialize NERDTree as needed {
-            function! NERDTreeInitAsNeeded()
-                redir => bufoutput
-                buffers!
-                redir END
-                let idx = stridx(bufoutput, "NERD_tree")
-                if idx > -1
-                    NERDTreeMirror
-                    NERDTreeFind
-                    wincmd l
-                endif
-            endfunction
-            " }
         endif
     " }
 
@@ -511,7 +364,7 @@
                         \ 'split': 'vertical',
                         \ 'winwidth': &columns/5,
                         \ 'direction': 'topleft',
-                        \ 'columns': 'git:indent:icon:filename',
+                        \ 'columns': 'git:indent:icons:filename',
                         \ })
 
             call defx#custom#column('filename', {
@@ -559,6 +412,18 @@
         endif
     " }
 
+    " defx-git {
+        if isdirectory(expand("~/.vim/bundle/defx-git"))
+            hi def link Defx_git_Untracked Comment
+            hi def link Defx_git_Ignored DiffAdd
+            hi def link Defx_git_Renamed Title
+            hi def link Defx_git_Modified Special
+            hi def link Defx_git_Unmerged Label
+            hi def link Defx_git_Deleted DiffDelete
+            hi def link Defx_git_Staged Function
+        endif
+    " }
+
     " defx-icons {
         if isdirectory(expand("~/.vim/bundle/defx-icons"))
             let g:defx_icons_enable_syntax_highlight = 0
@@ -575,18 +440,6 @@
         endif
     " }
 
-    " defx-git {
-        if isdirectory(expand("~/.vim/bundle/defx-git"))
-            hi def link Defx_git_Untracked Comment
-            hi def link Defx_git_Ignored DiffAdd
-            hi def link Defx_git_Renamed Title
-            hi def link Defx_git_Modified Special
-            hi def link Defx_git_Unmerged Label
-            hi def link Defx_git_Deleted DiffDelete
-            hi def link Defx_git_Staged Function
-        endif
-    " }
-
     " Session List {
         set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
         if isdirectory(expand("~/.vim/bundle/sessionman.vim/"))
@@ -594,34 +447,6 @@
             nmap <leader>ss :SessionSave<CR>
             nmap <leader>sc :SessionClose<CR>
         endif
-    " }
-
-    " JSON {
-        nmap <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
-        let g:vim_json_syntax_conceal = 0
-    " }
-
-    " PyMode {
-        " Disable if python support not present
-        if has('python3')
-            let g:pymode_python = 'python3'
-        else
-            if !has('python2')
-                let g:pymode = 0
-            endif
-        endif
-
-
-        if isdirectory(expand("~/.vim/bundle/python-mode"))
-            let g:pymode_lint = 0
-            let g:pymode_trim_whitespaces = 0
-            let g:pymode_options = 0
-            let g:pymode_rope = 0
-            let g:pymode_syntax_print_as_function = 1
-        endif
-
-        let g:pymode_options_max_line_length = 120
-        let g:pymode_lint_options_pylint = {'max-line-length': g:pymode_options_max_line_length}
     " }
 
     " TagBar {
@@ -693,7 +518,6 @@
             let g:airline#extensions#ale#enabled = 1
             let g:airline#extensions#coc#enabled = 1
 
-
             " Unicode symbols
             if !exists('g:airline_symbols')
                 let g:airline_symbols = {}
@@ -730,9 +554,11 @@
 
     " ALE {
         if isdirectory(expand("~/.vim/bundle/ale/"))
-            let g:ale_linters_explicit = 0
+            let g:ale_disable_lsp = 1
+            let g:ale_linters_explicit = 1
             let g:ale_lint_on_text_changed = 'normal'
             let g:ale_lint_delay = 0
+            let g:ale_echo_delay = 0
             let g:ale_set_loclist = 1
             let g:ale_set_quickfix = 0
             let g:ale_sign_error = '✗'
@@ -759,7 +585,7 @@
             if g:ale_completion_enabled == 1
                 nnoremap <silent> <leader>dl :ALEGoToDefinition <CR>
                 nnoremap <silent> <leader>re :ALEFindReferences <CR>
-                nnoremap <silent> <leader>fo :ALEFix<CR>
+                nnoremap <silent> <leader>fi :ALEFix<CR>
 
                 set omnifunc=ale#completion#OmniFunc
                 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
@@ -768,64 +594,29 @@
         endif
     " }
 
-    " Diminactive {
-        if isdirectory(expand("~/.vim/bundle/vim-diminactive/"))
-            let g:diminactive_use_colorcolumn = 1
-            let g:diminactive_use_syntax = 0
-        endif
-    " }
-
-    " Latex preview {
-        if isdirectory(expand("~/.vim/bundle/vim-latex-live-preview/"))
-            let g:livepreview_previewer = 'open -a Preview'
-            command! LLP LLPStartPreview
-            let g:livepreview_engine = 'pdflatex'
-            "autocmd! Filetype tex setl updatetime=1
-            augroup RemoveTemp
-                autocmd! FileType tex
-                    \ autocmd! BufUnload <buffer> silent !rm -rf $TMPDIR/vim-latex-live-preview-*
-            augroup END
-        endif
-    " }
-
-    " LeaderF {
-        if isdirectory(expand("~/.vim/bundle/LeaderF/"))
-            let g:Lf_StlSeparator = { 'left': '⮀', 'right': '⮂' }
-            let g:Lf_StlColorscheme = 'default'
-            let g:Lf_RootMarkers = ['.project', '.root', '.git', '.svn']
-            let g:Lf_WorkingDirectoryMode = 'Ac'
-            if executable('ag')
-                let g:Lf_DefaultExternalTool = "ag"
-            endif
-            if has('maxunix')
-                let g:Lf_Ctags = '/usr/local/bin/ctags'
-            endif
-            let g:Lf_CacheDirectory = $HOME . '/.cache'
-            let g:Lf_UseCache = 0
-            let g:Lf_UseMemoryCache = 0
-            let g:Lf_WildIgnore = {
-                \ 'dir': ['.svn','.git','.hg', 'Music', 'Movies', 'Public', 'Pictures'],
-                \ 'file': ['~$*','*.bak','*.exe','*.o','*.a','*.so','*.py[co]','.DS_Store', '*.pyc', '*.dat', '*.dll', '*.jpg', '*.png']
-                \ }
-
-            " Key mapping
-            let g:Lf_ShortcutF = '<leader>f<space>'
-            nnoremap <leader>ff :LeaderfFunction<CR>
-            nnoremap <leader>r<space> :LeaderfMru<CR>
-        endif
-    " }
-
-    " Auto-pairs {
+    " AutoPairs {
         if isdirectory(expand("~/.vim/bundle/auto-pairs"))
             let g:AutoPairsFlyMode = 0
             let g:AutoPairsMapCh = 0
+
+            function! DefaultPairs()
+                let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`'}
+                set conceallevel=1
+            endfunction
+
+            function! TexPairs()
+                let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '$':'$'}
+                set conceallevel=0
+            endfunction
+
+            au! BufEnter,BufRead,FileType *.tex call TexPairs()
+            au! BufLeave,BufUnload,FileType *.tex call DefaultPairs()
         endif
     " }
 
     " FastFold {
         if isdirectory(expand("~/.vim/bundle/FastFold/"))
             let g:tex_fold_enabled=1
-            let g:vimsyn_folding='af'
             let g:fastfold_fold_command_suffixes = []
             nmap zuz <Plug>(FastFoldUpdate)
         endif
@@ -836,8 +627,9 @@
             let g:indentLine_enabled = 1
             let g:indentLine_faster = 0
             let g:indentLine_char = '│'    " Can be ¦, ┆, │, ⎸, or ▏
-            let g:indentLine_fileTypeExclude = ['startify', 'defx', 'text']
+            let g:indentLine_fileTypeExclude = ['text']
             let g:indentLine_bufTypeExclude = ['help', 'terminal']
+            let g:indentLine_bufNameExclude = ['_.*', 'startify', 'NERD_tree.*', 'defx']
             let g:indentLine_concealcursor = ''
         endif
     " }
@@ -879,7 +671,6 @@
             let g:startify_session_persistence = 1
             "let g:startify_session_delete_buffers = 0
             let g:startify_change_to_dir = 0
-            "let g:startify_change_to_vcs_root = 0  " vim-rooter has same feature
             let g:startify_skiplist = [
                 \ 'COMMIT_EDITMSG',
                 \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
@@ -928,77 +719,6 @@
 
         set completeopt=menu,longest
 
-        " Remap Ultisnips
-        let g:UltiSnipsExpandTrigger = '<C-j>'
-        let g:UltiSnipsJumpForwardTrigger = '<C-j>'
-        let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
-
-        " YouCompleteMe {
-            let g:loaded_youcompleteme = 1  " Disable
-            if isdirectory(expand("~/.vim/bundle/YouCompleteMe/"))
-                let g:acp_enableAtStartup = 0
-
-                let g:ycm_global_ycm_extra_conf = '$HOME/.vim/ycm_extra_conf.py'
-                let g:ycm_confirm_extra_conf = 0
-
-                let g:ycm_always_populate_location_list = 1
-                let g:ycm_complete_in_comments = 1
-                let g:ycm_collect_identifiers_from_comments_and_strings = 0
-                let g:ycm_collect_identifiers_from_tags_files = 0
-                let g:ycm_max_num_candidates = 20
-                let g:ycm_max_num_identifier_candidates = 20
-                let g:ycm_add_preview_to_completeopt = 0
-                let g:ycm_autoclose_preview_window_after_completion = 0
-                let g:ycm_autoclose_preview_window_after_insertion = 1
-
-                nnoremap <C-j> :lnext <CR>
-                nnoremap <C-k> :lprevious <CR>
-
-                " clangd config
-                " Let clangd fully control code completion
-                let g:ycm_clangd_uses_ycmd_caching = 1
-                " Use installed clangd, not YCM-bundled clangd which doesn't get updates.
-                let g:ycm_clangd_binary_path = exepath("clangd")
-                let g:ycm_clangd_args = [
-                            \ '-log=error',
-                            \ '-pretty',
-                            "\ '-background-index',
-                            \ '-j=2',
-                            \ '-pch-storage=memory',
-                            \ '-function-arg-placeholders=1',
-                            \ '-header-insertion-decorators=1'
-                            \ ]
-
-                " Enable omni completion.
-                "autocmd! FileType css setlocal omnifunc=csscomplete#CompleteCSS
-                autocmd! FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-                "autocmd! FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-                autocmd! FileType python setlocal omnifunc=pythoncomplete#Complete
-                "autocmd! FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-                "autocmd! FileType ruby setlocal omnifunc=rubycomplete#Complete
-                "autocmd! FileType haskell setlocal omnifunc=necoghc#omnifunc
-
-                " For snippet_complete marker.
-                if has('conceal')
-                    set conceallevel=2 concealcursor=i
-                endif
-
-                nnoremap <silent> <leader>dl :YcmCompleter GoTo <CR>
-                nnoremap <silent> <leader>df :YcmCompleter GoToDefinition <CR>
-                nnoremap <silent> <leader>fi :YcmCompleter FixIt <CR>
-                nnoremap <silent> <leader>re :YcmCompleter GoToReferences <CR>
-                nnoremap <silent> <leader>fo :YcmCompleter Format <CR>
-                vnoremap <silent> <leader>fo :YcmCompleter Format <CR>
-                nnoremap <leader>rn :YcmCompleter RefactorRename<space>
-                nnoremap <leader>rs :YcmRestartServer<CR>
-
-                " Disable the neosnippet preview candidate window
-                " When enabled, there can be too much visual noise
-                " especially when splits are used.
-                set completeopt-=preview
-            endif
-        " }
-
         " Coc {
             if isdirectory(expand("~/.vim/bundle/coc.nvim/"))
                 set signcolumn=yes
@@ -1030,16 +750,10 @@
                 hi def link CocInfoSign GruvboxAquaSign
                 hi def link CocHintSign CocWarningSign
 
-                let s:menu_bg = '#f3e5bc'
-                exe 'hi Pmenu guifg=#32302f guibg=' . s:menu_bg
-                hi PmenuSbar  guifg=#8a95a7 guibg=#f9f5d7
-                exe 'hi PmenuThumb guifg=' . s:menu_bg . ' guibg=#8a95a7'
-
-                hi def link CocFloating Pmenu
-                exe 'hi GruvboxGreenSign guifg=#79740e guibg=' . s:menu_bg
-                exe 'hi CocErrorFloat    guifg=#9d0006 guibg=' . s:menu_bg
-                exe 'hi CocInfoFloat     guifg=#427b58 guibg=' . s:menu_bg
-                exe 'hi CocWarningFloat  guifg=#b57614 guibg=' . s:menu_bg
+                hi def link CocFloating Fmenu
+                exe 'hi CocErrorFloat   guifg=#9d0006 guibg=' . s:menu_bg
+                exe 'hi CocWarningFloat guifg=#b57614 guibg=' . s:menu_bg
+                exe 'hi CocInfoFloat    guifg=#427b58 guibg=' . s:menu_bg
                 hi def link CocHintFloat CocWarningFloat
             endif
         " }
@@ -1049,7 +763,7 @@
         let g:echodoc#enable_at_startup = 1
         if isdirectory(expand("~/.vim/bundle/echodoc.vim")) && g:echodoc#enable_at_startup == 1
             let g:echodoc#type = "floating"
-            highlight link EchoDocFloat Pmenu
+            highlight link EchoDocFloat Fmenu
         endif
     " }
 
@@ -1098,14 +812,4 @@
                         \ ) <CR>
         endif
     " }
-" }
-
-" GUI Settings {
-
-    " GVIM- (here instead of .gvimrc)
-    if has('gui_running')
-        set guioptions-=T           " Remove the toolbar
-        set lines=40                " 40 lines of text instead of 24
-    endif
-
 " }
