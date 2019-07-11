@@ -60,8 +60,17 @@
                 "c",
                 "cpp",
                 "objc",
-                "objcpp"
+                "objcpp",
+                "cuda"
             ]
         }
-    }
+    },
+    "pairs.enableCharacters": [
+        "(",
+        "[",
+        "{",
+        "'",
+        "\"",
+        "`"
+    ]
 }

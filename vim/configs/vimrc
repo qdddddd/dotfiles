@@ -44,8 +44,8 @@
     if has('clipboard')
         if has('unnamedplus')                 " When possible use + register for copy-paste
             set clipboard=unnamed,unnamedplus
-        "else                                  " On mac and Windows, use * register for copy-paste
-            "set clipboard=unnamed
+        else                                  " On mac and Windows, use * register for copy-paste
+            set clipboard=unnamed
         endif
     endif
 
@@ -154,8 +154,6 @@
     set foldenable                  " Auto fold code
     set list
     set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespaces
-    set lazyredraw                  " Speed up scrolling with large files
-    set ttyfast                     " Send more characters to the screen for redrawing
     set noshowmode                  " Disable mode message
     set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
 
@@ -203,7 +201,7 @@
         augroup FastEscape
             autocmd!
             au InsertEnter * set timeoutlen=0
-            au InsertLeave * set timeoutlen=1000
+            au InsertLeave * set timeoutlen=500
         augroup END
     endif
 " }
@@ -250,6 +248,9 @@
     " Shorcut saving
     nnoremap <leader>w :w<CR>
 
+    " Shortcut delete buffer
+    nnoremap <leader>x :bd<CR>
+
     " Compile and run code
     set autowrite
     autocmd! BufEnter,BufNewFile *.vim,*vimrc* nnoremap <leader>s :w <bar> so % <CR>
@@ -273,7 +274,11 @@
     inoremap <C-l> <Right>
 
     " Clear screen and redraw
-    nnoremap <silent> <C-l> :nohlsearch<CR>:diffupdate<CR>:syntax sync fromstart<CR>:AirlineRefresh<CR>
+    nnoremap <silent> <C-l>
+                \ :nohlsearch<CR>
+                \ :diffupdate<CR>
+                \ :syntax sync fromstart<CR>
+                \ :AirlineRefresh<CR>
 " }
 
 " Displays {
@@ -594,26 +599,6 @@
         endif
     " }
 
-    " AutoPairs {
-        if isdirectory(expand("~/.vim/bundle/auto-pairs"))
-            let g:AutoPairsFlyMode = 0
-            let g:AutoPairsMapCh = 0
-
-            function! DefaultPairs()
-                let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`'}
-                set conceallevel=1
-            endfunction
-
-            function! TexPairs()
-                let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '$':'$'}
-                set conceallevel=0
-            endfunction
-
-            au! BufEnter,BufRead,FileType *.tex call TexPairs()
-            au! BufLeave,BufUnload,FileType *.tex call DefaultPairs()
-        endif
-    " }
-
     " FastFold {
         if isdirectory(expand("~/.vim/bundle/FastFold/"))
             let g:tex_fold_enabled=1
@@ -708,13 +693,12 @@
         inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
         " Some convenient mappings
-        inoremap <expr> <cr>   pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+        inoremap <expr> <CR>   pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
         inoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"
         inoremap <expr> <Up>   pumvisible() ? "\<C-p>" : "\<Up>"
         inoremap <expr> <C-d>  pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
         inoremap <expr> <C-u>  pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
-        " Automatically open and close the popup menu / preview window
         au! CompleteDone,CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 
         set completeopt=menu,longest
@@ -743,6 +727,7 @@
                 nnoremap <silent> <leader>rs :CocRestart <CR>
                 nnoremap <silent> <leader>ho :call <SID>show_documentation() <CR>
                 nnoremap <silent> <leader>da :<C-u>CocList diagnostics<cr>
+                nnoremap <silent> <leader>b<space> :CocList buffers<CR>
 
                 " Highlight groups
                 hi def link CocErrorSign GruvboxRedSign
@@ -755,6 +740,9 @@
                 exe 'hi CocWarningFloat guifg=#b57614 guibg=' . s:menu_bg
                 exe 'hi CocInfoFloat    guifg=#427b58 guibg=' . s:menu_bg
                 hi def link CocHintFloat CocWarningFloat
+
+                " Coc plugins
+                autocmd FileType tex let b:coc_pairs = [["$", "$"]]
             endif
         " }
     "}
@@ -763,7 +751,7 @@
         let g:echodoc#enable_at_startup = 1
         if isdirectory(expand("~/.vim/bundle/echodoc.vim")) && g:echodoc#enable_at_startup == 1
             let g:echodoc#type = "floating"
-            highlight link EchoDocFloat Fmenu
+            highlight link EchoDocFloat Pmenu
         endif
     " }
 
@@ -801,7 +789,6 @@
             nnoremap <leader>f<space> :FZF <CR>
             nnoremap <leader>r<space> :History <CR>
             nnoremap <leader>ff :BTags <CR>
-            nnoremap <leader>b<space> :Buffers <CR>
             nnoremap <leader>l<space> :Lines <CR>
             " Bind K to grep word under cursor
             nnoremap K :call fzf#vim#ag

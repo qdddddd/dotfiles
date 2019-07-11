@@ -45,10 +45,13 @@ case "$OSTYPE" in
             /usr/local/opt/llvm/bin
             /usr/local/{texlive/2018/bin/x86_64-darwin,opt/openssl@1.1/bin}
             /Library/TeX/texbin
+            $HOME/.cargo/bin
             $path
         )
         export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
         export CXXFLAGS="-I/usr/local/opt/llvm/include -I/usr/local/opt/llvm/include/c++/v1/"
+        export CC=clang
+        export CXX=clang++
         export ASAN_OPTIONS="detect_leaks=1"
         ;;
     linux*)
@@ -95,3 +98,5 @@ export LS_COLORS='di=1;34:ln=36:so=32:pi=33:ex=33:bd=1;36:cd=1;33:su=30;41:sg=30
 export GRADLE_USER_HOME=$HOME/.cache/gradle
 export GREP_COLOR='1;35;40'
 export GREP_COLORS='mt=1;35;40'
+
+export PATH="$HOME/.cargo/bin:$PATH"

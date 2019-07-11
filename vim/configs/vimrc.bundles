@@ -22,7 +22,6 @@
     " General {
         Bundle 'bling/vim-bufferline'
         Bundle 'easymotion/vim-easymotion'
-        Bundle 'jiangmiao/auto-pairs'
         Bundle 'mbbill/undotree'
         Bundle 'mhinz/vim-signify'
         Bundle 'rhysd/conflict-marker.vim'
@@ -49,10 +48,6 @@
                     \ }
         Bundle 'kristijanhusak/defx-git'
         Bundle 'kristijanhusak/defx-icons'
-
-        "Bundle 'Xuyuanp/nerdtree-git-plugin'
-        "Bundle 'jistr/vim-nerdtree-tabs'
-        "Bundle 'scrooloose/nerdtree'
     " }
 
     " Writing {
@@ -77,22 +72,15 @@
         if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
             source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
         endif
-        Bundle 'SirVer/ultisnips'
         Bundle 'Shougo/echodoc.vim'
 
         function! BuildCoc(info)
             !./install.sh
-            CocInstall coc-java
+            CocInstall coc-pairs
+            CocInstall coc-ultisnips
+            CocInstall coc-lists
         endfunction
         Bundle 'neoclide/coc.nvim', {'tag': '*', 'do': function('BuildCoc')}
-
-        "Bundle 'Valloric/YouCompleteMe', {
-                    "\ 'do': 'python3 install.py --java-completer --clangd-completer --system-boost',
-                    "\ }
-        "Bundle 'Shougo/neocomplcache'
-        "Bundle 'Shougo/neocomplete.vim'
-        "Bundle 'Shougo/neosnippet'
-        "Bundle 'Shougo/neosnippet-snippets'
     " }
 
     " Misc {
