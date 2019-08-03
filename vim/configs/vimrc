@@ -35,7 +35,6 @@
         set term=$TERM        " Make arrow and other keys work
     endif
     filetype plugin indent on " Automatically detect file types.
-    syntax on                 " Syntax highlighting
     set mouse=a               " Automatically enable mouse usage
     set mousehide             " Hide the mouse cursor while typing
     set guioptions=           " Hide scroll bar in GVim
@@ -310,8 +309,9 @@
     else
         set t_Co=256
     endif
+    syntax on              " Syntax highlighting
     call GruvBoxSettings()
-    hi clear SignColumn      " SignColumn should match background
+    hi clear SignColumn    " SignColumn should match background
     set conceallevel=1
 
     " Floating window
