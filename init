@@ -16,17 +16,31 @@ for xfile in ${PWD}/bin/*; do
 done
 
 # Install vim-plug
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+if [ ! -s $HOME/.vim/autoload/plug.vim ]; then
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+fi
+
+# Install fzf
+if [ ! -s /usr/local/opt/fzf/ ]; then
+    sudo git clone --depth 1 https://github.com/junegunn/fzf.git /usr/local/opt/fzf
+    sudo /usr/local/opt/fzf/install
+fi
 
 # Install dependencies for Coc
-curl -sL install-node.now.sh | sudo bash
-curl --compressed -o- -L https://yarnpkg.com/install.sh | bash
+if type "$node" > /dev/null; then
+    curl -sL install-node.now.sh | sudo bash
+fi
+
+if type "$yarn" > /dev/null; then
+    curl --compressed -o- -L https://yarnpkg.com/install.sh | bash
+fi
 
 # Create vim config sym links
 for lcfile in ${PWD}/vim/configs/^*(README.md|init)*; do
     ln -s "$lcfile" "$HOME/.vim/${lcfile:t}"
 done
+mkdir $HOME/.vim/tempfiles
 vim +PlugInstall +PlugClean +qa!
 rm -f $HOME/.fzf.zsh $HOME/.fzf.bash
 
