@@ -246,6 +246,7 @@
 
     " Shorcut saving
     nnoremap <leader>w :w<CR>
+    nnoremap <leader>x :bd<CR>
 
     " Shortcut delete buffer
     nnoremap <leader>x :bd<CR>
@@ -303,13 +304,8 @@
         hi! def link Function GruvboxBlue
     endfunction
 
-    if has('gui_macvim')
-        "set lines=66 columns=120
-        set guifont=Monaco\ Nerd\ Font:h13
-    else
-        set t_Co=256
-    endif
     syntax on              " Syntax highlighting
+    set t_Co=256
     call GruvBoxSettings()
     hi clear SignColumn    " SignColumn should match background
     set conceallevel=1
