@@ -6,10 +6,8 @@ setopt +o nomatch
 git submodule update --init --recursive
 
 # Create local bin sym links
+mkdir -p $HOME/.local/bin
 BINDIR=$HOME/.local/bin
-if [ -s /usr/local/bin/ ]; then
-    BINDIR=/usr/local/bin
-fi
 
 for xfile in ${PWD}/bin/*; do
     ln -s "$xfile" "$BINDIR/${xfile:t}"
