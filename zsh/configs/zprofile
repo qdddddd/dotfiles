@@ -56,7 +56,6 @@ case "$OSTYPE" in
         ;;
     linux*)
         path=(
-            $HOME/.local/bin
             $path
         )
         export ASAN_OPTIONS="protect_shadow_gap=0"
@@ -70,6 +69,7 @@ path=(
     /bin
     /sbin
     $HOME/.yarn/bin
+    $HOME/.local/bin
 )
 
 # Ensure path arrays do not contain duplicates.
