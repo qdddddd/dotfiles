@@ -279,6 +279,9 @@
                 \ :diffupdate<CR>
                 \ :syntax sync fromstart<CR>
                 \ :AirlineRefresh<CR>
+
+    " Shortcut to copy over ssh
+    vnoremap <silent> sy :w !sshcopy<CR><CR>
 " }
 
 " Displays {
