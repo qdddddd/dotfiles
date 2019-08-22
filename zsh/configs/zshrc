@@ -4,6 +4,8 @@ export ZSH_CUSTOM=$HOME/.dotfiles/zsh
 export ZSH_COMPDUMP=$HOME/.cache/.zcompdump
 export ZSH_DISABLE_COMPFIX=true
 
+setopt rmstarsilent
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -92,4 +94,5 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 # fzf
 source $ZSH_CUSTOM/fzf.zsh
 
+# yarn
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
