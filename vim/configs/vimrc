@@ -304,7 +304,6 @@
         hi! GruvboxAquaSign   guifg=#427b58 guibg=bg
         hi! GruvboxYellowSign guifg=#b57614 guibg=bg
 
-        hi! def link Function GruvboxBlue
     endfunction
 
     syntax on              " Syntax highlighting
@@ -463,7 +462,7 @@
                 "\ 'ctermfgs': ['lightblue', 229, 'lightcyan', 'lightmagenta'],
         if isdirectory(expand("~/.vim/bundle/rainbow/"))
             let g:rainbow_conf = {
-                \ 'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+                \ 'guifgs': ['royalblue3', 'darkorange4', 'seagreen4', 'firebrick'],
                 \ 'ctermfgs': ['darkblue', 'darkyellow', 'darkgreen', 'darkred'],
                 \ 'operators': '_,_',
                 \ 'parentheses': ['start=/(/ end=/)/ fold',
@@ -798,4 +797,17 @@
                         \ ) <CR>
         endif
     " }
+
+    " cpp enhanced highlight {
+        if isdirectory(expand("~/.vim/bundle/vim-cpp-enhanced-highlight"))
+            hi! def link Function GruvboxBlue
+            hi! def link Identifier GruvboxBlue
+            let g:cpp_class_scope_highlight = 0
+            let g:cpp_member_variable_highlight = 1
+            let g:cpp_class_decl_highlight = 0
+            let g:cpp_experimental_template_highlight = 1
+            let g:cpp_concepts_highlight = 1
+        endif
+    " }
+
 " }
