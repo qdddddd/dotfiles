@@ -367,12 +367,18 @@
                         \ 'split': 'vertical',
                         \ 'winwidth': &columns/5,
                         \ 'direction': 'topleft',
-                        \ 'columns': 'git:indent:icons:filename',
+                        \ 'columns': 'git:indent:icons:filename:mark',
                         \ })
 
             call defx#custom#column('filename', {
                         \ 'min_width': 40,
                         \ 'max_width': 40,
+                        \ })
+
+            call defx#custom#column('mark', {
+                        \ 'length': 1,
+                        \ 'readonly_icon': 'R',
+                        \ 'selected_icon': '✓',
                         \ })
 
             let g:defx_ignore = "*.py[cd],*~,*.swo,*.swp,.git,.hg,.svn,*.bzr,*.DS_Store,build,gradle,.gradle,.idea,bin,cmake-build*,CMakeCache.txt,CMakeFiles,.github,.travis,.clangd*"
@@ -411,19 +417,20 @@
                 nnoremap <silent><buffer><expr> <C-l>   defx#do_action('redraw')
                 nnoremap <silent><buffer><expr> <C-g>   defx#do_action('print')
                 nnoremap <silent><buffer><expr> cd      defx#do_action('change_vim_cwd')
+                nnoremap <silent><buffer><expr> <TAB>   defx#do_action('toggle_select')
             endfunction
         endif
     " }
 
     " defx-git {
         if isdirectory(expand("~/.vim/bundle/defx-git"))
-            hi def link Defx_git_Untracked Comment
-            hi def link Defx_git_Ignored DiffAdd
-            hi def link Defx_git_Renamed Title
-            hi def link Defx_git_Modified Special
-            hi def link Defx_git_Unmerged Label
-            hi def link Defx_git_Deleted DiffDelete
-            hi def link Defx_git_Staged Function
+            hi def link Defx_git_0_Untracked Comment
+            hi def link Defx_git_0_Ignored DiffAdd
+            hi def link Defx_git_0_Renamed Title
+            hi def link Defx_git_0_Modified Special
+            hi def link Defx_git_0_Unmerged Label
+            hi def link Defx_git_0_Deleted DiffDelete
+            hi def link Defx_git_0_Staged Function
         endif
     " }
 
@@ -436,7 +443,7 @@
             let g:defx_icons_parent_icon = ''
             let g:defx_icons_default_icon = ''
             let g:defx_icons_directory_symlink_icon = ''
-            " Options below are applicable only when using "tree" feature
+            " Options below are applicable only when using 'tree' feature
             let g:defx_icons_root_opened_tree_icon = ''
             let g:defx_icons_nested_opened_tree_icon = ''
             let g:defx_icons_nested_closed_tree_icon = ''
@@ -610,9 +617,9 @@
             let g:indentLine_enabled = 1
             let g:indentLine_faster = 0
             let g:indentLine_char = '│'    " Can be ¦, ┆, │, ⎸, or ▏
-            let g:indentLine_fileTypeExclude = ['text']
+            let g:indentLine_fileTypeExclude = ['text', 'defx']
             let g:indentLine_bufTypeExclude = ['help', 'terminal']
-            let g:indentLine_bufNameExclude = ['_.*', 'startify', 'NERD_tree.*', 'defx']
+            let g:indentLine_bufNameExclude = ['_.*', 'startify', 'NERD_tree.*']
             let g:indentLine_concealcursor = ''
         endif
     " }

@@ -49,11 +49,15 @@
         "clangd": {
             "command": "clangd",
             "args": [
-                "-log=verbose",
+                "-log=error",
                 "-pretty",
                 "-pch-storage=memory",
                 "-function-arg-placeholders=1",
-                "-header-insertion-decorators=1"
+                "-header-insertion=never",
+                "-clang-tidy",
+                "-completion-style=detailed",
+                "-suggest-missing-includes",
+                "-j=4"
             ],
             "rootPatterns": [
                 "compile_commands.json",
