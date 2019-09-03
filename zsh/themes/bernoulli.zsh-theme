@@ -2,6 +2,10 @@
 # https://github.com/blueyed/oh-my-zsh/blob/5228d6e/themes/blueyed.zsh-theme#L766-L789
 
 function prompt_bernoulli_precmd {
+    invisibles='%([BSUbfksu]|([FK]|){*})'
+    PROMPT_L='%{%F{$COLOR}%}'${USER}'@'${HOST}' » %{%~%}'
+    local lsize=${#${(S%%)PROMPT_L//$~invisibles/}}
+
     local pwdsize=${#${(%):-%~}}
 
     # Get Git repository information.
@@ -23,7 +27,7 @@ function prompt_bernoulli_precmd {
     #echo left=$lsize pwd=$pwdsize mid=${#PROMPT_M} right=$rsize columns=$COLUMNS
 }
 
-# Show remote ref name and number of commits ahead-of or behind.
+# Show remote ref name and marks of dirty, untracked, ahead-of, or behind.
 # This also colors and adjusts ${hook_com[branch]}.
 function +vi-git-st() {
     [[ $1 == 0 ]] || return 0 # do this only once for vcs_info_msg_0_.
@@ -36,7 +40,7 @@ function +vi-git-st() {
         dirty=$(parse_git_dirty)
     fi
     if [[ -n $dirty ]]; then
-        gitstatus+=( "✱" )
+        gitstatus+=( "*" )
     fi
 
     # Untracked
@@ -97,10 +101,6 @@ function prompt_bernoulli_setup {
     zstyle ':vcs_info:git:*' actionformats '%F{240}[%b|%a]%f'
 
     # Define prompts.
-    invisibles='%([BSUbfksu]|([FK]|){*})'
-    PROMPT_L='%{%F{$COLOR}%}'${USER}'@'${HOST}' » %{%~%}'
-    lsize=${#${(S%%)PROMPT_L//$~invisibles/}}
-
     PROMPT='%B${PROMPT_L} ${PROMPT_M} ${PROMPT_R}'
     PROMPT+=$'\n  %b%f'
 }
