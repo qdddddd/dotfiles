@@ -141,3 +141,4 @@ keystore
 *.clion*
 yarn.lock
 node_modules/
+compile_commands.json
