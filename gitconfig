@@ -6,8 +6,6 @@
 [user]
     name = qdu
     email = q.du@connect.ust.hk
-[credential]
-    helper = osxkeychain
 [core]
     excludesfile = ~/.gitignore_global
 [branch]
