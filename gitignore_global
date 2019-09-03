@@ -139,3 +139,5 @@ keystore
 *tags
 .metadata/
 *.clion*
+yarn.lock
+node_modules/

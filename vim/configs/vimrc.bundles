@@ -99,6 +99,7 @@
         Bundle 'tpope/vim-markdown'
         Bundle 'w0rp/ale'
         "Bundle 'vim-scripts/CycleColor'
+        Bundle 'dyng/ctrlsf.vim'
     " }
 " }
 

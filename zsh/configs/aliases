@@ -38,8 +38,6 @@ alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/m
 alias ss-load='launchctl load -w /Library/LaunchDaemons/com.shadowsocks.plist'
 alias ss-unload='launchctl unload -w /Library/LaunchDaemons/com.shadowsocks.plist'
 alias close_tunnel="pkill -f '8888:iez035.ieda.ust.hk:445'"
-alias ss-load='launchctl load -w ~/Library/LaunchAgents/com.shadowsocks.plist'
-alias ss-unload='launchctl unload -w ~/Library/LaunchAgents/com.shadowsocks.plist'
 
 alias biiota-jshell='JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home \
                      JAVA_OPTS="--add-exports jdk.jshell/jdk.internal.jshell.tool=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED"\

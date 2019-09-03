@@ -817,4 +817,14 @@
         endif
     " }
 
+    " CtrlSF{
+        if isdirectory(expand("~/.vim/bundle/ctrlsf.vim"))
+            let g:ctrlsf_auto_focus = {"at": "start"}
+            let g:ctrlsf_position = 'bottom'
+            let g:ctrlsf_winsize = '40%'
+            let g:ctrlsf_confirm_save = 0
+            nmap F <Plug>CtrlSFPrompt
+            vmap F <Plug>CtrlSFVwordExec
+        endif
+    " }
 " }
