@@ -80,7 +80,7 @@
             CocInstall coc-ultisnips
             CocInstall coc-lists
         endfunction
-        Bundle 'neoclide/coc.nvim', {'tag': '*', 'do': function('BuildCoc')}
+        Bundle 'neoclide/coc.nvim', {'branch': 'release', 'do': function('BuildCoc')}
     " }
 
     " Misc {

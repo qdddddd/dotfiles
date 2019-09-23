@@ -268,6 +268,7 @@
 
     " Switch between .h and .cpp files
     nnoremap <leader>ch :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
+    nnoremap <leader>cu :e %:p:s,.cuh$,.X123X,:s,.cu$,.cuh,:s,.X123X$,.cu,<CR>
 
     " Insert mode navigation
     inoremap <C-h> <Left>
@@ -729,7 +730,7 @@
                 nmap <silent> <C-k>      <Plug>(coc-diagnostic-prev)
                 nmap <leader>rn <Plug>(coc-rename)
                 nnoremap <silent> <leader>fo :call CocAction('format') <CR>
-                nnoremap <silent> <leader>rs :CocRestart <CR>
+                nnoremap <silent> <leader>rs :CocRestart <CR><CR>
                 nnoremap <silent> <leader>ho :call <SID>show_documentation() <CR>
                 nnoremap <silent> <leader>da :<C-u>CocList diagnostics<cr>
                 nnoremap <silent> <leader>b<space> :CocList buffers<CR>
@@ -807,7 +808,7 @@
 
     " cpp enhanced highlight {
         if isdirectory(expand("~/.vim/bundle/vim-cpp-enhanced-highlight"))
-            hi! def link Function GruvboxBlue
+            hi! def link Function GruvboxBlueBold
             hi! def link Identifier GruvboxBlue
             let g:cpp_class_scope_highlight = 0
             let g:cpp_member_variable_highlight = 1
