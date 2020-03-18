@@ -266,7 +266,7 @@
     " Map redo to U
     nnoremap U :redo<CR>
 
-    " Switch between .h and .cpp files
+    " Switch between .h/.cuh and .cpp/.cu files
     nnoremap <leader>ch :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
     nnoremap <leader>cu :e %:p:s,.cuh$,.X123X,:s,.cu$,.cuh,:s,.X123X$,.cu,<CR>
 
@@ -364,7 +364,6 @@
                         \ })
 
             call defx#custom#option('_', {
-                        "\ 'root_marker': '√ ',
                         \ 'split': 'vertical',
                         \ 'winwidth': &columns/5,
                         \ 'direction': 'topleft',
@@ -824,8 +823,8 @@
             let g:ctrlsf_position = 'bottom'
             let g:ctrlsf_winsize = '40%'
             let g:ctrlsf_confirm_save = 0
-            nmap F <Plug>CtrlSFPrompt
-            vmap F <Plug>CtrlSFVwordExec
+            nmap SF <Plug>CtrlSFPrompt
+            vmap SF <Plug>CtrlSFVwordExec
         endif
     " }
 " }

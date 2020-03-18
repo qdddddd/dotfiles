@@ -36,6 +36,7 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+core*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
