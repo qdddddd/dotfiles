@@ -74,7 +74,7 @@
             ]
         }
     },
-    "coc.preferences.formatOnSaveFiletypes": ["c", "cpp", "java", "vim"],
+    "coc.preferences.formatOnSaveFiletypes": ["c", "cpp", "java", "vim", "yaml"],
     "coc.preferences.formatOnType": false,
     "pairs.enableCharacters": [
         "(",
@@ -83,5 +83,5 @@
         "'",
         "\"",
         "`"
-    ]
+    ],
 }
