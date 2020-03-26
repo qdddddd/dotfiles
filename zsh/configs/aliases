@@ -34,7 +34,6 @@ alias crontab='VIM_CRONTAB=true EDITOR=vim crontab'
 alias wallet47='open -a /Applications/Ethereum\ Wallet.app --args --rpc http://47.104.238.166:8545'
 alias wallet111='open -a /Applications/Ethereum\ Wallet.app --args --rpc http://111.230.11.46:8545'
 alias wallet52='open -a /Applications/Ethereum\ Wallet.app/ --args --rpc http://52.14.206.161:8545'
-alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
 alias ss-load='launchctl load -w /Library/LaunchDaemons/com.shadowsocks.plist'
 alias ss-unload='launchctl unload -w /Library/LaunchDaemons/com.shadowsocks.plist'
 alias close_tunnel="pkill -f '8888:iez035.ieda.ust.hk:445'"
@@ -45,3 +44,6 @@ alias biiota-jshell='JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.jdk/Cont
 alias ds='du -h --max-depth=1'
 alias git-refresh-date='GIT_COMMITTER_DATE="$(date)" git commit --amend --no-edit --date "$(date)"'
 alias ag='ag --nobreak --nonumbers --noheading --silent --path-to-ignore ~/.config/agignore . | fzf --reverse -e'
+alias sshp="ssh -o ProxyCommand='socat - PROXY:121.33.253.71:%h:%p,proxyport=8080'"
+alias set-proxy='export http_proxy=http://127.0.0.1:1087 && export https_proxy=$http_proxy'
+alias unset-proxy='unset http_proxy https_proxy'
