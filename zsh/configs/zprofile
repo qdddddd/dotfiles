@@ -62,6 +62,7 @@ case "$OSTYPE" in
         path=(
             $path
         )
+        export SHELL='/usr/bin/zsh'
         ;;
 esac
 
