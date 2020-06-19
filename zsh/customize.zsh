@@ -22,3 +22,4 @@ _git_log_medium_format='%C(bold)Commit:%C(reset) %C(green)%H%C(red)%d%n%C(bold)A
 alias gpl='git pull'
 alias gl='git log --topo-order --pretty=format:"${_git_log_medium_format}"'
 alias glg='git log --topo-order --stat --pretty=format:"${_git_log_medium_format}"'
+alias gst='git status -s'
