@@ -104,7 +104,7 @@
 " }
 
 if has('macunix')
-    Bundle 'philpep/vim-rst-tables'
+    "Bundle 'philpep/vim-rst-tables'
 endif
 
 call plug#end()

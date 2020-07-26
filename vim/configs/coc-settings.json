@@ -74,7 +74,15 @@
             ]
         }
     },
-    "coc.preferences.formatOnSaveFiletypes": ["c", "cpp", "java", "vim", "yaml, python"],
+    "coc.preferences.formatOnSaveFiletypes": [
+        "c",
+        "cpp",
+        "java",
+        "vim",
+        "yaml",
+        "python",
+        "json"
+    ],
     "coc.preferences.formatOnType": false,
     "pairs.enableCharacters": [
         "(",
