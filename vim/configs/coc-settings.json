@@ -74,16 +74,6 @@
             ]
         }
     },
-    "coc.preferences.formatOnSaveFiletypes": [
-        "c",
-        "cpp",
-        "java",
-        "vim",
-        "yaml",
-        "python",
-        "json"
-    ],
-    "coc.preferences.formatOnType": false,
     "pairs.enableCharacters": [
         "(",
         "[",
@@ -95,5 +85,15 @@
     "python.formatting.provider": "yapf",
     "python.jediEnabled": false,
     "python.analysis.diagnosticEnabled": true,
-    "python.linting.lintOnSave": true
+    "python.linting.lintOnSave": true,
+    "coc.preferences.formatOnSaveFiletypes": [
+        "c",
+        "cpp",
+        "java",
+        "vim",
+        "yaml",
+        "python",
+        "json"
+    ],
+    "coc.preferences.formatOnType": false
 }
