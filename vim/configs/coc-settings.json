@@ -92,7 +92,6 @@
         "java",
         "vim",
         "yaml",
-        "python",
         "json"
     ],
     "coc.preferences.formatOnType": false

@@ -359,14 +359,14 @@
             endfunction
 
             call defx#custom#column('icon', {
-                        \ 'root_icon': '√ ',
+                        \ 'root_icon': ' ',
                         \ 'directory_icon': '',
                         \ 'opened_icon': '',
                         \ })
 
             call defx#custom#option('_', {
                         \ 'split': 'vertical',
-                        \ 'winwidth': &columns/5,
+                        \ 'winwidth': &columns/4.8,
                         \ 'direction': 'topleft',
                         \ 'columns': 'git:indent:icons:filename:mark',
                         \ })
@@ -377,7 +377,6 @@
                         \ })
 
             call defx#custom#column('mark', {
-                        \ 'length': 1,
                         \ 'readonly_icon': 'R',
                         \ 'selected_icon': '✓',
                         \ })
