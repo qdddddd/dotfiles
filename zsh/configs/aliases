@@ -36,7 +36,6 @@ alias wallet111='open -a /Applications/Ethereum\ Wallet.app --args --rpc http://
 alias wallet52='open -a /Applications/Ethereum\ Wallet.app/ --args --rpc http://52.14.206.161:8545'
 alias ss-load='launchctl load -w /Library/LaunchDaemons/com.shadowsocks.plist'
 alias ss-unload='launchctl unload -w /Library/LaunchDaemons/com.shadowsocks.plist'
-alias tunnel-close="pkill -f '8888:iez035.ieda.ust.hk:445'"
 
 alias biiota-jshell='JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home \
                      JAVA_OPTS="--add-exports jdk.jshell/jdk.internal.jshell.tool=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED"\
@@ -47,3 +46,4 @@ alias ag='ag --nobreak --nonumbers --noheading --silent --path-to-ignore ~/.conf
 alias proxy-on='export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7891'
 alias proxy-off='unset http_proxy https_proxy all_proxy'
 alias sshp="ssh -o ProxyCommand='nc -X 5 -x ${clash_socks} %h %p'"
+alias ps-grep="ps aux | grep -v grep | grep"
