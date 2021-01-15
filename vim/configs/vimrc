@@ -447,6 +447,15 @@
             let g:defx_icons_root_opened_tree_icon = ''
             let g:defx_icons_nested_opened_tree_icon = ''
             let g:defx_icons_nested_closed_tree_icon = ''
+
+            " Colors
+            let g:defx_icons_gui_colors = {
+                        \ 'default': '#504945'
+                        \ }
+            let g:defx_icons_term_colors = {
+                        \ 'default': 239
+                        \}
+            hi! link Directory GruvboxAqua
         endif
     " }
 
