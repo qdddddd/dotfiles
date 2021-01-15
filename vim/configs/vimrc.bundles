@@ -60,6 +60,7 @@
         Bundle 'scrooloose/nerdcommenter'
         Bundle 'godlygeek/tabular'
         Bundle 'luochen1990/rainbow'
+        Bundle 'roxma/nvim-yarp'
         if executable('ctags')
             Bundle 'majutsushi/tagbar'
         endif
@@ -72,12 +73,13 @@
         if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
             source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
         endif
+        Bundle 'SirVer/ultisnips'
         Bundle 'Shougo/echodoc.vim'
 
         function! BuildCoc(info)
             !./install.sh
             CocInstall coc-pairs
-            CocInstall coc-ultisnips
+            CocInstall coc-snippets
             CocInstall coc-lists
         endfunction
         Bundle 'neoclide/coc.nvim', {'branch': 'release', 'do': function('BuildCoc')}

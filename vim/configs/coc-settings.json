@@ -35,14 +35,13 @@
         "typeParameter": "\uf728",
         "default": "\uf29c"
     },
-    "signature.triggerSignatureWait": 50,
+    "signature.triggerSignatureWait": 200,
     "signature.target": "float",
     "diagnostic.errorSign": "✗",
     "diagnostic.warningSign": "▲",
     "diagnostic.infoSign": "●",
     "diagnostic.hintSign": "◇",
     "diagnostic.checkCurrentLine": true,
-    "diagnostic.signOffset": 1,
     "list.nextKeymap": "<C-n>",
     "list.previousKeymap": "<C-p>",
     "languageserver": {
