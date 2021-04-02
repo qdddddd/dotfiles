@@ -94,3 +94,15 @@ git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 # Create git global config sym links
 ln -s "${PWD}/gitconfig" "$HOME/.gitconfig"
 ln -s "${PWD}/gitignore_global" "$HOME/.gitignore_global"
+
+# Install Alarcritty
+if ! (( $+commands[alacritty] )); then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        brew install alacritty
+
+        # Enable font smoothing
+        defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO
+        defaults -currentHost write -globalDomain AppleFontSmoothing -int 2
+    fi
+fi
+ln -s "${PWD}/alacritty.yml" "$HOME/.alacritty.yml"
