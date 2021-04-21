@@ -73,6 +73,14 @@
             ]
         }
     },
+    "latex.build.onSave": true,
+    "latex.build.args": [
+        "-outdir=out",
+        "-pdf",
+        "-f",
+        "-silent"
+    ],
+    "latex.build.outputDirectory": "out",
     "pairs.enableCharacters": [
         "(",
         "[",

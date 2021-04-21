@@ -827,7 +827,7 @@
         endif
     " }
 
-    " CtrlSF{
+    " CtrlSF {
         if isdirectory(expand("~/.vim/bundle/ctrlsf.vim"))
             let g:ctrlsf_auto_focus = {"at": "start"}
             let g:ctrlsf_position = 'bottom'
@@ -838,4 +838,12 @@
         endif
     " }
 
+    " litecorrect {
+        if isdirectory(expand("~/.vim/bundle/vim-litecorrect"))
+            augroup litecorrect
+                autocmd!
+                autocmd FileType markdown,mkd,tex call litecorrect#init()
+            augroup END
+        endif
+    " }
 " }
