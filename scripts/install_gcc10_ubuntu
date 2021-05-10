@@ -1,0 +1,11 @@
+#!bin/zsh
+
+add-apt-repository ppa:ubuntu-toolchain-r/test
+apt-get update
+apt install gcc-10
+apt install g++-10
+
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100
+update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100
+update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++-10 100
+update-alternatives --install /usr/bin/cc cc /usr/bin/gcc-10 100

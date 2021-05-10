@@ -1,0 +1,20 @@
+#!/bin/zsh
+
+if [ -z "$1" ]; then
+    version=12;
+else
+    version=$1;
+fi
+
+echo "Installing llvm-${version}"
+
+wget https://apt.llvm.org/llvm.sh
+chmod +x llvm.sh
+./llvm.sh ${version}
+
+rm llvm.sh
+
+update-alternatives --install /usr/bin/clang clang /usr/bin/clang-${version} 100
+update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-${version} 100
+update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-${version} 100
+update-alternatives --install /usr/bin/lldb lldb /usr/bin/lldb-${version} 100
