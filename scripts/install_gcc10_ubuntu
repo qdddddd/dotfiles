@@ -1,4 +1,4 @@
-#!bin/zsh
+#!/bin/zsh
 
 add-apt-repository ppa:ubuntu-toolchain-r/test
 apt-get update

@@ -33,7 +33,13 @@
 
     if !has('gui')
         set term=$TERM        " Make arrow and other keys work
+
+        " Fix start up in REPLACE mode in WSL
+        if LINUX()
+            set t_u7=
+        endif
     endif
+
     filetype plugin indent on " Automatically detect file types.
     set mouse=a               " Automatically enable mouse usage
     set mousehide             " Hide the mouse cursor while typing
@@ -745,16 +751,16 @@
                 nnoremap <silent> <leader>b<space> :CocList buffers<CR>
 
                 " Highlight groups
-                hi def link CocErrorSign GruvboxRedSign
-                hi def link CocWarningSign GruvboxYellowSign
-                hi def link CocInfoSign GruvboxAquaSign
-                hi def link CocHintSign CocWarningSign
+                hi! def link CocErrorSign GruvboxRedSign
+                hi! def link CocWarningSign GruvboxYellowSign
+                hi! def link CocInfoSign GruvboxAquaSign
+                hi! def link CocHintSign CocWarningSign
 
                 hi def link CocFloating Fmenu
-                exe 'hi CocErrorFloat   guifg=#9d0006 guibg=' . s:menu_bg
-                exe 'hi CocWarningFloat guifg=#b57614 guibg=' . s:menu_bg
-                exe 'hi CocInfoFloat    guifg=#427b58 guibg=' . s:menu_bg
-                hi def link CocHintFloat CocWarningFloat
+                exe 'hi! CocErrorFloat   guifg=#9d0006 guibg=' . s:menu_bg
+                exe 'hi! CocWarningFloat guifg=#b57614 guibg=' . s:menu_bg
+                exe 'hi! CocInfoFloat    guifg=#427b58 guibg=' . s:menu_bg
+                hi! def link CocHintFloat CocWarningFloat
 
                 " Coc plugins
                 autocmd FileType tex let b:coc_pairs = [["$", "$"]]
