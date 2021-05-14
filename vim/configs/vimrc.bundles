@@ -74,15 +74,14 @@
             source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
         endif
         Bundle 'SirVer/ultisnips'
-        Bundle 'Shougo/echodoc.vim'
 
         function! BuildCoc(info)
-            !./install.sh
-            CocInstall coc-pairs
-            CocInstall coc-snippets
-            CocInstall coc-lists
+            "!./install.sh
         endfunction
+        let g:coc_global_extensions=[ 'coc-pairs', 'coc-snippets', 'coc-lists']
         Bundle 'neoclide/coc.nvim', {'branch': 'release', 'do': function('BuildCoc')}
+
+        Bundle 'Shougo/echodoc.vim'
     " }
 
     " Misc {

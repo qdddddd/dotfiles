@@ -534,7 +534,7 @@
             let g:airline#extensions#bufferline#enabled = 0
             let g:airline#extensions#tabline#enabled = 1
             let g:airline#extensions#tabline#fnamemod = ':t'
-            let g:airline#extensions#tabline#left_alt_sep = '│'
+            let g:airline#extensions#tabline#left_alt_sep = '|'
             let g:airline#extensions#tabline#buffer_idx_mode = 1
             let g:airline#extensions#branch#enabled = 1
             let g:airline#extensions#branch#format = 2
@@ -631,7 +631,7 @@
         if isdirectory(expand("~/.vim/bundle/indentLine/"))
             let g:indentLine_enabled = 1
             let g:indentLine_faster = 0
-            let g:indentLine_char = '│'    " Can be ¦, ┆, │, ⎸, or ▏
+            let g:indentLine_char = '|'    " Can be ¦, ┆, │, ⎸, or ▏
             let g:indentLine_fileTypeExclude = ['text', 'defx']
             let g:indentLine_bufTypeExclude = ['help', 'terminal']
             let g:indentLine_bufNameExclude = ['_.*', 'startify', 'NERD_tree.*']
@@ -684,7 +684,6 @@
                 \ ]
             autocmd! FileType startify nnoremap <buffer> <F2> <Nop>
             autocmd! FileType startify setl nowrap
-
         endif
     " }
 
@@ -756,7 +755,7 @@
                 hi! def link CocInfoSign GruvboxAquaSign
                 hi! def link CocHintSign CocWarningSign
 
-                hi def link CocFloating Fmenu
+                hi! def link CocFloating Fmenu
                 exe 'hi! CocErrorFloat   guifg=#9d0006 guibg=' . s:menu_bg
                 exe 'hi! CocWarningFloat guifg=#b57614 guibg=' . s:menu_bg
                 exe 'hi! CocInfoFloat    guifg=#427b58 guibg=' . s:menu_bg

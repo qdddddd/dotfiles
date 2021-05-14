@@ -16,3 +16,5 @@
     unmerged  = yellow
 [push]
     default = simple
+[credential]
+    helper = store
