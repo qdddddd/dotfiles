@@ -6,6 +6,7 @@ setopt +o nomatch
 git submodule update --init --recursive
 
 # Create local bin sym links
+
 mkdir -p $HOME/.local/bin
 BINDIR=$HOME/.local/bin
 
@@ -13,13 +14,37 @@ for xfile in ${PWD}/bin/*; do
     ln -s "$xfile" "$BINDIR/${xfile:t}"
 done
 
+#############################
+
+# Some useful functions
+
+is_mac() {
+    [[ "$OSTYPE" == "darwin"* ]]
+}
+
+is_linux() {
+    [[ "$OSTYPE" == 'linux-gnu'* ]]
+}
+
 command_exists() {
     (( $+commands[$1] ));
 }
 
+standard_install() {
+    if ! (command_exists $1); then
+        if is_mac; then
+            sudo apt-get install $1
+        elif is_linux; then
+            brew install $1
+        fi
+    fi
+}
+
+###########################
+
 # Install pip
 if ! (command_exists pip3); then
-    if [[ "$OSTYPE" == 'linux-gnu'* ]]; then
+    if is_linux; then
         sudo apt-get install python3 python3-distutils python3-apt
     fi
     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
@@ -29,9 +54,9 @@ fi
 
 # Install ag
 if ! (command_exists ag); then
-    if [[ "$OSTYPE" == 'linux-gnu'* ]]; then
+    if is_linux; then
         sudo apt-get install silversearcher-ag
-    elif [[ "$OSTYPE" == "darwin"* ]]; then
+    elif is_mac; then
         # Install homebrew if not exists
         if ! (command_exists brew); then
             /bin/bash -c \
@@ -49,13 +74,7 @@ if [ ! -s /usr/local/opt/fzf/ ]; then
 fi
 
 # Install autojump
-if ! (command_exists autojump); then
-    if [[ "$OSTYPE" == 'linux-gnu'* ]]; then
-        sudo apt-get install autojump
-    elif [[ "$OSTYPE" == "darwin"* ]]; then
-        brew install autojump
-    fi
-fi
+standard_install autojump
 
 # Install thefuck
 if ! (command_exists fuck); then
@@ -78,6 +97,7 @@ if ! (command_exists yarn); then
 fi
 
 # Create vim config sym links
+
 for lcfile in ${PWD}/vim/configs/^*(README.md|init)*; do
     ln -s "$lcfile" "$HOME/.vim/${lcfile:t}"
 done
@@ -91,6 +111,14 @@ for rcfile in "${PWD}"/zsh/configs/*; do
 done
 source $HOME/.zshrc
 
+##############################
+
+# Install tmux
+standard_install tmux
+
+# Install tree
+standard_install tree
+
 # Create tmux.conf sym link
 ln -s "${PWD}/tmux.conf" "$HOME/.tmux.conf"
 git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
@@ -101,7 +129,7 @@ ln -s "${PWD}/gitignore_global" "$HOME/.gitignore_global"
 
 # Install Alarcritty
 if ! (command_exists alacritty); then
-    if [[ "$OSTYPE" == "darwin"* ]]; then
+    if is_mac; then
         brew install alacritty
 
         # Enable font smoothing

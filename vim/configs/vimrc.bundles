@@ -98,7 +98,7 @@
         Bundle 'tfnico/vim-gradle'
         Bundle 'tpope/vim-cucumber'
         Bundle 'tpope/vim-markdown'
-        Bundle 'w0rp/ale'
+        "Bundle 'w0rp/ale'
         "Bundle 'vim-scripts/CycleColor'
         Bundle 'dyng/ctrlsf.vim'
     " }

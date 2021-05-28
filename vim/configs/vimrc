@@ -162,6 +162,7 @@
     set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespaces
     set noshowmode                  " Disable mode message
     set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
+    set nobomb
 
     autocmd! BufRead,BufNewFile *.html.twig set ft=html.twig
     autocmd! BufRead,BufNewFile *.coffee set ft=coffee

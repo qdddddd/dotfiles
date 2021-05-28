@@ -99,7 +99,9 @@
         "java",
         "vim",
         "yaml",
-        "json"
+        "json",
+        "cs"
     ],
-    "coc.preferences.formatOnType": false
+    "coc.preferences.formatOnType": false,
+    "coc.preferences.extensionUpdateCheck": "daily"
 }
