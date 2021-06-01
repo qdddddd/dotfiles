@@ -66,6 +66,10 @@
         endif
         Bundle 'skywind3000/asyncrun.vim'
         Bundle 'octol/vim-cpp-enhanced-highlight'
+        if has('nvim')
+            Bundle 'neovim/nvim-lspconfig'
+            Bundle 'kabouzeid/nvim-lspinstall'
+        endif
     " }
 
     " AutoComplete {

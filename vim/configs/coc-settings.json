@@ -73,6 +73,22 @@
             ]
         }
     },
+    "languageserver": {
+        "omnisharp": {
+            "command": "/home/qdu/.local/share/nvim/lspinstall/csharp/omnisharp/run",
+            "args": [
+                "--languageserver"
+            ],
+            "rootPatterns": [
+                ".csproj",
+                ".sln"
+            ],
+            "filetypes": [
+                "cs",
+                "vb"
+            ]
+        }
+    },
     "latex.build.onSave": true,
     "latex.build.args": [
         "-outdir=out",

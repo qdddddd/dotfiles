@@ -97,13 +97,23 @@ if ! (command_exists yarn); then
 fi
 
 # Create vim config sym links
-
-for lcfile in ${PWD}/vim/configs/^*(README.md|init)*; do
+DOT_VIM_CONFIG_DIR=${PWD}/vim/configs
+for lcfile in ${DOT_VIM_CONFIG_DIR}/^*(README.md|nvim)*; do
     ln -s "$lcfile" "$HOME/.vim/${lcfile:t}"
 done
 mkdir $HOME/.vim/tempfiles
 vim +PlugInstall +PlugClean +qa!
 rm -f $HOME/.fzf.zsh $HOME/.fzf.bash
+
+# Create nvim config sym links
+if (command_exists nvim); then
+    NVIM_CONFIG_DIR=$HOME/.config/nvim
+    mkdir -p ${NVIM_CONFIG_DIR}
+    ln -s ${DOT_VIM_CONFIG_DIR}/nvim_init.vim ${NVIM_CONFIG_DIR}/init.vim
+    ln -s ${DOT_VIM_CONFIG_DIR}/nvim_plugs.lua ${NVIM_CONFIG_DIR}/plugs.lua
+    ln -s ${DOT_VIM_CONFIG_DIR}/coc-settings.json ${NVIM_CONFIG_DIR}/.
+    nvim +PlugInstall +PlugClean +qa!
+fi
 
 # Create zsh config sym links
 for rcfile in "${PWD}"/zsh/configs/*; do
