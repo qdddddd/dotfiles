@@ -17,33 +17,34 @@ function IsDir(path)
 end
 
 -- lspinstall {
-if IsDir('~/.vim/bundle/nvim-lspinstall') then
-    local function setup_servers()
-        require'lspinstall'.setup()
-        local servers = require'lspinstall'.installed_servers()
-        for _, server in pairs(servers) do
-            require'lspconfig'[server].setup{}
-        end
-    end
+--if IsDir('~/.vim/bundle/nvim-lspinstall') then
+    --local function setup_servers()
+        --require'lspinstall'.setup()
+        --local servers = require'lspinstall'.installed_servers()
+        --for _, server in pairs(servers) do
+            --require'lspconfig'[server].setup{}
+        --end
+    --end
 
-    setup_servers()
+    --setup_servers()
 
     -- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
-    require'lspinstall'.post_install_hook = function ()
-        setup_servers() -- reload installed servers
-        vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
-    end
-end
+    --require'lspinstall'.post_install_hook = function ()
+        --setup_servers() -- reload installed servers
+        --vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
+    --end
+--end
 -- }
 
--- lspconfig {
+-- LSP {
 if IsDir('~/.vim/bundle/nvim-lspconfig') then
     vim.cmd('packadd nvim-lspconfig')
     local pid = vim.fn.getpid()
+    local bin = "/home/qdu/.local/share/nvim/lspinstall/csharp/omnisharp/run"
     require'lspconfig'.omnisharp.setup {
-        cmd = { "/home/qdu/.local/share/nvim/lspinstall/csharp/omnisharp/run", "--languageserver", "--hostPID", tostring(pid) },
+        cmd = { bin, "--languageserver", "--hostPID", tostring(pid) },
         filetypes = {"cs", "vb"};
-        root_dir = util.root_pattern("*.csproj", "*.sln");
+        root_dir = root_pattern("*.csproj", "*.sln", ".git");
         init_options = { };
     }
 end

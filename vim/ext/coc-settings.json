@@ -77,11 +77,13 @@
         "omnisharp": {
             "command": "/home/qdu/.local/share/nvim/lspinstall/csharp/omnisharp/run",
             "args": [
-                "--languageserver"
+                "-lsp",
+                "--zero-based-indices=true",
+                "--encoding=utf8"
             ],
             "rootPatterns": [
                 ".csproj",
-                ".sln"
+                ".sln",
             ],
             "filetypes": [
                 "cs",

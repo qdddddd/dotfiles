@@ -15,11 +15,13 @@ for xfile in ${PWD}/bin/; do
 done
 
 # Remove vim files
-for lcfile in ${PWD}/vim/configs/^*(README.md|init)*; do
+for lcfile in ${PWD}/vim/(rc|ext)/*; do
     rm "$HOME/.vim/${lcfile:t}"
 done
-rm $HOME/.vim/ycm_extra_conf.py
-rm $HOME/.vim/tempfiles
+for lcfile in ${PWD}/vim/(nvim|ext)/*; do
+    rm "$HOME/.config/nvim/${lcfile:t}"
+done
+rm -r $HOME/.vim/tempfiles
 
 # Remove zsh files
 for rcfile in "${PWD}"/zsh/configs/*; do
@@ -34,3 +36,6 @@ rm -rf $HOME/.tmux/
 # Remove git configs
 rm $HOME/.gitconfig
 rm $HOME/.gitignore_global
+
+# Remove alacritty config
+rm "$HOME/.alacritty.yml"

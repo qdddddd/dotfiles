@@ -97,8 +97,9 @@ if ! (command_exists yarn); then
 fi
 
 # Create vim config sym links
-DOT_VIM_CONFIG_DIR=${PWD}/vim/configs
-for lcfile in ${DOT_VIM_CONFIG_DIR}/^*(README.md|nvim)*; do
+DOT_VIM_DIR=${PWD}/vim
+#for lcfile in ${DOT_VIMRC_DIR}/^*(README.md|nvim)*; do
+for lcfile in ${DOT_VIM_DIR}/(rc|ext)/*; do
     ln -s "$lcfile" "$HOME/.vim/${lcfile:t}"
 done
 mkdir $HOME/.vim/tempfiles
@@ -109,9 +110,9 @@ rm -f $HOME/.fzf.zsh $HOME/.fzf.bash
 if (command_exists nvim); then
     NVIM_CONFIG_DIR=$HOME/.config/nvim
     mkdir -p ${NVIM_CONFIG_DIR}
-    ln -s ${DOT_VIM_CONFIG_DIR}/nvim_init.vim ${NVIM_CONFIG_DIR}/init.vim
-    ln -s ${DOT_VIM_CONFIG_DIR}/nvim_plugs.lua ${NVIM_CONFIG_DIR}/plugs.lua
-    ln -s ${DOT_VIM_CONFIG_DIR}/coc-settings.json ${NVIM_CONFIG_DIR}/.
+    for lcfile in ${DOT_VIM_DIR}/(nvim|ext)/*; do
+        ln -s "$lcfile" "${NVIM_CONFIG_DIR}/${lcfile:t}"
+    done
     nvim +PlugInstall +PlugClean +qa!
 fi
 
@@ -145,6 +146,8 @@ if ! (command_exists alacritty); then
         # Enable font smoothing
         defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO
         defaults -currentHost write -globalDomain AppleFontSmoothing -int 2
+
+        # Install config
+        ln -s "${PWD}/alacritty.yml" "$HOME/.alacritty.yml"
     fi
 fi
-ln -s "${PWD}/alacritty.yml" "$HOME/.alacritty.yml"

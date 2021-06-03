@@ -1,0 +1,106 @@
+" Environment {
+    " Setup Plug Support {
+        filetype off
+        call plug#begin('~/.vim/bundle')
+    " }
+
+    "command! -nargs=+ -bar Plug call plug#(<args>)
+" }
+
+" Plugs {
+
+    " General {
+        Plug 'bling/vim-bufferline'
+        Plug 'easymotion/vim-easymotion'
+        Plug 'mbbill/undotree'
+        Plug 'mhinz/vim-signify'
+        Plug 'rhysd/conflict-marker.vim'
+        Plug 'terryma/vim-multiple-cursors'
+        Plug 'tpope/vim-fugitive'
+        Plug 'tpope/vim-repeat'
+        Plug 'tpope/vim-surround'
+        Plug 'vim-airline/vim-airline'
+        Plug 'vim-airline/vim-airline-themes'
+        Plug 'vim-scripts/matchit.zip'
+        Plug 'vim-scripts/restore_view.vim'
+        Plug 'vim-scripts/sessionman.vim'
+    " }
+
+    " File explorer {
+        Plug '/usr/local/opt/fzf'
+        Plug 'junegunn/fzf.vim'
+        Plug 'Shougo/defx.nvim', {
+                    \ 'do': 'pip3 install pynvim'
+                    \ }
+        Plug 'roxma/nvim-yarp'
+        Plug 'roxma/vim-hug-neovim-rpc', {
+                    \ 'do': 'pip3 install neovim'
+                    \ }
+        Plug 'kristijanhusak/defx-git'
+        Plug 'kristijanhusak/defx-icons'
+    " }
+
+    " Writing {
+        Plug 'reedes/vim-litecorrect'
+        Plug 'reedes/vim-textobj-quote'
+        Plug 'reedes/vim-textobj-sentence'
+    " }
+
+    " General Programming {
+        Plug 'scrooloose/nerdcommenter'
+        Plug 'godlygeek/tabular'
+        Plug 'luochen1990/rainbow'
+        Plug 'roxma/nvim-yarp'
+        if executable('ctags')
+            Plug 'majutsushi/tagbar'
+        endif
+        Plug 'skywind3000/asyncrun.vim'
+        Plug 'octol/vim-cpp-enhanced-highlight'
+        if has('nvim')
+            Plug 'neovim/nvim-lspconfig'
+            Plug 'kabouzeid/nvim-lspinstall'
+            "Plug 'neovim/nvim-lsp'
+        endif
+    " }
+
+    " AutoComplete {
+        Plug 'honza/vim-snippets'
+        if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
+            source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
+        endif
+        Plug 'SirVer/ultisnips'
+
+        function! BuildCoc(info)
+            "!./install.sh
+        endfunction
+        let g:coc_global_extensions=[ 'coc-pairs', 'coc-snippets', 'coc-lists']
+        Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': function('BuildCoc')}
+
+        Plug 'Shougo/echodoc.vim'
+    " }
+
+    " Misc {
+        Plug 'Konfekt/FastFold'
+        Plug 'Yggdroot/indentLine'
+        Plug 'airblade/vim-rooter'
+        Plug 'christoomey/vim-tmux-navigator'
+        Plug 'lifepillar/vim-cheat40'
+        Plug 'mhinz/vim-startify'
+        Plug 'morhetz/gruvbox'
+        Plug 'qdddddd/vim-cycle-airline-theme'
+        Plug 'quentindecock/vim-cucumber-align-pipes'
+        Plug 'spf13/vim-preview'
+        Plug 'tfnico/vim-gradle'
+        Plug 'tpope/vim-cucumber'
+        Plug 'tpope/vim-markdown'
+        "Plug 'w0rp/ale'
+        "Plug 'vim-scripts/CycleColor'
+        Plug 'dyng/ctrlsf.vim'
+    " }
+" }
+
+if has('macunix')
+    "Plug 'philpep/vim-rst-tables'
+endif
+
+call plug#end()

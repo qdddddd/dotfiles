@@ -32,7 +32,7 @@
     set background=light      " Assume a light background
 
     if !has('gui')
-        if !has('nvim') 
+        if !has('nvim')
             set term=$TERM        " Make arrow and other keys work
         endif
 
@@ -215,6 +215,9 @@
             au InsertLeave * set timeoutlen=500
         augroup END
     endif
+
+    " Remove trailing whitespaces
+    autocmd BufWritePre * %s/\s\+$//e
 " }
 
 " Key Mappings {
