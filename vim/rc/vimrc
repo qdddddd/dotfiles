@@ -322,14 +322,14 @@
     syntax on              " Syntax highlighting
     set t_Co=256
     call GruvBoxSettings()
-    hi clear SignColumn    " SignColumn should match background
+    hi! clear SignColumn    " SignColumn should match background
     set conceallevel=1
 
     " Floating window
     let s:menu_bg = '#f3e5bc'
-    exe 'hi Fmenu guifg=#32302f guibg=' . s:menu_bg
+    exe 'hi! Fmenu guifg=#32302f guibg=' . s:menu_bg
     hi! def link FmenuSbar PmenuSbar
-    exe 'hi FmenuThumb guifg=' . s:menu_bg . ' guibg=#8a95a7'
+    exe 'hi! FmenuThumb guifg=' . s:menu_bg . ' guibg=#8a95a7'
 " }
 
 " Plugins {
@@ -435,13 +435,13 @@
 
     " defx-git {
         if isdirectory(expand("~/.vim/bundle/defx-git"))
-            hi def link Defx_git_0_Untracked Comment
-            hi def link Defx_git_0_Ignored DiffAdd
-            hi def link Defx_git_0_Renamed Title
-            hi def link Defx_git_0_Modified Special
-            hi def link Defx_git_0_Unmerged Label
-            hi def link Defx_git_0_Deleted DiffDelete
-            hi def link Defx_git_0_Staged Function
+            hi! def link Defx_git_0_Untracked Comment
+            hi! def link Defx_git_0_Ignored DiffAdd
+            hi! def link Defx_git_0_Renamed Title
+            hi! def link Defx_git_0_Modified Special
+            hi! def link Defx_git_0_Unmerged Label
+            hi! def link Defx_git_0_Deleted DiffDelete
+            hi! def link Defx_git_0_Staged Function
         endif
     " }
 
@@ -594,10 +594,11 @@
             let g:ale_sign_error = '✗'
             let g:ale_sign_warning = '▲'
             let g:ale_sign_info = '●'
+            let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰']
             if g:colors_name == 'gruvbox'
-                highlight link ALEErrorSign GruvboxRedSign
-                highlight link ALEWarningSign GruvboxYellowSign
-                highlight link ALEInfoSign GruvboxAquaSign
+                hi! link ALEErrorSign GruvboxRedSign
+                hi! link ALEWarningSign GruvboxYellowSign
+                hi! link ALEInfoSign GruvboxAquaSign
             endif
             let g:ale_statusline_format = ['✗ %d', '▲ %d', '✓ OK']
 
@@ -605,9 +606,7 @@
                         \ 'cs': ['OmniSharp']
                         \}
 
-            let g:ale_fixers = {
-                        \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-                        \}
+            let g:ale_fixers = { '*': ['remove_trailing_lines', 'trim_whitespace'] }
             let g:ale_fix_on_save = 1
 
             if g:ale_completion_enabled == 1
@@ -774,6 +773,7 @@
             if isdirectory(expand("~/.vim/bundle/omnisharp-vim"))
                 let g:OmniSharp_selector_ui = 'fzf'
                 let g:OmniSharp_selector_findusages = 'fzf'
+                let g:OmniSharp_want_snippet = 1
 
                 " Key mappings
                 augroup omnisharp_commands
@@ -802,7 +802,7 @@
         let g:echodoc#enable_at_startup = 1
         if isdirectory(expand("~/.vim/bundle/echodoc.vim")) && g:echodoc#enable_at_startup == 1
             let g:echodoc#type = "floating"
-            highlight link EchoDocFloat Pmenu
+            hi! link EchoDocFloat Pmenu
         endif
     " }
 
