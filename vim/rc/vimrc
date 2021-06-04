@@ -1,4 +1,4 @@
-" vim: set sw=4 ts=4 sts=4 et foldmarker={,} foldlevel=0 foldmethod=marker:
+" vim: set sw=4 ts=4 sts=4 et foldmarker={,} foldlevel=1 foldmethod=marker:
 
 " Environment {
 
@@ -572,8 +572,13 @@
             nmap <leader>7 <Plug>AirlineSelectTab7
             nmap <leader>8 <Plug>AirlineSelectTab8
             nmap <leader>9 <Plug>AirlineSelectTab9
-            nmap – <Plug>AirlineSelectPrevTab
-            nmap ≠ <Plug>AirlineSelectNextTab
+            if has('nvim')
+                nmap <A--> <Plug>AirlineSelectPrevTab
+                nmap <A-=> <Plug>AirlineSelectNextTab
+            else
+                nmap – <Plug>AirlineSelectPrevTab
+                nmap ≠ <Plug>AirlineSelectNextTab
+            endif
 
             " Sections
             let g:airline_section_x = airline#section#create_right(['tagbar'])
