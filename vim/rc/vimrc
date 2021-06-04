@@ -19,7 +19,7 @@
 " Load bundles config {
 
     " Plugin setteings before loading
-    "let g:ale_completion_enabled = 0
+    let g:ale_completion_enabled = 0
     "let g:ale_set_balloons = 1
     "let g:ale_completion_delay = 0
 
@@ -215,9 +215,6 @@
             au InsertLeave * set timeoutlen=500
         augroup END
     endif
-
-    " Remove trailing whitespaces
-    autocmd BufWritePre * %s/\s\+$//e
 " }
 
 " Key Mappings {
@@ -605,9 +602,7 @@
             let g:ale_statusline_format = ['✗ %d', '▲ %d', '✓ OK']
 
             let g:ale_linters = {
-                        \ 'java': [],
-                        \ 'cpp': [],
-                        \ 'python': ['flake8', 'pylint'],
+                        \ 'cs': ['OmniSharp']
                         \}
 
             let g:ale_fixers = {
@@ -772,6 +767,33 @@
 
                 " Coc plugins
                 autocmd FileType tex let b:coc_pairs = [["$", "$"]]
+            endif
+        " }
+
+        " OmniSharp-vim {
+            if isdirectory(expand("~/.vim/bundle/omnisharp-vim"))
+                let g:OmniSharp_selector_ui = 'fzf'
+                let g:OmniSharp_selector_findusages = 'fzf'
+
+                " Key mappings
+                augroup omnisharp_commands
+                    autocmd!
+                    autocmd FileType cs nmap <silent> <buffer> <Leader>dl <Plug>(omnisharp_go_to_definition)
+                    autocmd FileType cs nmap <silent> <buffer> <Leader>re <Plug>(omnisharp_find_usages)
+                    autocmd FileType cs nmap <silent> <buffer> <Leader>im <Plug>(omnisharp_find_implementations)
+                    autocmd FileType cs nmap <silent> <buffer> <Leader>pdl <Plug>(omnisharp_preview_definition)
+                    autocmd FileType cs nmap <silent> <buffer> <Leader>pim <Plug>(omnisharp_preview_implementations)
+                    autocmd FileType cs nmap <silent> <buffer> <Leader>tp <Plug>(omnisharp_type_lookup)
+                    autocmd FileType cs nmap <silent> <buffer> <Leader>ho <Plug>(omnisharp_documentation)
+                    autocmd FileType cs nmap <silent> <buffer> <Leader>sm <Plug>(omnisharp_find_symbol)
+                    autocmd FileType cs nmap <silent> <buffer> <Leader>fi <Plug>(omnisharp_fix_usings)
+                    autocmd FileType cs nmap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
+                    autocmd FileType cs imap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
+                    autocmd FileType cs nmap <silent> <buffer> <Leader>da <Plug>(omnisharp_global_code_check)
+                    autocmd FileType cs nmap <silent> <buffer> <Leader>fo <Plug>(omnisharp_code_format)
+                    autocmd FileType cs nmap <silent> <buffer> <Leader>rn <Plug>(omnisharp_rename)
+                    autocmd FileType cs nmap <silent> <buffer> <Leader>rs <Plug>(omnisharp_restart_server)
+                augroup END
             endif
         " }
     "}
