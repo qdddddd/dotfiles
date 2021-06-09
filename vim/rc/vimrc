@@ -810,7 +810,7 @@
                 autocmd FileType cs nmap <silent> <buffer> <Leader>da <Plug>(omnisharp_global_code_check)
                 autocmd FileType cs nmap <silent> <buffer> <Leader>fo <Plug>(omnisharp_code_format)
                 autocmd FileType cs nmap <silent> <buffer> <Leader>rn <Plug>(omnisharp_rename)
-                autocmd FileType cs nmap <silent> <buffer> <Leader>rs <Plug>(omnisharp_restart_server)
+                autocmd FileType cs nmap <Leader>rs :OmniSharpRestartServer <CR>
                 autocmd FileType cs nmap <silent> <buffer> <C-k> <Plug>(ale_previous_wrap)
                 autocmd FileType cs nmap <silent> <buffer> <C-j> <Plug>(ale_next_wrap)
             augroup END

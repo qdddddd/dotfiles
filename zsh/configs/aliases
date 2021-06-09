@@ -21,7 +21,10 @@ case "$OSTYPE" in
 esac
 
 alias v='vim'
-alias n='nvim'
+if (( $+commands[nvim] )); then
+    alias vn='nvim'
+    alias v='nvim'
+fi
 alias llp='latexmk -xelatex -pvc -pdf -interaction=batchmode -quiet'
 alias BundleInstall='vim +BundleInstall! +BundleClean +q'
 alias ll='ls -lFh'
