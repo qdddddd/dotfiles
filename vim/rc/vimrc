@@ -250,8 +250,6 @@
     " For when you forget to sudo.. Really Write the file.
     cmap w!! w !sudo tee % >/dev/null
 
-    command! Uf set foldlevel=20
-
     "nnoremap <f5> :CycleColorNext<CR> " \| Silent call AirlineRefresh()
     "nnoremap <f6> :CycleColorPrev<CR> " \| Silent call AirlineRefresh()
 
