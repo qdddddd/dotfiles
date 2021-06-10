@@ -40,7 +40,12 @@ standard_install() {
     fi
 }
 
-###########################
+#############################
+
+# Intall homebrew
+if is_mac && ! (command_exists brew); then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+fi
 
 # Install pip
 if ! (command_exists pip3); then
@@ -57,12 +62,6 @@ if ! (command_exists ag); then
     if is_linux; then
         sudo apt-get install silversearcher-ag
     elif is_mac; then
-        # Install homebrew if not exists
-        if ! (command_exists brew); then
-            /bin/bash -c \
-                "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-        fi
-
         brew install the_silver_searcher
     fi
 fi
@@ -102,7 +101,6 @@ DOT_VIM_DIR=${PWD}/vim
 for lcfile in ${DOT_VIM_DIR}/(rc|ext)/*; do
     ln -s "$lcfile" "$HOME/.vim/${lcfile:t}"
 done
-mkdir $HOME/.vim/tempfiles
 vim +PlugInstall +PlugClean +qa!
 rm -f $HOME/.fzf.zsh $HOME/.fzf.bash
 
@@ -122,7 +120,7 @@ for rcfile in "${PWD}"/zsh/configs/*; do
 done
 source $HOME/.zshrc
 
-##############################
+#############################
 
 # Install tmux
 standard_install tmux

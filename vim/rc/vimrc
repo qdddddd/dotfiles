@@ -102,7 +102,11 @@
                     \ 'swap': 'directory' }
 
         if has('persistent_undo')
-            let dir_list['undo'] = 'undodir'
+            if has('nvim')
+                let dir_list['undo/nvim'] = 'undodir'
+            else
+                let dir_list['undo/vim'] = 'undodir'
+            endif
         endif
 
         " To specify a different directory in which to place the vimbackup,
@@ -113,7 +117,7 @@
             let directory = common_dir . dirname . '/'
             if exists("*mkdir")
                 if !isdirectory(directory)
-                    call mkdir(directory)
+                    call mkdir(directory, "p")
                 endif
             endif
             if !isdirectory(directory)
@@ -217,6 +221,9 @@
             augroup END
         endif
     " }
+
+    " Reload vim settings
+    command! Reload source ~/.vim/vimrc
 " }
 
 " Key Mappings {
@@ -857,10 +864,10 @@
                     \ )
 
         " key mappings
-        nnoremap <leader>f<space> :FZF <CR>
-        nnoremap <leader>r<space> :History <CR>
-        nnoremap <leader>ff :BTags <CR>
-        nnoremap <leader>l<space> :Lines <CR>
+        nnoremap <silent> <leader>f<space> :FZF <CR>
+        nnoremap <silent> <leader>r<space> :History <CR>
+        nnoremap <silent> <leader>ff :BTags <CR>
+        nnoremap <silent> <leader>l<space> :Lines <CR>
         " Bind K to grep word under cursor
         nnoremap <silent> K :call fzf#vim#ag
                     \ (
