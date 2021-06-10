@@ -400,7 +400,7 @@
                     \ })
 
         call defx#custom#column('indent', {
-                    \ 'indent': "  ",
+                    \ 'indent': "| ",
                     \ })
 
         let g:defx_ignore = "*.py[cd],*~,*.swo,*.swp,.git,.hg,.svn,*.bzr,*.DS_Store,build,gradle,.gradle,.idea,bin,cmake-build*,CMakeCache.txt,CMakeFiles,.github,.travis,.clangd*"
