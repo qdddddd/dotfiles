@@ -8,6 +8,8 @@
     email = q.du@connect.ust.hk
 [core]
     excludesfile = ~/.gitignore_global
+    autocrlf = true
+    whitespace = cr-at-eol
 [branch]
     autosetuprebase = always
 [alias]
