@@ -22,7 +22,7 @@ esac
 
 alias v='vim'
 if (( $+commands[nvim] )); then
-    alias vn='nvim'
+    alias vi='nvim'
     alias v='nvim'
 fi
 alias llp='latexmk -xelatex -pvc -pdf -interaction=batchmode -quiet'

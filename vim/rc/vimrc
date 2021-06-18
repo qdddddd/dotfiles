@@ -172,6 +172,7 @@
     set noshowmode                  " Disable mode message
     set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
     set nobomb
+    set noreadonly
 
     autocmd! BufRead,BufNewFile *.html.twig set ft=html.twig
     autocmd! BufRead,BufNewFile *.coffee set ft=coffee
@@ -359,23 +360,6 @@
 
 " defx {
     if isdirectory(expand("~/.vim/bundle/defx.nvim"))
-        function! g:MaxLineLength()
-            let l:max = 0
-            for l:line in range(1, line('$'))
-                let l:len = len(getline(l:line))
-                if l:len > l:max
-                    let l:max = l:len
-                endif
-            endfor
-            return l:max
-        endfunction
-
-        " Toggle between defx window width and longest line
-        function! g:DefxToggleWidth(context) abort
-            let l:max = MaxLineLength()
-            execute 'vertical resize '. (l:max == winwidth('.') ? a:context['winwidth'] : l:max)
-        endfunction
-
         call defx#custom#column('icon', {
                     \ 'root_icon': ' ',
                     \ 'directory_icon': '',
@@ -384,7 +368,7 @@
 
         call defx#custom#option('_', {
                     \ 'split': 'vertical',
-                    \ 'winwidth': &columns/4.8,
+                    \ 'winwidth': 35,
                     \ 'direction': 'topleft',
                     \ 'columns': 'git:indent:icons:filename:mark',
                     \ })
@@ -402,6 +386,25 @@
         call defx#custom#column('indent', {
                     \ 'indent': "| ",
                     \ })
+
+        let s:original_width = get(get(defx#custom#_get().option, '_'), 'winwidth')
+
+        function! g:MaxLineLength()
+            let l:max = 0
+            for l:line in range(1, line('$'))
+                let l:len = strdisplaywidth(substitute(getline(l:line), '\s\+$', '', ''))
+                let l:max = max([l:len + 6, l:max])
+            endfor
+            return l:max
+        endfunction
+
+        " Toggle between defx window width and longest line
+        function! g:DefxToggleWidth(context) abort
+            let l:max = MaxLineLength()
+            let l:new = l:max == winwidth(0) ? s:original_width : l:max
+            call defx#call_action('resize', l:new)
+        endfunction
+
 
         let g:defx_ignore = "*.py[cd],*~,*.swo,*.swp,.git,.hg,.svn,*.bzr,*.DS_Store,build,gradle,.gradle,.idea,bin,cmake-build*,CMakeCache.txt,CMakeFiles,.github,.travis,.clangd*"
         nnoremap <silent><leader>e :Defx -toggle -ignored-files=`g:defx_ignore` -search=`resolve(expand('%:p'))` `getcwd()` <CR>
