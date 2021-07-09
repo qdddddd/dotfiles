@@ -99,7 +99,8 @@
         let dir_list = {
                     \ 'backup': 'backupdir',
                     \ 'views': 'viewdir',
-                    \ 'swap': 'directory' }
+                    \ 'swap': 'directory'
+                    \ }
 
         if has('persistent_undo')
             if has('nvim')
@@ -134,45 +135,48 @@
         endif
     endfunction
     call InitializeDirectories()
+
+    " Setup cursor style
+    autocmd OptionSet guicursor noautocmd set guicursor=
 " }
 
 " Misc {
-    set wrap                        " Wrap long lines
     set autoindent                  " Indent at the same level of the previous line
-    set shiftwidth=4                " Use indents of 4 spaces
-    set expandtab                   " Tabs are spaces, not tabs
-    set tabstop=4                   " An indentation every four columns
-    set softtabstop=4               " Let backspace delete indent
-    set nojoinspaces                " Prevents inserting two spaces after punctuation on a join (J)
-    set splitright                  " Puts new vsplit windows to the right of the current
-    set splitbelow                  " Puts new split windows to the bottom of the current
-    set breakindent
-    set equalalways
-    set tw=120
-    set updatetime=300
-    set tabpagemax=15               " Only show 15 tabs
-    set cursorline                  " Highlight current line
     set backspace=indent,eol,start  " Backspace for dummies
-    set linespace=0                 " No extra spaces between rows
-    set number relativenumber       " Line numbers on
-    set showmatch                   " Show matching brackets/parenthesis
-    set incsearch                   " Find as you type search
-    set hlsearch                    " Highlight search terms
-    set winminheight=0              " Windows can be 0 line high
-    set ignorecase                  " Case insensitive search
-    set smartcase                   " Case sensitive when uc present
-    set wildmenu                    " Show list instead of just completing
-    set wildmode=list:longest,full  " Command <Tab> completion, list matches, then longest common part, then all.
-    set whichwrap=b,s,h,l,<,>,[,]   " Backspace and cursor keys wraep too
-    set scrolljump=0                " Lines to scroll when cursor leaves screen
-    set scrolloff=3                 " Minimum lines to keep above and below cursor
+    set breakindent
+    set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
+    set cursorline                  " Highlight current line
+    set equalalways
+    set expandtab                   " Tabs are spaces, not tabs
     set foldenable                  " Auto fold code
+    set hlsearch                    " Highlight search terms
+    set ignorecase                  " Case insensitive search
+    set incsearch                   " Find as you type search
+    set linespace=0                 " No extra spaces between rows
     set list
     set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespaces
-    set noshowmode                  " Disable mode message
-    set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
     set nobomb
+    set nojoinspaces                " Prevents inserting two spaces after punctuation on a join (J)
     set noreadonly
+    set noshowmode                  " Disable mode message
+    set number relativenumber       " Line numbers on
+    set scrolljump=0                " Lines to scroll when cursor leaves screen
+    set scrolloff=3                 " Minimum lines to keep above and below cursor
+    set shiftwidth=4                " Use indents of 4 spaces
+    set showmatch                   " Show matching brackets/parenthesis
+    set smartcase                   " Case sensitive when uc present
+    set softtabstop=4               " Let backspace delete indent
+    set splitbelow                  " Puts new split windows to the bottom of the current
+    set splitright                  " Puts new vsplit windows to the right of the current
+    set tabpagemax=15               " Only show 15 tabs
+    set tabstop=4                   " An indentation every four columns
+    set tw=120
+    set updatetime=300
+    set whichwrap=b,s,h,l,<,>,[,]   " Backspace and cursor keys wrap too
+    set wildmenu                    " Show list instead of just completing
+    set wildmode=longest:full,full  " Command <Tab> completion, list matches, then longest common part, then all.
+    set winminheight=0              " Windows can be 0 line high
+    set wrap                        " Wrap long lines
 
     autocmd! BufRead,BufNewFile *.html.twig set ft=html.twig
     autocmd! BufRead,BufNewFile *.coffee set ft=coffee
