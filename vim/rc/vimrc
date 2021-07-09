@@ -362,7 +362,7 @@
                     \ 'split': 'vertical',
                     \ 'winwidth': 35,
                     \ 'direction': 'topleft',
-                    \ 'columns': 'git:indent:icons:filename:mark',
+                    \ 'columns': 'git:indent:icons:space:filename:mark',
                     \ })
 
         call defx#custom#column('filename', {

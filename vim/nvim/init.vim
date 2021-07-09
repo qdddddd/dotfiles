@@ -19,6 +19,7 @@ command! Reload source ~/.config/nvim/init.vim
 
 " Color the column marking the lengthLimit when
 " the longest line in the file exceeds the limit
+au! BufWinEnter set colorcolumn=99999
 augroup TriggerColorColumn
     au!
     au BufWinEnter,BufRead,TextChanged,TextChangedI *.cs call ShowColumnAtLimit(120)
