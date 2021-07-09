@@ -17,8 +17,22 @@ let g:fzf_layout = { 'window': { 'width': 0.6, 'height': 0.3, 'highlight': 'Gruv
 " Reload vim settings
 command! Reload source ~/.config/nvim/init.vim
 
-" To fix the cursorline highlight bug
-set colorcolumn=999999
+" Color the column marking the lengthLimit when
+" the longest line in the file exceeds the limit
+augroup TriggerColorColumn
+    au!
+    au BufWinEnter,BufRead,TextChanged,TextChangedI *.cs call ShowColumnAtLimit(120)
+augroup END
+
+function! ShowColumnAtLimit(len_limit)
+    let max_len = max(map(getline(1,'$'), 'len(v:val)'))
+
+    if max_len > a:len_limit
+        exe "set colorcolumn=" . (a:len_limit + 1)
+    else
+        set colorcolumn=99999
+    endif
+endfunction
 
 " Plugin Settings
 
