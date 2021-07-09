@@ -77,9 +77,10 @@
 
     " Misc {
         Plug 'Konfekt/FastFold'
-        Plug 'Yggdroot/indentLine'
         if has('nvim')
             Plug 'lukas-reineke/indent-blankline.nvim'
+        else
+            Plug 'Yggdroot/indentLine'
         endif
         Plug 'airblade/vim-rooter'
         Plug 'christoomey/vim-tmux-navigator'

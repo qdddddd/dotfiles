@@ -17,11 +17,14 @@ let g:fzf_layout = { 'window': { 'width': 0.6, 'height': 0.3, 'highlight': 'Gruv
 " Reload vim settings
 command! Reload source ~/.config/nvim/init.vim
 
+" To fix the cursorline highlight bug
+set colorcolumn=999999
+
 " Plugin Settings
 
 " indent_blankline {
     if isdirectory(expand("~/.vim/bundle/indent-blankline.nvim"))
-        let g:indent_blankline_indent_level = 20
-        let g:indent_blankline_extra_indent_level = -1
+        let g:indent_blankline_show_first_indent_level = v:false
+        let g:indent_blankline_show_trailing_blankline_indent = v:false
     endif
 " }
