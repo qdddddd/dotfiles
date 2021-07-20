@@ -94,8 +94,6 @@
     "python.analysis.diagnosticEnabled": true,
     "python.linting.lintOnSave": true,
     "coc.preferences.formatOnSaveFiletypes": [
-        "c",
-        "cpp",
         "java",
         "vim",
         "yaml",

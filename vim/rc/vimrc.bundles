@@ -26,15 +26,20 @@
         Plug 'vim-scripts/sessionman.vim'
     " }
 
+    " Vim Compatible {
+        if !has('nvim')
+            Plug 'roxma/nvim-yarp'
+            Plug 'roxma/vim-hug-neovim-rpc', {
+                        \ 'do': 'pip3 install neovim'
+                        \ }
+        endif
+    " }
+
     " File explorer {
         Plug '/usr/local/opt/fzf'
         Plug 'junegunn/fzf.vim'
         Plug 'Shougo/defx.nvim', {
                     \ 'do': 'pip3 install pynvim'
-                    \ }
-        Plug 'roxma/nvim-yarp'
-        Plug 'roxma/vim-hug-neovim-rpc', {
-                    \ 'do': 'pip3 install neovim'
                     \ }
         Plug 'kristijanhusak/defx-git'
         Plug 'kristijanhusak/defx-icons'
@@ -50,28 +55,26 @@
         Plug 'scrooloose/nerdcommenter'
         Plug 'godlygeek/tabular'
         Plug 'luochen1990/rainbow'
-        Plug 'roxma/nvim-yarp'
         if executable('ctags')
             Plug 'majutsushi/tagbar'
         endif
         Plug 'skywind3000/asyncrun.vim'
         Plug 'octol/vim-cpp-enhanced-highlight'
-        Plug 'OmniSharp/omnisharp-vim'
     " }
 
-    " AutoComplete {
+    " LSP and Extensions {
+        function! BuildCoc(info)
+            !./install.sh
+        endfunction
+        let g:coc_global_extensions=[ 'coc-pairs', 'coc-snippets', 'coc-lists']
+        Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': function('BuildCoc')}
+        Plug 'dense-analysis/ale'
+        Plug 'OmniSharp/omnisharp-vim'
         Plug 'honza/vim-snippets'
         if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
             source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
         endif
         Plug 'SirVer/ultisnips'
-
-        function! BuildCoc(info)
-            "!./install.sh
-        endfunction
-        let g:coc_global_extensions=[ 'coc-pairs', 'coc-snippets', 'coc-lists']
-        Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': function('BuildCoc')}
-
         Plug 'Shougo/echodoc.vim'
     " }
 
@@ -84,18 +87,13 @@
         endif
         Plug 'airblade/vim-rooter'
         Plug 'christoomey/vim-tmux-navigator'
-        Plug 'lifepillar/vim-cheat40'
         Plug 'mhinz/vim-startify'
         Plug 'morhetz/gruvbox'
-        Plug 'qdddddd/vim-cycle-airline-theme'
-        Plug 'quentindecock/vim-cucumber-align-pipes'
         Plug 'spf13/vim-preview'
-        Plug 'tfnico/vim-gradle'
-        Plug 'tpope/vim-cucumber'
         Plug 'tpope/vim-markdown'
-        Plug 'dense-analysis/ale'
-        "Plug 'vim-scripts/CycleColor'
         Plug 'dyng/ctrlsf.vim'
+        "Plug 'vim-scripts/CycleColor'
+        "Plug 'qdddddd/vim-cycle-airline-theme'
     " }
 " }
 
