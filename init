@@ -120,21 +120,12 @@ for rcfile in "${PWD}"/zsh/configs/*; do
 done
 source $HOME/.zshrc
 
-#############################
-
 # Install tmux
 standard_install tmux
+git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 
 # Install tree
 standard_install tree
-
-# Create tmux.conf sym link
-ln -s "${PWD}/tmux.conf" "$HOME/.tmux.conf"
-git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
-
-# Create git global config sym links
-ln -s "${PWD}/gitconfig" "$HOME/.gitconfig"
-ln -s "${PWD}/gitignore_global" "$HOME/.gitignore_global"
 
 # Install Alarcritty
 if ! (command_exists alacritty); then
@@ -144,8 +135,16 @@ if ! (command_exists alacritty); then
         # Enable font smoothing
         defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO
         defaults -currentHost write -globalDomain AppleFontSmoothing -int 2
-
-        # Install config
-        ln -s "${PWD}/alacritty.yml" "$HOME/.alacritty.yml"
     fi
+fi
+
+#############################
+
+# Create sym links for dot configs
+for dotfile in ${PWD}/dotconf/*; do
+    ln -s "$dotfile" "$HOME/.${dotfile:t}"
+done
+
+if ! is_mac; then
+    rm $HOME/.alacritty.yml
 fi
