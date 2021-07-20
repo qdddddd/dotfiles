@@ -14,6 +14,8 @@ chmod +x llvm.sh
 
 rm llvm.sh
 
+apt-get install libc++-${version}-dev
+
 update-alternatives --install /usr/bin/clang clang /usr/bin/clang-${version} 100
 update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-${version} 100
 update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-${version} 100
