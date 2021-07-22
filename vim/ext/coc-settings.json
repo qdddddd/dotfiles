@@ -44,35 +44,17 @@
     "diagnostic.checkCurrentLine": true,
     "list.nextKeymap": "<C-n>",
     "list.previousKeymap": "<C-p>",
-    "languageserver": {
-        "clangd": {
-            "command": "clangd",
-            "args": [
-                "-log=error",
-                "-pretty",
-                "-pch-storage=memory",
-                "-function-arg-placeholders=1",
-                "-header-insertion=never",
-                "-clang-tidy",
-                "-completion-style=detailed",
-                "-suggest-missing-includes",
-                "-j=4"
-            ],
-            "rootPatterns": [
-                "compile_commands.json",
-                ".vim/",
-                ".git/",
-                ".hg/"
-            ],
-            "filetypes": [
-                "c",
-                "cpp",
-                "objc",
-                "objcpp",
-                "cuda"
-            ]
-        }
-    },
+    "clangd.arguments": [
+        "-log=error",
+        "-pretty",
+        "-pch-storage=memory",
+        "-function-arg-placeholders=1",
+        "-header-insertion=never",
+        "-clang-tidy",
+        "-completion-style=detailed",
+        "-suggest-missing-includes",
+        "-j=6"
+    ],
     "latex.build.onSave": true,
     "latex.build.args": [
         "-outdir=out",
@@ -94,6 +76,8 @@
     "python.analysis.diagnosticEnabled": true,
     "python.linting.lintOnSave": true,
     "coc.preferences.formatOnSaveFiletypes": [
+        "c",
+        "cpp",
         "java",
         "vim",
         "yaml",
