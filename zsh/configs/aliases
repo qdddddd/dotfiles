@@ -48,7 +48,7 @@ alias biiota-jshell='JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.jdk/Cont
 alias ds='du -h --max-depth=1'
 alias git-refresh-date='GIT_COMMITTER_DATE="$(date)" git commit --amend --no-edit --date "$(date)"'
 alias ag='ag --nobreak --nonumbers --noheading --silent --path-to-ignore ~/.config/agignore . | fzf --reverse -e'
-alias proxy-on='export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7891'
+alias proxy-on='export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087 all_proxy=socks5://127.0.0.1:7891'
 alias proxy-off='unset http_proxy https_proxy all_proxy'
 alias sshp="ssh -o ProxyCommand='nc -X 5 -x ${clash_socks} %h %p'"
 alias ps-grep="ps aux | grep -v grep | grep"

@@ -128,14 +128,17 @@ git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 standard_install tree
 
 # Install Alarcritty
-if ! (command_exists alacritty); then
-    if is_mac; then
+if is_mac; then
+    if ! (command_exists alacritty); then
         brew install alacritty
 
         # Enable font smoothing
         defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO
         defaults -currentHost write -globalDomain AppleFontSmoothing -int 2
     fi
+
+    # Install config
+    ln -s "${PWD}/alacritty.yml" "$HOME/.alacritty.yml"
 fi
 
 #############################

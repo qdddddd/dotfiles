@@ -29,6 +29,7 @@ for rcfile in "${PWD}"/zsh/configs/*; do
 done
 rm -rf $HOME/.cache/.zcompdump* $HOME/.zhistory $HOME/.cache/.zcompcache
 
+# Remove dot files
 for dfile in ${PWD}/dotconf/*; do
     rm -f "$HOME/.${dfile:t}"
 done
