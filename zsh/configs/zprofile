@@ -102,6 +102,13 @@ if (( $#commands[(i)lesspipe(|.sh)] )); then
 fi
 
 #
+# Tmux
+#
+# Set the tmux socket directory
+mkdir -p $HOME/.cache/tmux
+export TMUX_TMPDIR=$HOME/.cache/tmux
+
+#
 # Misc
 #
 export LSCOLORS='ExgxcxdxdxGxDxabagacad'
