@@ -136,9 +136,6 @@ if is_mac; then
         defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO
         defaults -currentHost write -globalDomain AppleFontSmoothing -int 2
     fi
-
-    # Install config
-    ln -s "${PWD}/alacritty.yml" "$HOME/.alacritty.yml"
 fi
 
 #############################
