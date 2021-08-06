@@ -95,25 +95,6 @@ if ! (command_exists yarn); then
     curl --compressed -o- -L https://yarnpkg.com/install.sh | bash
 fi
 
-# Create vim config sym links
-DOT_VIM_DIR=${PWD}/vim
-#for lcfile in ${DOT_VIMRC_DIR}/^*(README.md|nvim)*; do
-for lcfile in ${DOT_VIM_DIR}/(rc|ext)/*; do
-    ln -s "$lcfile" "$HOME/.vim/${lcfile:t}"
-done
-vim +PlugInstall +PlugClean +qa!
-rm -f $HOME/.fzf.zsh $HOME/.fzf.bash
-
-# Create nvim config sym links
-if (command_exists nvim); then
-    NVIM_CONFIG_DIR=$HOME/.config/nvim
-    mkdir -p ${NVIM_CONFIG_DIR}
-    for lcfile in ${DOT_VIM_DIR}/(nvim|ext)/*; do
-        ln -s "$lcfile" "${NVIM_CONFIG_DIR}/${lcfile:t}"
-    done
-    nvim +PlugInstall +PlugClean +qa!
-fi
-
 # Create zsh config sym links
 for rcfile in "${PWD}"/zsh/configs/*; do
     ln -s "$rcfile" "$HOME/.${rcfile:t}"
@@ -125,6 +106,27 @@ touch $HOME/.zshrc.local
 cat <<EOF >$HOME/.zshrc.local
 prompt_bernoulli_setup 66
 EOF
+
+# Create vim config sym links
+DOT_VIM_DIR=${PWD}/vim
+#for lcfile in ${DOT_VIMRC_DIR}/^*(README.md|nvim)*; do
+for lcfile in ${DOT_VIM_DIR}/(rc|ext)/*; do
+    ln -s "$lcfile" "$HOME/.vim/${lcfile:t}"
+done
+
+# Create nvim config sym links
+if (command_exists nvim); then
+    NVIM_CONFIG_DIR=$HOME/.config/nvim
+    mkdir -p ${NVIM_CONFIG_DIR}
+    for lcfile in ${DOT_VIM_DIR}/(nvim|ext)/*; do
+        ln -s "$lcfile" "${NVIM_CONFIG_DIR}/${lcfile:t}"
+    done
+
+    nvim +UpdateRemotePlugins +qa!
+fi
+
+vi +PlugInstall +PlugClean +qa!
+rm -f $HOME/.fzf.zsh $HOME/.fzf.bash
 
 # Install tmux
 standard_install tmux
