@@ -33,9 +33,9 @@ command_exists() {
 standard_install() {
     if ! (command_exists $1); then
         if is_mac; then
-            sudo apt-get install $1
-        elif is_linux; then
             brew install $1
+        elif is_linux; then
+            sudo apt-get install $1
         fi
     fi
 }
@@ -119,6 +119,12 @@ for rcfile in "${PWD}"/zsh/configs/*; do
     ln -s "$rcfile" "$HOME/.${rcfile:t}"
 done
 source $HOME/.zshrc
+
+# Create .zshrc.local
+touch $HOME/.zshrc.local
+cat <<EOF >$HOME/.zshrc.local
+prompt_bernoulli_setup 66
+EOF
 
 # Install tmux
 standard_install tmux
