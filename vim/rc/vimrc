@@ -258,9 +258,8 @@
 
     " Shorcut saving
     nnoremap <leader>w :w<CR>
-    nnoremap <leader>x :bd<CR>
 
-    " Shortcut delete buffer
+    " Shortcut deleting buffer
     nnoremap <leader>x :bd<CR>
 
     " Compile and run code
@@ -800,7 +799,9 @@
                         \ '\.nuget\\',
                         \ '\<AssemblyInfo\.cs\>',
                         \ 'obj\/*',
-                        \ '\.nuget\/'
+                        \ '\.nuget\/',
+                        \ 'bin\\',
+                        \ 'bin\/*'
                         \ ]
 
             " Key mappings
@@ -823,6 +824,7 @@
                 autocmd FileType cs nmap <Leader>rs :OmniSharpRestartServer <CR>
                 autocmd FileType cs nmap <silent> <buffer> <C-k> <Plug>(ale_previous_wrap)
                 autocmd FileType cs nmap <silent> <buffer> <C-j> <Plug>(ale_next_wrap)
+                autocmd FileType cs autocmd BufWrite <buffer> OmniSharpCodeFormat
             augroup END
         endif
     " }
