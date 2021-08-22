@@ -396,7 +396,6 @@
             call defx#call_action('resize', l:new)
         endfunction
 
-
         let g:defx_ignore = "*.py[cd],*~,*.swo,*.swp,.git,.hg,.svn,*.bzr,*.DS_Store,
                             \build,gradle,.gradle,.idea,bin,cmake-build*,CMakeCache.txt,
                             \CMakeFiles,.github,.travis,.clangd*"
@@ -585,10 +584,9 @@
         nmap <leader>7 <Plug>AirlineSelectTab7
         nmap <leader>8 <Plug>AirlineSelectTab8
         nmap <leader>9 <Plug>AirlineSelectTab9
-        if OSX()
-            nmap – <Plug>AirlineSelectPrevTab
-            nmap ≠ <Plug>AirlineSelectNextTab
-        elseif has('nvim')
+        nmap – <Plug>AirlineSelectPrevTab
+        nmap ≠ <Plug>AirlineSelectNextTab
+        if LINUX() || has('nvim')
             nmap <A--> <Plug>AirlineSelectPrevTab
             nmap <A-=> <Plug>AirlineSelectNextTab
         endif
@@ -824,7 +822,6 @@
                 autocmd FileType cs nmap <Leader>rs :OmniSharpRestartServer <CR>
                 autocmd FileType cs nmap <silent> <buffer> <C-k> <Plug>(ale_previous_wrap)
                 autocmd FileType cs nmap <silent> <buffer> <C-j> <Plug>(ale_next_wrap)
-                autocmd FileType cs autocmd BufWrite <buffer> OmniSharpCodeFormat
             augroup END
         endif
     " }
