@@ -152,7 +152,3 @@ fi
 for dotfile in ${PWD}/dotconf/*; do
     ln -s "$dotfile" "$HOME/.${dotfile:t}"
 done
-
-if ! is_mac; then
-    rm $HOME/.alacritty.yml
-fi
