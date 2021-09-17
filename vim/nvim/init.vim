@@ -5,7 +5,6 @@
 set runtimepath^=~/.vim
 let &packpath = &runtimepath
 source ~/.vim/vimrc
-luafile ~/.config/nvim/plugs.lua
 
 " Set cursor style
 set guicursor="n-v-c-sm:hor20,i-ci-ve:hor20,r-cr-o:hor20"
@@ -36,6 +35,7 @@ function! ShowColumnAtLimit(len_limit)
 endfunction
 
 " Plugin Settings
+luafile ~/.config/nvim/plugs.lua
 
 " indent_blankline {
     if isdirectory(expand("~/.vim/bundle/indent-blankline.nvim"))

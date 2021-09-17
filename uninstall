@@ -18,7 +18,7 @@ done
 for lcfile in ${PWD}/vim/(rc|ext)/*; do
     rm "$HOME/.vim/${lcfile:t}"
 done
-for lcfile in ${PWD}/vim/(nvim|ext)/*; do
+for lcfile in ${PWD}/vim/nvim/*; do
     rm "$HOME/.config/nvim/${lcfile:t}"
 done
 rm -r $HOME/.vim/tempfiles

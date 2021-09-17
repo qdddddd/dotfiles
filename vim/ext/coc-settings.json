@@ -4,10 +4,11 @@
     "suggest.echodocSupport": true,
     "suggest.languageSourcePriority": 1,
     "suggest.numberSelect": false,
-    "suggest.snippetIndicator": "▸",
+    "suggest.snippetIndicator": "",
     "suggest.noselect": false,
     "suggest.detailField": "menu",
     "suggest.labelMaxLength": 60,
+    "suggest.removeDuplicateItems": true,
     "suggest.completionItemKindLabels": {
         "keyword": "\uf1de",
         "variable": "\ue79b",
@@ -42,6 +43,7 @@
     "diagnostic.infoSign": "●",
     "diagnostic.hintSign": "◇",
     "diagnostic.checkCurrentLine": true,
+    "diagnostic.showDeprecated": true,
     "list.nextKeymap": "<C-n>",
     "list.previousKeymap": "<C-p>",
     "clangd.arguments": [
@@ -55,6 +57,12 @@
         "-suggest-missing-includes",
         "-j=6"
     ],
+    "omnisharp.version": "v1.37.6",
+    "coc.source.OmniSharp.enable": false,
+    "coc.preferences.colorSupport": true,
+    "coc.source.buffer.ignoreGitignore": true,
+    "coc.preferences.bracketEnterImprove": true,
+    "coc.preferences.semanticTokensHighlights": true,
     "latex.build.onSave": true,
     "latex.build.args": [
         "-outdir=out",

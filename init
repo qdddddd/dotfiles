@@ -104,7 +104,8 @@ source $HOME/.zshrc
 # Create .zshrc.local
 touch $HOME/.zshrc.local
 cat <<EOF >$HOME/.zshrc.local
-prompt_bernoulli_setup 66
+export ZSH_THEME_COLOR=66
+source ~/.p10k.zsh
 EOF
 
 # Create vim config sym links
@@ -118,7 +119,7 @@ done
 if (command_exists nvim); then
     NVIM_CONFIG_DIR=$HOME/.config/nvim
     mkdir -p ${NVIM_CONFIG_DIR}
-    for lcfile in ${DOT_VIM_DIR}/(nvim|ext)/*; do
+    for lcfile in ${DOT_VIM_DIR}/nvim/*; do
         ln -s "$lcfile" "${NVIM_CONFIG_DIR}/${lcfile:t}"
     done
 

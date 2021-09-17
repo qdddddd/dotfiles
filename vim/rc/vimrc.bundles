@@ -3,15 +3,11 @@
         filetype off
         call plug#begin('~/.vim/bundle')
     " }
-
-    "command! -nargs=+ -bar Plug call plug#(<args>)
 " }
 
 " Plugs {
-
     " General {
         Plug 'bling/vim-bufferline'
-        Plug 'easymotion/vim-easymotion'
         Plug 'mbbill/undotree'
         Plug 'mhinz/vim-signify'
         Plug 'rhysd/conflict-marker.vim'
@@ -20,10 +16,10 @@
         Plug 'tpope/vim-repeat'
         Plug 'tpope/vim-surround'
         Plug 'vim-airline/vim-airline'
-        Plug 'vim-airline/vim-airline-themes'
         Plug 'vim-scripts/matchit.zip'
         Plug 'vim-scripts/restore_view.vim'
         Plug 'vim-scripts/sessionman.vim'
+        Plug 'akinsho/bufferline.nvim'
     " }
 
     " Vim Compatible {
@@ -58,7 +54,6 @@
         if executable('ctags')
             Plug 'majutsushi/tagbar'
         endif
-        Plug 'skywind3000/asyncrun.vim'
         Plug 'octol/vim-cpp-enhanced-highlight'
     " }
 
@@ -66,7 +61,6 @@
         function! BuildCoc(info)
             !./install.sh
         endfunction
-        let g:coc_global_extensions=[ 'coc-pairs', 'coc-snippets', 'coc-lists']
         Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': function('BuildCoc')}
         Plug 'dense-analysis/ale'
         Plug 'OmniSharp/omnisharp-vim'
