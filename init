@@ -99,14 +99,15 @@ fi
 for rcfile in "${PWD}"/zsh/configs/*; do
     ln -s "$rcfile" "$HOME/.${rcfile:t}"
 done
-source $HOME/.zshrc
 
 # Create .zshrc.local
 touch $HOME/.zshrc.local
-cat <<EOF >$HOME/.zshrc.local
+cat <<EOF >>$HOME/.zshrc.local
 export ZSH_THEME_COLOR=66
 source ~/.p10k.zsh
 EOF
+
+source $HOME/.zshrc
 
 # Create vim config sym links
 DOT_VIM_DIR=${PWD}/vim
