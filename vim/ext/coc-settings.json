@@ -83,6 +83,9 @@
     "python.jediEnabled": false,
     "python.analysis.diagnosticEnabled": true,
     "python.linting.lintOnSave": true,
+    "Lua.diagnostics.globals": [
+        "vim"
+    ],
     "coc.preferences.formatOnSaveFiletypes": [
         "c",
         "cpp",
