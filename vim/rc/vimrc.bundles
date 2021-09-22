@@ -55,6 +55,7 @@
             Plug 'majutsushi/tagbar'
         endif
         Plug 'octol/vim-cpp-enhanced-highlight'
+        Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     " }
 
     " LSP and Extensions {
@@ -63,7 +64,6 @@
         endfunction
         Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': function('BuildCoc')}
         Plug 'dense-analysis/ale'
-        Plug 'OmniSharp/omnisharp-vim'
         Plug 'honza/vim-snippets'
         if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
             source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim

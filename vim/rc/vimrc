@@ -807,58 +807,12 @@
             augroup coc_user_defined
                 autocmd!
                 autocmd BufEnter *.cs :ALEDisableBuffer
-                autocmd BufWritePost *.cs :OmniSharpHighlight
                 autocmd CursorHold  *.cs silent call CocActionAsync('highlight')
                 autocmd CursorHoldI *.cs silent call CocActionAsync('showSignatureHelp')
                 autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
                 autocmd FileType tex let b:coc_pairs = [["$", "$"]]
                 autocmd FileType cs command! ClearBin exe "!find . -name bin -exec rm -rf {} +"
             augroup END
-        endif
-    " }
-
-    " OmniSharp-vim {
-        if isdirectory(expand("~/.vim/bundle/omnisharp-vim"))
-            let g:OmniSharp_diagnostic_listen = 0
-            let g:OmniSharp_popup = 0
-            let g:OmniSharp_highlighting = 1
-            let g:OmniSharp_start_server = 1
-
-            let g:OmniSharp_selector_ui = 'fzf'
-            let g:OmniSharp_selector_findusages = 'fzf'
-            let g:OmniSharp_want_snippet = 1
-            let g:OmniSharp_diagnostic_exclude_paths = [
-                        \ 'obj\\',
-                        \ '[Tt]emp\\',
-                        \ '\.nuget\\',
-                        \ '\<AssemblyInfo\.cs\>',
-                        \ 'obj\/*',
-                        \ '\.nuget\/',
-                        \ 'bin\\',
-                        \ 'bin\/*'
-                        \ ]
-
-            " Key mappings
-            "augroup omnisharp_commands
-                "autocmd!
-                "autocmd FileType cs nmap <silent> <buffer> <Leader>dl <Plug>(omnisharp_go_to_definition)
-                "autocmd FileType cs nmap <silent> <buffer> <Leader>re <Plug>(omnisharp_find_usages)
-                "autocmd FileType cs nmap <silent> <buffer> <Leader>im <Plug>(omnisharp_find_implementations)
-                "autocmd FileType cs nmap <silent> <buffer> <Leader>pdl <Plug>(omnisharp_preview_definition)
-                "autocmd FileType cs nmap <silent> <buffer> <Leader>pim <Plug>(omnisharp_preview_implementations)
-                "autocmd FileType cs nmap <silent> <buffer> <Leader>tp <Plug>(omnisharp_type_lookup)
-                "autocmd FileType cs nmap <silent> <buffer> <Leader>ho <Plug>(omnisharp_documentation)
-                "autocmd FileType cs nmap <silent> <buffer> <Leader>sm <Plug>(omnisharp_find_symbol)
-                "autocmd FileType cs nmap <silent> <buffer> <Leader>fi <Plug>(omnisharp_fix_usings)
-                "autocmd FileType cs nmap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
-                "autocmd FileType cs imap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
-                "autocmd FileType cs nmap <silent> <buffer> <Leader>da <Plug>(omnisharp_global_code_check)
-                "autocmd FileType cs nmap <silent> <buffer> <Leader>fo <Plug>(omnisharp_code_format)
-                "autocmd FileType cs nmap <silent> <buffer> <Leader>rn <Plug>(omnisharp_rename)
-                "autocmd FileType cs nmap <Leader>rs :OmniSharpRestartServer <CR>
-                "autocmd FileType cs nmap <silent> <buffer> <C-k> <Plug>(ale_previous_wrap)
-                "autocmd FileType cs nmap <silent> <buffer> <C-j> <Plug>(ale_next_wrap)
-            "augroup END
         endif
     " }
 " }
