@@ -1,16 +1,19 @@
 # Setup fzf
 # ---------
-if [[ ! "$PATH" == */usr/local/opt/fzf/bin* ]]; then
-    export PATH="${PATH:+${PATH}:}/usr/local/opt/fzf/bin"
+
+local FZF_DIR=$HOME/.fzf
+
+if [[ ! "$PATH" == *$FZF_DIR/bin* ]]; then
+    export PATH="${PATH:+${PATH}:}$FZF_DIR/bin"
 fi
 
 # Auto-completion
 # ---------------
-[[ $- == *i* ]] && source "/usr/local/opt/fzf/shell/completion.zsh" 2> /dev/null
+[[ $- == *i* ]] && source "$FZF_DIR/shell/completion.zsh" 2> /dev/null
 
 # Key bindings
 # ------------
-source "/usr/local/opt/fzf/shell/key-bindings.zsh"
+source "$FZF_DIR/shell/key-bindings.zsh"
 
 # Search for dot files
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'

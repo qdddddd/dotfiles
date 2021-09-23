@@ -828,7 +828,7 @@
 
 " FZF {
     if executable("fzf")
-        set rtp+=/usr/local/opt/fzf
+        set rtp+=~/.fzf
 
         let g:fzf_layout = {
                     \ 'down': '~30%',

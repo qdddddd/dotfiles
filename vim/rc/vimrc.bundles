@@ -32,7 +32,7 @@
     " }
 
     " File explorer {
-        Plug '/usr/local/opt/fzf'
+        Plug '~/.fzf'
         Plug 'junegunn/fzf.vim'
         Plug 'Shougo/defx.nvim', {
                     \ 'do': 'pip3 install pynvim'

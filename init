@@ -8,7 +8,7 @@ git submodule update --init --recursive
 # Create local bin sym links
 
 mkdir -p $HOME/.local/bin
-BINDIR=$HOME/.local/bin
+local BINDIR=$HOME/.local/bin
 
 for xfile in ${PWD}/bin/*; do
     ln -s "$xfile" "$BINDIR/${xfile:t}"
@@ -67,9 +67,9 @@ if ! (command_exists ag); then
 fi
 
 # Install fzf
-if [ ! -s /usr/local/opt/fzf/ ]; then
-    sudo git clone --depth 1 https://github.com/junegunn/fzf.git /usr/local/opt/fzf
-    sudo /usr/local/opt/fzf/install
+if [ ! -s $HOME/.fzf ]; then
+    git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
+    $HOME/.fzf/install --bin
 fi
 
 # Install autojump
@@ -101,16 +101,19 @@ for rcfile in "${PWD}"/zsh/configs/*; do
 done
 
 # Create .zshrc.local
-touch $HOME/.zshrc.local
-cat <<EOF >>$HOME/.zshrc.local
+local RCLOCAL=$HOME/.zshrc.local
+touch $RCLOCAL
+if ! grep -q "export ZSH_THEME_COLOR=" $RCLOCAL; then
+cat <<EOF >>$RCLOCAL
 export ZSH_THEME_COLOR=66
 source ~/.p10k.zsh
 EOF
+fi
 
 source $HOME/.zshrc
 
 # Create vim config sym links
-DOT_VIM_DIR=${PWD}/vim
+local DOT_VIM_DIR=${PWD}/vim
 #for lcfile in ${DOT_VIMRC_DIR}/^*(README.md|nvim)*; do
 for lcfile in ${DOT_VIM_DIR}/(rc|ext)/*; do
     ln -s "$lcfile" "$HOME/.vim/${lcfile:t}"
@@ -118,7 +121,7 @@ done
 
 # Create nvim config sym links
 if (command_exists nvim); then
-    NVIM_CONFIG_DIR=$HOME/.config/nvim
+    local NVIM_CONFIG_DIR=$HOME/.config/nvim
     mkdir -p ${NVIM_CONFIG_DIR}
     for lcfile in ${DOT_VIM_DIR}/nvim/*; do
         ln -s "$lcfile" "${NVIM_CONFIG_DIR}/${lcfile:t}"
@@ -128,7 +131,6 @@ if (command_exists nvim); then
 fi
 
 vi +PlugInstall +PlugClean +qa!
-rm -f $HOME/.fzf.zsh $HOME/.fzf.bash
 
 # Install tmux
 standard_install tmux
