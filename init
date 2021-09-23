@@ -6,13 +6,14 @@ setopt +o nomatch
 git submodule update --init --recursive
 
 # Create local bin sym links
+function() {
+    mkdir -p $HOME/.local/bin
+    local BINDIR=$HOME/.local/bin
 
-mkdir -p $HOME/.local/bin
-local BINDIR=$HOME/.local/bin
-
-for xfile in ${PWD}/bin/*; do
-    ln -s "$xfile" "$BINDIR/${xfile:t}"
-done
+    for xfile in ${PWD}/bin/*; do
+        ln -s "$xfile" "$BINDIR/${xfile:t}"
+    done
+}
 
 #############################
 
@@ -101,36 +102,40 @@ for rcfile in "${PWD}"/zsh/configs/*; do
 done
 
 # Create .zshrc.local
-local RCLOCAL=$HOME/.zshrc.local
-touch $RCLOCAL
-if ! grep -q "export ZSH_THEME_COLOR=" $RCLOCAL; then
-cat <<EOF >>$RCLOCAL
+function () {
+    local RCLOCAL=$HOME/.zshrc.local
+    touch $RCLOCAL
+    if ! grep -q "export ZSH_THEME_COLOR=" $RCLOCAL; then
+    cat <<EOF >>$RCLOCAL
 export ZSH_THEME_COLOR=66
 source ~/.p10k.zsh
 EOF
-fi
+    fi
+}
 
 source $HOME/.zshrc
 
-# Create vim config sym links
-local DOT_VIM_DIR=${PWD}/vim
-#for lcfile in ${DOT_VIMRC_DIR}/^*(README.md|nvim)*; do
-for lcfile in ${DOT_VIM_DIR}/(rc|ext)/*; do
-    ln -s "$lcfile" "$HOME/.vim/${lcfile:t}"
-done
-
-# Create nvim config sym links
-if (command_exists nvim); then
-    local NVIM_CONFIG_DIR=$HOME/.config/nvim
-    mkdir -p ${NVIM_CONFIG_DIR}
-    for lcfile in ${DOT_VIM_DIR}/nvim/*; do
-        ln -s "$lcfile" "${NVIM_CONFIG_DIR}/${lcfile:t}"
+function() {
+    # Create vim config sym links
+    local DOT_VIM_DIR=${PWD}/vim
+    #for lcfile in ${DOT_VIMRC_DIR}/^*(README.md|nvim)*; do
+    for lcfile in ${DOT_VIM_DIR}/(rc|ext)/*; do
+        ln -s "$lcfile" "$HOME/.vim/${lcfile:t}"
     done
 
-    nvim +UpdateRemotePlugins +qa!
-fi
+    # Create nvim config sym links
+    if (command_exists nvim); then
+        local NVIM_CONFIG_DIR=$HOME/.config/nvim
+        mkdir -p ${NVIM_CONFIG_DIR}
+        for lcfile in ${DOT_VIM_DIR}/nvim/*; do
+            ln -s "$lcfile" "${NVIM_CONFIG_DIR}/${lcfile:t}"
+        done
 
-vi +PlugInstall +PlugClean +qa!
+        nvim +UpdateRemotePlugins +qa!
+    fi
+
+    vi +PlugInstall +PlugClean +qa!
+}
 
 # Install tmux
 standard_install tmux
