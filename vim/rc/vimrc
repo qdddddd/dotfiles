@@ -230,7 +230,7 @@
     vnoremap > >gv
 
     " Allow using the repeat operator with a visual selection (!)
-    vnoremap . :normal .<CR>
+    vmap . :normal .<CR>
 
     " For when you forget to sudo.. Really Write the file.
     cmap w!! w !sudo tee % >/dev/null
@@ -239,43 +239,43 @@
     map ,,f :python ReflowTable()<CR>
 
     " Shorcut saving
-    nnoremap <leader>w :w<CR>
+    nmap <leader>w :w<CR>
 
     " Shortcut deleting buffer
-    nnoremap <leader>x :bd<CR>
+    nmap <leader>x :bd<CR>
 
     " Compile and run code
     set autowrite
-    autocmd! BufEnter,BufNewFile *.vim,*vimrc* nnoremap <leader>s :w <bar> so % <CR>
+    autocmd! BufEnter,BufNewFile *.vim,*vimrc* nmap <leader>s :w <bar> so % <CR>
 
     " Terminal mode
     command! Vter vert ter zsh
     command! Ter ter zsh
 
     " Clear highlight
-    nnoremap <silent> ' :let @/="" <CR>
-    nnoremap <silent> \ :let @/="" <CR>
+    nmap <silent> ' :let @/="" <CR>
+    nmap <silent> \ :let @/="" <CR>
 
     " Map redo to U
-    nnoremap U :redo<CR>
+    nmap U :redo<CR>
 
     " Switch between .h/.cuh and .cpp/.cu files
-    nnoremap <leader>ch :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
-    nnoremap <leader>cu :e %:p:s,.cuh$,.X123X,:s,.cu$,.cuh,:s,.X123X$,.cu,<CR>
+    nmap <leader>ch :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
+    nmap <leader>cu :e %:p:s,.cuh$,.X123X,:s,.cu$,.cuh,:s,.X123X$,.cu,<CR>
 
     " Insert mode navigation
     inoremap <C-h> <Left>
     inoremap <C-l> <Right>
 
     " Clear screen and redraw
-    nnoremap <silent> <C-l>
+    nmap <silent> <C-l>
                 \ :nohlsearch<CR>
                 \ :diffupdate<CR>
                 \ :syntax sync fromstart<CR>
                 \ :AirlineRefresh<CR>
 
     " Shortcut to copy over ssh
-    vnoremap <silent> sy :w !sshcopy<CR><CR>
+    vmap <silent> sy :w !sshcopy<CR><CR>
 " }
 
 " Displays {
@@ -389,44 +389,44 @@
         let g:defx_ignore = "*.py[cd],*~,*.swo,*.swp,.git,.hg,.svn,*.bzr,*.DS_Store,
                             \build,gradle,.gradle,.idea,bin,cmake-build*,CMakeCache.txt,
                             \CMakeFiles,.github,.travis,.clangd*"
-        nnoremap <silent><leader>e :Defx -toggle
-                                       \ -ignored-files=`g:defx_ignore`
-                                       \ -search=`resolve(expand('%:p'))` `getcwd()` <CR>
+        nmap <silent><leader>e :Defx -toggle
+                    \ -ignored-files=`g:defx_ignore`
+                    \ -search=`resolve(expand('%:p'))` `getcwd()` <CR>
 
         au! FileType defx call s:defx_my_settings()
         function! s:defx_my_settings() abort
             " Define mappings
-            nnoremap <silent><buffer><expr> w       defx#do_action('call', 'DefxToggleWidth')
-            nnoremap <silent><buffer><expr> oo      defx#do_action('multi', ['drop', 'quit'])
-            nnoremap <silent><buffer><expr> o       defx#do_action('drop')
-            nnoremap <silent><buffer><expr> <CR>    defx#is_directory() ?
+            nmap <silent><buffer><expr> w       defx#do_action('call', 'DefxToggleWidth')
+            nmap <silent><buffer><expr> oo      defx#do_action('multi', ['drop', 'quit'])
+            nmap <silent><buffer><expr> o       defx#do_action('drop')
+            nmap <silent><buffer><expr> <CR>    defx#is_directory() ?
                                                     \ defx#do_action('open_or_close_tree') :
                                                     \ defx#do_action('drop')
-            nnoremap <silent><buffer><expr> v       defx#do_action('open','vsplit')
-            nnoremap <silent><buffer><expr> vv      defx#do_action('multi', [['drop', 'vsplit'], 'quit'])
-            nnoremap <silent><buffer><expr> h       defx#do_action('cd',['..'])
-            nnoremap <silent><buffer><expr> l       defx#do_action('open_directory')
-            nnoremap <silent><buffer><expr> y       defx#do_action('copy')
-            nnoremap <silent><buffer><expr> m       defx#do_action('move')
-            nnoremap <silent><buffer><expr> p       defx#do_action('paste')
-            nnoremap <silent><buffer><expr> aa      defx#do_action('new_directory')
-            nnoremap <silent><buffer><expr> a       defx#do_action('new_file')
-            nnoremap <silent><buffer><expr> S       defx#do_action('toggle_sort','time')
-            nnoremap <silent><buffer><expr> d       defx#do_action('remove')
-            nnoremap <silent><buffer><expr> r       defx#do_action('rename')
-            nnoremap <silent><buffer><expr> f       defx#do_action('search')
-            nnoremap <silent><buffer><expr> !       defx#do_action('execute_command')
-            nnoremap <silent><buffer><expr> x       defx#do_action('execute_system')
-            nnoremap <silent><buffer><expr> yy      defx#do_action('yank_path')
-            nnoremap <silent><buffer><expr> .       defx#do_action('toggle_ignored_files')
-            nnoremap <silent><buffer><expr> ;       defx#do_action('repeat')
-            nnoremap <silent><buffer><expr> q       defx#do_action('quit')
-            nnoremap <silent><buffer><expr> j       line('.') == line('$') ? 'gg' : 'j'
-            nnoremap <silent><buffer><expr> k       line('.') == 1 ? 'G' : 'k'
-            nnoremap <silent><buffer><expr> <C-l>   defx#do_action('redraw')
-            nnoremap <silent><buffer><expr> <C-g>   defx#do_action('print')
-            nnoremap <silent><buffer><expr> cd      defx#do_action('change_vim_cwd')
-            nnoremap <silent><buffer><expr> <TAB>   defx#do_action('toggle_select')
+            nmap <silent><buffer><expr> v       defx#do_action('open','vsplit')
+            nmap <silent><buffer><expr> vv      defx#do_action('multi', [['drop', 'vsplit'], 'quit'])
+            nmap <silent><buffer><expr> h       defx#do_action('cd',['..'])
+            nmap <silent><buffer><expr> l       defx#do_action('open_directory')
+            nmap <silent><buffer><expr> y       defx#do_action('copy')
+            nmap <silent><buffer><expr> m       defx#do_action('move')
+            nmap <silent><buffer><expr> p       defx#do_action('paste')
+            nmap <silent><buffer><expr> aa      defx#do_action('new_directory')
+            nmap <silent><buffer><expr> a       defx#do_action('new_file')
+            nmap <silent><buffer><expr> S       defx#do_action('toggle_sort','time')
+            nmap <silent><buffer><expr> d       defx#do_action('remove')
+            nmap <silent><buffer><expr> r       defx#do_action('rename')
+            nmap <silent><buffer><expr> f       defx#do_action('search')
+            nmap <silent><buffer><expr> !       defx#do_action('execute_command')
+            nmap <silent><buffer><expr> x       defx#do_action('execute_system')
+            nmap <silent><buffer><expr> yy      defx#do_action('yank_path')
+            nmap <silent><buffer><expr> .       defx#do_action('toggle_ignored_files')
+            nmap <silent><buffer><expr> ;       defx#do_action('repeat')
+            nmap <silent><buffer><expr> q       defx#do_action('quit')
+            nmap <silent><buffer><expr> j       line('.') == line('$') ? 'gg' : 'j'
+            nmap <silent><buffer><expr> k       line('.') == 1 ? 'G' : 'k'
+            nmap <silent><buffer><expr> <C-l>   defx#do_action('redraw')
+            nmap <silent><buffer><expr> <C-g>   defx#do_action('print')
+            nmap <silent><buffer><expr> cd      defx#do_action('change_vim_cwd')
+            nmap <silent><buffer><expr> <TAB>   defx#do_action('toggle_select')
         endfunction
     endif
 " }
@@ -479,7 +479,7 @@
 
 " TagBar {
     if isdirectory(expand("~/.vim/bundle/tagbar/"))
-        nnoremap <silent> <leader>tt :TagbarToggle<CR>
+        nmap <silent> <leader>tt :TagbarToggle<CR>
     endif
 "}
 
@@ -569,16 +569,16 @@
         " Configure tabline
         if isdirectory(expand("~/.vim/bundle/barbar.nvim"))
             let g:airline#extensions#tabline#enabled = 0
-            nnoremap <silent> <leader><space>e :BufferPick<CR>
-            nnoremap <silent> <leader>1 :BufferGoto 1<CR>
-            nnoremap <silent> <leader>2 :BufferGoto 2<CR>
-            nnoremap <silent> <leader>3 :BufferGoto 3<CR>
-            nnoremap <silent> <leader>4 :BufferGoto 4<CR>
-            nnoremap <silent> <leader>5 :BufferGoto 5<CR>
-            nnoremap <silent> <leader>6 :BufferGoto 6<CR>
-            nnoremap <silent> <leader>7 :BufferGoto 7<CR>
-            nnoremap <silent> <leader>8 :BufferGoto 8<CR>
-            nnoremap <silent> <leader>9 :BufferLast<CR>
+            nmap <silent> <leader><space>e :BufferPick<CR>
+            nmap <silent> <leader>1 :BufferGoto 1<CR>
+            nmap <silent> <leader>2 :BufferGoto 2<CR>
+            nmap <silent> <leader>3 :BufferGoto 3<CR>
+            nmap <silent> <leader>4 :BufferGoto 4<CR>
+            nmap <silent> <leader>5 :BufferGoto 5<CR>
+            nmap <silent> <leader>6 :BufferGoto 6<CR>
+            nmap <silent> <leader>7 :BufferGoto 7<CR>
+            nmap <silent> <leader>8 :BufferGoto 8<CR>
+            nmap <silent> <leader>9 :BufferLast<CR>
             command! PrevTab :BufferPrevious
             command! NextTab :BufferNext
 
@@ -616,11 +616,11 @@
             command! NextTab :execute "normal \<Plug>AirlineSelectNextTab"
         endif
 
-        nnoremap <silent> – :PrevTab<CR>
-        nnoremap <silent> ≠ :NextTab<CR>
+        nmap <silent> – :PrevTab<CR>
+        nmap <silent> ≠ :NextTab<CR>
         if LINUX() || has('nvim')
-            nnoremap <silent> <A--> :PrevTab<CR>
-            nnoremap <silent> <A-=> :NextTab<CR>
+            nmap <silent> <A--> :PrevTab<CR>
+            nmap <silent> <A-=> :NextTab<CR>
         endif
     endif
 " }
@@ -653,9 +653,9 @@
         let g:ale_fix_on_save = 1
 
         if g:ale_completion_enabled == 1
-            nnoremap <silent> <leader>dl :ALEGoToDefinition <CR>
-            nnoremap <silent> <leader>re :ALEFindReferences <CR>
-            nnoremap <silent> <leader>fi :ALEFix<CR>
+            nmap <silent> <leader>dl :ALEGoToDefinition <CR>
+            nmap <silent> <leader>re :ALEFindReferences <CR>
+            nmap <silent> <leader>fi :ALEFix<CR>
 
             set omnifunc=ale#completion#OmniFunc
             nmap <silent> <C-k> <Plug>(ale_previous_wrap)
@@ -737,11 +737,11 @@
     let g:tmux_navigator_no_mappings = 1
     let g:tmux_navigator_disable_when_zoomed = 1
 
-    nnoremap <silent> ˙ :TmuxNavigateLeft<cr>
-    nnoremap <silent> ∆ :TmuxNavigateDown<cr>
-    nnoremap <silent> ˚ :TmuxNavigateUp<cr>
-    nnoremap <silent> ¬ :TmuxNavigateRight<cr>
-    nnoremap <silent> « :TmuxNavigatePrevious<cr>
+    nmap <silent> ˙ :TmuxNavigateLeft<cr>
+    nmap <silent> ∆ :TmuxNavigateDown<cr>
+    nmap <silent> ˚ :TmuxNavigateUp<cr>
+    nmap <silent> ¬ :TmuxNavigateRight<cr>
+    nmap <silent> « :TmuxNavigatePrevious<cr>
 " }
 
 " Completion {
@@ -764,7 +764,12 @@
         if isdirectory(expand("~/.vim/bundle/coc.nvim/"))
             let g:ale_lint_on_text_changed = 'never'
             let g:coc_config_home = $HOME . '/.vim'
-            let g:coc_global_extensions=[ 'coc-pairs', 'coc-snippets', 'coc-lists', 'coc-omnisharp', 'coc-python']
+            let g:coc_global_extensions=[
+                        \'coc-pairs',
+                        \'coc-snippets',
+                        \'coc-lists',
+                        \'coc-json'
+                        \]
             set signcolumn=yes
 
             function! s:show_documentation()
@@ -786,11 +791,11 @@
             nmap <silent> <C-k>      <Plug>(coc-diagnostic-prev)
             nmap <leader>rn <Plug>(coc-rename)
             nmap <leader>ra <Plug>(coc-refactor)
-            nnoremap <silent> <leader>fo :call CocAction('format') <CR>
-            nnoremap <silent> <leader>rs :CocRestart <CR><CR>
-            nnoremap <silent> <leader>ho :call <SID>show_documentation() <CR>
-            nnoremap <silent> <leader>da :<C-u>CocList diagnostics<cr>
-            nnoremap <silent> <leader>b<space> :CocList buffers<CR>
+            nmap <silent> <leader>fo :call CocAction('format') <CR>
+            nmap <silent> <leader>rs :CocRestart <CR><CR>
+            nmap <silent> <leader>ho :call <SID>show_documentation() <CR>
+            nmap <silent> <leader>da :<C-u>CocList diagnostics<cr>
+            nmap <silent> <leader>b<space> :CocList buffers<CR>
 
             " Highlight groups
             hi! def link CocErrorSign GruvboxRedSign
@@ -857,12 +862,12 @@
                     \ )
 
         " key mappings
-        nnoremap <silent> <leader>f<space> :FZF <CR>
-        nnoremap <silent> <leader>r<space> :History <CR>
-        nnoremap <silent> <leader>ff :BTags <CR>
-        nnoremap <silent> <leader>l<space> :Lines <CR>
+        nmap <silent> <leader>f<space> :FZF <CR>
+        nmap <silent> <leader>r<space> :History <CR>
+        nmap <silent> <leader>ff :BTags <CR>
+        nmap <silent> <leader>l<space> :Lines <CR>
         " Bind K to grep word under cursor
-        nnoremap <silent> K :call fzf#vim#ag
+        nmap <silent> K :call fzf#vim#ag
                     \ (
                     \ expand('<cword>'),
                     \ '--color-path "0;34" --color-line-number "0;35" --color-match "1;33"',
