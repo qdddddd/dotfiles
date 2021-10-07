@@ -58,7 +58,6 @@
         "-j=6"
     ],
     "omnisharp.version": "v1.37.6",
-    "coc.source.OmniSharp.enable": false,
     "coc.preferences.colorSupport": true,
     "coc.source.buffer.ignoreGitignore": true,
     "coc.preferences.bracketEnterImprove": true,
