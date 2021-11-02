@@ -17,6 +17,7 @@ case "$OSTYPE" in
     linux*)
         alias vi='vim'
         alias sha2=func_lnx
+        alias open='gio open'
         ;;
 esac
 
