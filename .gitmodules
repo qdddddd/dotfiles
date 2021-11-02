@@ -1,12 +1,12 @@
 [submodule "oh-my-zsh"]
-	path = oh-my-zsh
-	url = https://github.com/robbyrussell/oh-my-zsh.git
+    path = oh-my-zsh
+    url = git@github.com:robbyrussell/oh-my-zsh.git
 [submodule "zsh/plugins/zsh-autosuggestions"]
-	path = zsh/plugins/zsh-autosuggestions
-	url = https://github.com/zsh-users/zsh-autosuggestions
+    path = zsh/plugins/zsh-autosuggestions
+    url = git@github.com:zsh-users/zsh-autosuggestions
 [submodule "zsh/plugins/fast-syntax-highlighting"]
-	path = zsh/plugins/fast-syntax-highlighting
-	url = https://github.com/zdharma/fast-syntax-highlighting.git
+    path = zsh/plugins/fast-syntax-highlighting
+    url = git@github.com:zdharma-continuum/fast-syntax-highlighting.git
 [submodule "zsh/themes/powerlevel10k"]
-	path = zsh/themes/powerlevel10k
-	url = https://github.com/romkatv/powerlevel10k.git
+    path = zsh/themes/powerlevel10k
+    url = git@github.com:romkatv/powerlevel10k.git

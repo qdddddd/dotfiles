@@ -69,7 +69,7 @@ fi
 
 # Install fzf
 if [ ! -s $HOME/.fzf ]; then
-    git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
+    git clone --depth 1 git@github.com:junegunn/fzf.git $HOME/.fzf
     $HOME/.fzf/install --bin
 fi
 
@@ -156,7 +156,7 @@ function() {
 
 # Install tmux
 standard_install tmux
-git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+git clone git@github.com:tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 
 # Install tree
 standard_install tree
