@@ -78,10 +78,8 @@
         "\"",
         "`"
     ],
-    "python.jediEnabled": false,
-    "python.analysis.downloadChannel": "daily",
-    "python.formatting.provider": "yapf",
-    "python.analysis.diagnosticEnabled": true,
+    "python.formatting.provider": "black",
+    "python.formatting.blackPath": "~/.local/bin/black",
     "python.linting.lintOnSave": true,
     "Lua.diagnostics.globals": [
         "vim"
@@ -93,7 +91,8 @@
         "vim",
         "yaml",
         "json",
-        "cs"
+        "cs",
+        "python"
     ],
     "coc.preferences.formatOnType": false,
     "coc.preferences.extensionUpdateCheck": "daily"
