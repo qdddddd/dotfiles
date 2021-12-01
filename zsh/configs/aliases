@@ -39,7 +39,7 @@ alias crontab='VIM_CRONTAB=true EDITOR=vim crontab'
 alias ds='du -h --max-depth=1'
 alias git-redate='GIT_COMMITTER_DATE="$(date)" git commit --amend --no-edit --date "$(date)"'
 alias ag='ag --nobreak --nonumbers --noheading --silent --path-to-ignore ~/.config/agignore . | fzf --reverse -e'
-alias proxy-on='export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087 all_proxy=socks5://127.0.0.1:7891'
+alias proxy-on='export https_proxy=192.168.0.96:7890 http_proxy=192.168.0.96:7890 all_proxy=192.168.0.96:7891'
 alias proxy-off='unset http_proxy https_proxy all_proxy'
 alias sshp="ssh -o ProxyCommand='nc -X 5 -x ${clash_socks} %h %p'"
 alias ps-grep="ps aux | grep -v grep | grep"

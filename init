@@ -46,6 +46,7 @@ standard_install() {
 # Intall homebrew
 if is_mac && ! (command_exists brew); then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    PATH=$PATH:/opt/homebrew/bin
 fi
 
 # Install pip
@@ -120,11 +121,7 @@ if ! (command_exists nvim); then
         chmod u+x nvim.appimage
         mv nvim.appimage $HOME/.local/bin/nvim
     elif is_mac; then
-        wget https://github.com/neovim/neovim/releases/download/nightly/nvim-macos.tar.gz
-        tar xzvf nvim-macos.tar.gz
-        mv nvim-osx64 $HOME/.local/bin/.
-        ln -s $HOME/.local/bin/nvim-osx64/bin/nvim $HOME/.local/bin/nvim
-        rm nvim-macos.tar.gz
+        brew install neovim
     fi
 
     python3 -m pip install --user --upgrade pynvim
@@ -157,6 +154,8 @@ function() {
 # Install tmux
 standard_install tmux
 git clone git@github.com:tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+$HOME/.tmux/plugins/tpm/scripts/install_plugins.sh
+$HOME/.tmux/plugins/tpm/scripts/source_plugins.sh
 
 # Install tree
 standard_install tree

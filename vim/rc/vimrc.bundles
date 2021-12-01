@@ -55,7 +55,9 @@
             Plug 'majutsushi/tagbar'
         endif
         Plug 'octol/vim-cpp-enhanced-highlight'
-        Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+        if has('nvim')
+            Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+        endif
     " }
 
     " LSP and Extensions {

@@ -32,7 +32,8 @@ if Exists(BUNDLE_DIR .. "bufferline.nvim") then
             diagnostics = false,
             modified_icon = "+",
             indicator_icon = "",
-            separator_style = {'|', '|'}
+            separator_style = {'|', '|'},
+            tab_size = 10,
         }
     }
 
@@ -56,20 +57,20 @@ if Exists(BUNDLE_DIR .. "bufferline.nvim") then
 
         augroup bufferline_highlights
             au!
-            au VimEnter * hi! BufferLineFill guifg=#3c3836 guibg=#fbf1c7
+            au VimEnter * hi BufferLineFill guifg=#3c3836 guibg=#fbf1c7
 
             au VimEnter * hi! link BufferLineBufferSelected airline_a
             au VimEnter * hi! link BufferLinePickSelected airline_a_red
             au VimEnter * hi! link BufferLineModifiedSelected airline_a
 
-            au VimEnter * hi! BufferLineBackground guifg=#a89984 guibg=#ebdbb2
-            au VimEnter * hi! BufferLinePick guifg=#9d0006 guibg=#ebdbb2
+            au VimEnter * hi BufferLineBackground guifg=#a89984 guibg=#ebdbb2
+            au VimEnter * hi BufferLinePick guifg=#9d0006 guibg=#ebdbb2
             au VimEnter * hi! link BufferLineSeparator BufferLineBackground
-            au VimEnter * hi! BufferLineModified guifg=#076678 guibg=#ebdbb2
+            au VimEnter * hi BufferLineModified guifg=#076678 guibg=#ebdbb2
 
-            au VimEnter * hi! BufferLineBufferVisible guifg=#7c6f64 guibg=#d5c4a1
-            au VimEnter * hi! BufferLinePickVisible guifg=#9d0006 guibg=#d5c4a1
-            au VimEnter * hi! BufferLineModifiedVisible guifg=#076678 guibg=#d5c4a1
+            au VimEnter * hi BufferLineBufferVisible guifg=#7c6f64 guibg=#d5c4a1
+            au VimEnter * hi BufferLinePickVisible guifg=#9d0006 guibg=#d5c4a1
+            au VimEnter * hi BufferLineModifiedVisible guifg=#076678 guibg=#d5c4a1
         augroup END
     ]])
 end

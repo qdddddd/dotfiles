@@ -51,6 +51,7 @@ case "$OSTYPE" in
             /usr/local/{texlive/2018/bin/x86_64-darwin,opt/openssl/bin}
             /Library/TeX/texbin
             $HOME/.cargo/bin
+            /opt/homebrew/bin
             $path
         )
         export LDFLAGS="-L/usr/local/opt/llvm/lib -L/usr/local/opt/openssl/lib -Wl,-rpath,/usr/local/opt/llvm/lib"

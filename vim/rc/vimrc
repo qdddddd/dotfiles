@@ -293,24 +293,24 @@
 
         colo gruvbox
 
-        hi! GruvboxGreenSign  guifg=#79740e guibg=bg
-        hi! GruvboxRedSign    guifg=#9d0006 guibg=bg
-        hi! GruvboxAquaSign   guifg=#427b58 guibg=bg
-        hi! GruvboxYellowSign guifg=#b57614 guibg=bg
+        hi GruvboxGreenSign  guifg=#79740e guibg=bg
+        hi GruvboxRedSign    guifg=#9d0006 guibg=bg
+        hi GruvboxAquaSign   guifg=#427b58 guibg=bg
+        hi GruvboxYellowSign guifg=#b57614 guibg=bg
 
     endfunction
 
     syntax on              " Syntax highlighting
     set t_Co=256
     call GruvBoxSettings()
-    hi! clear SignColumn    " SignColumn should match background
+    hi clear SignColumn    " SignColumn should match background
     set conceallevel=1
 
     " Floating window
     let s:menu_bg = '#f3e5bc'
-    exe 'hi! Fmenu guifg=#32302f guibg=' . s:menu_bg
+    exe 'hi Fmenu guifg=#32302f guibg=' . s:menu_bg
     hi! def link FmenuSbar PmenuSbar
-    exe 'hi! FmenuThumb guifg=' . s:menu_bg . ' guibg=#8a95a7'
+    exe 'hi FmenuThumb guifg=' . s:menu_bg . ' guibg=#8a95a7'
 
     " Setup cursor style
     autocmd OptionSet guicursor noautocmd set guicursor=
@@ -591,14 +591,14 @@
             let bufferline.maximum_padding = 0
             let bufferline.no_name_title = v:null
 
-            hi! BufferCurrent gui=reverse guifg=#7c6f64 guibg=#fbf1c7
+            hi BufferCurrent gui=reverse guifg=#7c6f64 guibg=#fbf1c7
             hi! link BufferCurrentIndex BufferCurrent
             hi! link BufferCurrentSign BufferInactive
-            hi! BufferCurrentMod gui=reverse guifg=#7c6f64 guibg=#9d0006
+            hi BufferCurrentMod gui=reverse guifg=#7c6f64 guibg=#9d0006
             hi! link BufferVisible StatusLine
             hi! link BufferVisibleIndex BufferVisible
             hi! link BufferVisibleSign BufferInactive
-            hi! BufferVisibleMod guifg=#9d0006 guibg=#d5c4a1
+            hi BufferVisibleMod guifg=#9d0006 guibg=#d5c4a1
 
         else
             let g:airline#extensions#tabline#enabled = 1
@@ -804,9 +804,9 @@
             hi! def link CocHintSign CocWarningSign
 
             hi! def link CocFloating Fmenu
-            exe 'hi! CocErrorFloat   guifg=#9d0006 guibg=' . s:menu_bg
-            exe 'hi! CocWarningFloat guifg=#b57614 guibg=' . s:menu_bg
-            exe 'hi! CocInfoFloat    guifg=#427b58 guibg=' . s:menu_bg
+            exe 'hi CocErrorFloat   guifg=#9d0006 guibg=' . s:menu_bg
+            exe 'hi CocWarningFloat guifg=#b57614 guibg=' . s:menu_bg
+            exe 'hi CocInfoFloat    guifg=#427b58 guibg=' . s:menu_bg
             hi! def link CocHintFloat CocWarningFloat
 
             " Autocmd
