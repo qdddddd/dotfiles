@@ -62,7 +62,7 @@ case "$OSTYPE" in
         export CXX=clang++
         export ASAN_OPTIONS="detect_leaks=1"
 
-        export clash_socks="127.0.0.1:7891"
+        export clash_socks="192.168.0.96:7891"
         ;;
     linux*)
         path=(
