@@ -391,7 +391,8 @@
                             \CMakeFiles,.github,.travis,.clangd*"
         nmap <silent><leader>e :Defx -toggle
                     \ -ignored-files=`g:defx_ignore`
-                    \ -search=`resolve(expand('%:p'))` `getcwd()` <CR>
+                    \ -resume
+                    \ -search-recursive=`resolve(expand('%:p'))` `getcwd()` <CR>
 
         au! FileType defx call s:defx_my_settings()
         function! s:defx_my_settings() abort
