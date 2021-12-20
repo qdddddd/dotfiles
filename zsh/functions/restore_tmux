@@ -1,0 +1,14 @@
+# Restore tmux sessions
+
+#function restore_tmux() {
+local session_name=$1
+if [ -z "$1" ]; then
+    session_name="main"
+fi
+
+tmux has-session -t $session_name &> /dev/null
+if [ $? != 0 ]; then
+    tmux new -t $session_name -d
+    tmux run-shell $HOME/.tmux/plugins/tmux-resurrect/scripts/restore.sh
+fi
+#}

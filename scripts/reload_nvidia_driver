@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+sudo systemctl isolate multi-user.target
+sudo modprobe -r nvidia-drm
+sudo rmmod nvidia-uvm
+sudo rmmod nvidia-drm
+sudo rmmod nvidia-modeset
+sudo rmmod nvidia
+
+# Restart the graphical env
+sudo systemctl start graphical.target
+nvidia-smi

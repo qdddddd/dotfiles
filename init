@@ -97,6 +97,8 @@ if ! (command_exists yarn); then
     curl --compressed -o- -L https://yarnpkg.com/install.sh | bash
 fi
 
+rm $HOME/.zshrc
+
 # Create zsh config sym links
 for rcfile in "${PWD}"/zsh/configs/*; do
     ln -s "$rcfile" "$HOME/.${rcfile:t}"
@@ -110,6 +112,7 @@ function () {
     cat <<EOF >>$RCLOCAL
 export ZSH_THEME_COLOR=66
 source ~/.p10k.zsh
+restore_tmux main
 EOF
     fi
 }
