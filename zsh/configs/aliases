@@ -36,7 +36,7 @@ func_backup() {
 alias backup=func_backup
 
 alias crontab='VIM_CRONTAB=true EDITOR=vim crontab'
-alias ds='du -h --max-depth=1'
+alias ds='du -hd1'
 alias git-redate='GIT_COMMITTER_DATE="$(date)" git commit --amend --no-edit --date "$(date)"'
 alias ag='ag --nobreak --nonumbers --noheading --silent --path-to-ignore ~/.config/agignore . | fzf --reverse -e'
 alias proxy-on='export https_proxy=192.168.0.96:7890 http_proxy=192.168.0.96:7890 all_proxy=192.168.0.96:7891'
