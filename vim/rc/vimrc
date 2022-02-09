@@ -429,6 +429,7 @@
             nmap <silent><buffer><expr> cd      defx#do_action('change_vim_cwd')
             nmap <silent><buffer><expr> <TAB>   defx#do_action('toggle_select')
         endfunction
+
     endif
 " }
 
@@ -810,15 +811,24 @@
             exe 'hi CocInfoFloat    guifg=#427b58 guibg=' . s:menu_bg
             hi! def link CocHintFloat CocWarningFloat
 
-            " Autocmd
+            let g:opened_cs = 0
+            function! EnterCsBuffer()
+                :ALEDisableBuffer
+                if (g:opened_cs > 0) | return | endif
+                :ClearBin
+                let g:opened_cs = 1
+            endfunction
+
+            "" Autocmd
             augroup coc_user_defined
                 autocmd!
-                autocmd BufEnter *.cs :ALEDisableBuffer
+                autocmd BufEnter *.cs silent call EnterCsBuffer()
+                autocmd FileType cs command! ClearBin exe "!find . -name bin -exec rm -rf {} +"
+                autocmd FileType cs nmap <silent> <leader>rs :ClearBin <CR> <bar> :CocRestart <CR><CR>
                 autocmd CursorHold  *.cs silent call CocActionAsync('highlight')
                 autocmd CursorHoldI *.cs silent call CocActionAsync('showSignatureHelp')
                 autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
                 autocmd FileType tex let b:coc_pairs = [["$", "$"]]
-                autocmd FileType cs command! ClearBin exe "!find . -name bin -exec rm -rf {} +"
             augroup END
         endif
     " }

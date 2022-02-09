@@ -144,3 +144,5 @@ keystore
 yarn.lock
 node_modules/
 compile_commands.json
+cmake-build-debug
+cmake-build-release

@@ -44,3 +44,4 @@ alias proxy-off='unset http_proxy https_proxy all_proxy'
 alias sshp="ssh -o ProxyCommand='nc -X 5 -x ${clash_socks} %h %p'"
 alias ps-grep="ps aux | grep -v grep | grep"
 alias untarb="tar --use-compress-program=lbzip2 -xf"
+alias xclip="xclip -selection c"
