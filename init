@@ -7,8 +7,8 @@ git submodule update --init --recursive
 
 # Create local bin sym links
 function() {
-    mkdir -p $HOME/.local/bin
     local BINDIR=$HOME/.local/bin
+    mkdir -p $BINDIR
 
     for xfile in ${PWD}/bin/*; do
         ln -s "$xfile" "$BINDIR/${xfile:t}"
@@ -119,15 +119,7 @@ EOF
 
 # Install nvim
 if ! (command_exists nvim); then
-    if is_linux; then
-        wget https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
-        chmod u+x nvim.appimage
-        mv nvim.appimage $HOME/.local/bin/nvim
-    elif is_mac; then
-        brew install neovim
-    fi
-
-    python3 -m pip install --user --upgrade pynvim
+    ${PWD}/scripts/install_neovim
 fi
 
 source $HOME/.zshrc
