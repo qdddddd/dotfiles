@@ -57,6 +57,7 @@
         "-suggest-missing-includes",
         "-j=6"
     ],
+    "omnisharp.version": "v1.37.9",
     "coc.preferences.colorSupport": true,
     "coc.source.buffer.ignoreGitignore": true,
     "coc.preferences.bracketEnterImprove": true,

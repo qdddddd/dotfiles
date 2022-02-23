@@ -1,22 +1,18 @@
 alias sudo='sudo '
 
-func_osx() {
-    echo $1 | gsha256sum
-}
-
-func_lnx() {
-    echo $1 | sha256sum
-}
-
 case "$OSTYPE" in
     darwin*)
-        alias sha2=func_osx
+        sha2() {
+            echo $1 | gsha256sum
+        }
         alias fw='/usr/libexec/ApplicationFirewall/socketfilterfw'
         alias ctags="$(brew --prefix)/bin/ctags"
         ;;
     linux*)
+        sha2() {
+            echo $1 | sha256sum
+        }
         alias vi='vim'
-        alias sha2=func_lnx
         alias open='gio open'
         ;;
 esac
@@ -28,13 +24,6 @@ if (( $+commands[nvim] )); then
 fi
 alias llp='latexmk -xelatex -pvc -pdf -interaction=batchmode -quiet'
 alias ll='ls -lFh'
-
-func_backup() {
-     fswatch -0 -o -e .git/ -e *.pyc -e $1:~/ . |
-             rsync -avz -e "ssh" --delete $1:~/. $2.
-}
-alias backup=func_backup
-
 alias crontab='VIM_CRONTAB=true EDITOR=vim crontab'
 alias ds='du -hd1'
 alias git-redate='GIT_COMMITTER_DATE="$(date)" git commit --amend --no-edit --date "$(date)"'
@@ -43,5 +32,9 @@ alias proxy-on='export https_proxy=${POISSON_IP}:7890 http_proxy=${POISSON_IP}:7
 alias proxy-off='unset http_proxy https_proxy all_proxy'
 alias sshp="ssh -o ProxyCommand='nc -X 5 -x ${clash_socks} %h %p'"
 alias ps-grep="ps aux | grep -v grep | grep"
-alias untarb="tar --use-compress-program=lbzip2 -xf"
+alias untarbz="tar --use-compress-program=lbzip2 -xf"
 alias xclip="xclip -selection c"
+
+csv() {
+    column -s, -t < $1 | less
+}
