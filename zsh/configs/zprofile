@@ -9,7 +9,7 @@
 #
 # Poisson host
 #
-export POISSON_IP="192.168.0.202"
+export POISSON_IP="192.168.32.77"
 
 #
 # Browser
