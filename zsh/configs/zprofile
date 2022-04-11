@@ -36,8 +36,10 @@ export PAGER='less'
 # Language
 #
 
-if [[ -z "$LANG" ]]; then
+if [[ -z "$LC_ALL" ]]; then
   export LANG='en_US.UTF-8'
+  export LC_ALL='en_US.UTF-8'
+  export LC_CTYPE='UTF-8'
 fi
 
 #
