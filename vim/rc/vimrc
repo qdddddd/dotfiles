@@ -815,15 +815,17 @@
             function! EnterCsBuffer()
                 :ALEDisableBuffer
                 if (g:opened_cs > 0) | return | endif
-                :ClearBin
+                ":ClearBin
                 let g:opened_cs = 1
             endfunction
 
             "" Autocmd
             augroup coc_user_defined
                 autocmd!
-                autocmd BufEnter *.cs silent call EnterCsBuffer()
+                "autocmd BufEnter *.cs silent call EnterCsBuffer()
+                autocmd BufEnter *.cs silent :ALEDisableBuffer
                 autocmd FileType cs command! ClearBin exe "!find . -name bin -exec rm -rf {} +"
+                "autocmd FileType cs nmap <silent> <leader>rs :ClearBin <CR> <bar> :CocRestart <CR><CR>
                 autocmd FileType cs nmap <silent> <leader>rs :ClearBin <CR> <bar> :CocRestart <CR><CR>
                 autocmd CursorHold  *.cs silent call CocActionAsync('highlight')
                 autocmd CursorHoldI *.cs silent call CocActionAsync('showSignatureHelp')
