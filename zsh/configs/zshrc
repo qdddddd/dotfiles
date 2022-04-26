@@ -91,6 +91,7 @@ bindkey "^N" history-beginning-search-forward
 # autosuggestions
 bindkey -M viins "^F" vi-forward-word
 bindkey -M viins "^E" vi-add-eolbindkey
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#a89984'
 
 # completion
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
