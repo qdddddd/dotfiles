@@ -46,6 +46,19 @@
     "diagnostic.showDeprecated": true,
     "list.nextKeymap": "<C-n>",
     "list.previousKeymap": "<C-p>",
+    "languageserver": {
+        "csharp-ls": {
+            "command": "csharp-ls",
+            "filetypes": [
+                "cs"
+            ],
+            "rootPatterns": [
+                ".git/",
+                "*.sln",
+                "*.csproj"
+            ]
+        }
+    },
     "clangd.arguments": [
         "-log=error",
         "-pretty",
@@ -57,7 +70,6 @@
         "-suggest-missing-includes",
         "-j=6"
     ],
-    "omnisharp.version": "v1.36.1",
     "coc.preferences.colorSupport": true,
     "coc.source.buffer.ignoreGitignore": true,
     "coc.preferences.bracketEnterImprove": true,
