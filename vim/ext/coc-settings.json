@@ -54,8 +54,7 @@
             ],
             "rootPatterns": [
                 ".git/",
-                "*.sln",
-                "*.csproj"
+                "*.sln"
             ]
         }
     },
@@ -98,11 +97,11 @@
     ],
     "coc.preferences.formatOnSaveFiletypes": [
         "c",
+        "cs",
         "cpp",
         "java",
         "vim",
         "yaml",
-        "json",
         "python"
     ],
     "coc.preferences.formatOnType": false,

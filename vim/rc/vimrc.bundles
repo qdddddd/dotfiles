@@ -34,11 +34,16 @@
     " File explorer {
         Plug '~/.fzf'
         Plug 'junegunn/fzf.vim'
-        Plug 'Shougo/defx.nvim', {
-                    \ 'do': 'pip3 install pynvim'
-                    \ }
-        Plug 'kristijanhusak/defx-git'
-        Plug 'kristijanhusak/defx-icons'
+        if has('nvim')
+            Plug 'kyazdani42/nvim-tree.lua'
+            Plug 'kyazdani42/nvim-web-devicons'
+        else
+            Plug 'Shougo/defx.nvim', {
+                        \ 'do': 'pip3 install pynvim'
+                        \ }
+            Plug 'kristijanhusak/defx-git'
+            Plug 'kristijanhusak/defx-icons'
+        endif
     " }
 
     " Writing {

@@ -340,6 +340,15 @@
 " }
 
 " defx {
+    function! g:MaxLineLength()
+        let l:max = 0
+        for l:line in range(1, line('$'))
+            let l:len = strdisplaywidth(substitute(getline(l:line), '\s\+$', '', ''))
+            let l:max = max([l:len + 6, l:max])
+        endfor
+        return l:max
+    endfunction
+
     if isdirectory(expand("~/.vim/bundle/defx.nvim"))
         call defx#custom#column('icon', {
                     \ 'root_icon': ' ',
@@ -369,15 +378,6 @@
                     \ })
 
         let s:original_width = get(get(defx#custom#_get().option, '_'), 'winwidth')
-
-        function! g:MaxLineLength()
-            let l:max = 0
-            for l:line in range(1, line('$'))
-                let l:len = strdisplaywidth(substitute(getline(l:line), '\s\+$', '', ''))
-                let l:max = max([l:len + 6, l:max])
-            endfor
-            return l:max
-        endfunction
 
         " Toggle between defx window width and longest line
         function! g:DefxToggleWidth(context) abort
@@ -678,7 +678,7 @@
     if isdirectory(expand("~/.vim/bundle/indentLine/")) || isdirectory(expand("~/.vim/bundle/indent-blankline.nvim"))
         let g:indentLine_enabled = 1
         let g:indentLine_faster = 0
-        let g:indentLine_char = '|'    " Can be ¦, ┆, │, ⎸, or ▏
+        let g:indentLine_char = '│'    " Can be ¦, ┆, │, ⎸, or ▏
         let g:indentLine_fileTypeExclude = ['text', 'defx']
         let g:indentLine_bufTypeExclude = ['help', 'terminal']
         let g:indentLine_bufNameExclude = ['_.*', 'startify', 'NERD_tree.*']

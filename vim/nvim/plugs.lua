@@ -107,3 +107,125 @@ if Exists(BUNDLE_DIR .. "nvim-treesitter") then
         augroup END
     ]])
 end
+
+if Exists(BUNDLE_DIR .. "nvim-tree.lua") then
+    local width_perc = 0.2
+    local original_width = math.floor(vim.o.columns * width_perc)
+
+    function NvimTreeToggleWidth()
+        local max = vim.fn.MaxLineLength()
+        local new = (max == vim.fn.winwidth(0)) and original_width or max
+        vim.cmd('NvimTreeResize '..new)
+    end
+
+    vim.cmd([[
+        nnoremap <silent> <leader>e :NvimTreeFindFileToggle<CR>
+        let g:nvim_tree_git_hl = 0
+        let g:nvim_tree_highlight_opened_files = 3
+        let g:nvim_tree_group_empty = 1
+        let g:nvim_tree_respect_buf_cwd = 1
+        let g:nvim_tree_show_icons = {
+            \ 'git': 1,
+            \ 'folders': 1,
+            \ 'files': 1,
+            \ 'folder_arrows': 0,
+            \ }
+
+        let g:nvim_tree_icons = {
+            \ 'default': "",
+            \ 'symlink': "",
+            \ 'git': {
+            \   'unstaged': "✗",
+            \   'staged': "✓",
+            \   'unmerged': "",
+            \   'renamed': "➜",
+            \   'untracked': "★",
+            \   'deleted': "",
+            \   'ignored': "◌"
+            \   },
+            \ 'folder': {
+            \   'arrow_open': "",
+            \   'arrow_closed': "",
+            \   'default': "",
+            \   'open': "",
+            \   'empty': "",
+            \   'empty_open': "",
+            \   'symlink': "",
+            \   'symlink_open': "",
+            \   }
+            \ }
+
+        augroup nvimtree_augroup
+            au!
+            au VimEnter * hi! link NvimTreeFolderIcon GruvboxBlue
+            au VimEnter * hi! link NvimTreeFolderName NvimTreeFolderIcon
+            au VimEnter * hi! link NvimTreeEmptyFolderName NvimTreeFolderName
+            au VimEnter * hi! NvimTreeRootFolder cterm=bold,underline ctermfg=24 gui=bold,underline guifg=#076678
+            au VimEnter * hi! link NvimTreeOpenedFolderName GruvboxBlueBold
+            au VimEnter * hi! link NvimTreeOpenedFile GruvboxGreen
+            au VimEnter * hi! link NvimTreeSymlink GruvboxAqua
+            au VimEnter * hi! link NvimTreeExecFile GruvboxYellow
+            au VimEnter * hi! NvimTreeSpecialFile ctermfg=237 ctermbg=229 guifg=#3c3836 guibg=#fbf1c7 gui=underline cterm=underline
+            au BufEnter NvimTree_* nnoremap <silent> <buffer> w :lua NvimTreeToggleWidth()<CR>
+        augroup END
+    ]])
+
+    require'nvim-tree'.setup {
+        hijack_cursor = true,
+        reload_on_bufenter = true,
+        update_focused_file = {
+            enable = true,
+        },
+        renderer = {
+            indent_markers = {
+                enable = true,
+                icons = {
+                    corner = "└ ",
+                    edge = "│ ",
+                    none = "  ",
+                },
+            },
+            icons = {
+                git_placement = "after",
+            },
+        },
+        view = {
+            width = original_width,
+            mappings = {
+                custom_only = true,
+                list = {
+                    { key = ".",                            action = "toggle_dotfiles" },
+                    { key = "<BS>",                         action = "close_node" },
+                    { key = "<C-j>",                        action = "next_sibling" },
+                    { key = "<C-k>",                        action = "prev_sibling" },
+                    { key = "<C-o>",                        action = "system_open" },
+                    { key = "<Tab>",                        action = "preview" },
+                    { key = "?",                            action = "toggle_help" },
+                    { key = "D",                            action = "trash" },
+                    { key = "F",                            action = "clear_live_filter" },
+                    { key = "i",                            action = "toggle_git_ignored" },
+                    { key = "P",                            action = "parent_node" },
+                    { key = "R",                            action = "refresh" },
+                    { key = "S",                            action = "search_node" },
+                    { key = "W",                            action = "collapse_all" },
+                    { key = "a",                            action = "create" },
+                    { key = "x",                            action = "remove" },
+                    { key = "f",                            action = "live_filter" },
+                    { key = "Y",                            action = "copy_absolute_path" },
+                    { key = "h",                            action = "dir_up" },
+                    { key = "<leader>ho",                   action = "toggle_file_info" },
+                    { key = "m",                            action = "cut" },
+                    { key = "p",                            action = "paste" },
+                    { key = "q",                            action = "close" },
+                    { key = "r",                            action = "rename" },
+                    { key = "s",                            action = "split" },
+                    { key = "v",                            action = "vsplit" },
+                    { key = "y",                            action = "copy" },
+                    { key = {"<2-RightMouse>", "l"},        action = "cd" },
+                    { key = {"<CR>", "o", "<2-LeftMouse>"}, action = "edit" },
+                    { key = {"O"},                          action = "edit_no_picker" },
+                }
+            },
+        },
+    }
+end
