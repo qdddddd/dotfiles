@@ -155,14 +155,22 @@ $HOME/.tmux/plugins/tpm/scripts/source_plugins.sh
 # Install tree
 standard_install tree
 
-# Install Alarcritty
-if is_mac; then
-    if ! (command_exists alacritty); then
-        brew install alacritty
-
-        # Enable font smoothing
-        defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO
-        defaults -currentHost write -globalDomain AppleFontSmoothing -int 2
+# Install Kitty
+if ! (command_exists kitty); then
+    read "REPLY?Install kitty? [Y/n] "
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        ${PWD}/scripts/install_kitty
+        if is_linux; then
+            ln -s ~/.local/kitty.app/bin/kitty ~/.local/bin/
+            cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
+            cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/
+            wget https://raw.githubusercontent.com/igrmk/whiskers/main/whiskers_256x256.png -O $HOME/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png
+            sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
+            sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+        fi
+        mkdir -p $HOME/.config/kitty
+        ln -s ${PWD}/kitty/* "$HOME/.config/kitty"
     fi
 fi
 
