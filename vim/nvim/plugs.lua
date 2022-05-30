@@ -120,41 +120,6 @@ if Exists(BUNDLE_DIR .. "nvim-tree.lua") then
 
     vim.cmd([[
         nnoremap <silent> <leader>e :NvimTreeFindFileToggle<CR>
-        let g:nvim_tree_git_hl = 0
-        let g:nvim_tree_highlight_opened_files = 3
-        let g:nvim_tree_group_empty = 1
-        let g:nvim_tree_respect_buf_cwd = 1
-        let g:nvim_tree_show_icons = {
-            \ 'git': 1,
-            \ 'folders': 1,
-            \ 'files': 1,
-            \ 'folder_arrows': 0,
-            \ }
-
-        let g:nvim_tree_icons = {
-            \ 'default': "",
-            \ 'symlink': "",
-            \ 'git': {
-            \   'unstaged': "✗",
-            \   'staged': "✓",
-            \   'unmerged': "",
-            \   'renamed': "➜",
-            \   'untracked': "★",
-            \   'deleted': "",
-            \   'ignored': "◌"
-            \   },
-            \ 'folder': {
-            \   'arrow_open': "",
-            \   'arrow_closed': "",
-            \   'default': "",
-            \   'open': "",
-            \   'empty': "",
-            \   'empty_open': "",
-            \   'symlink': "",
-            \   'symlink_open': "",
-            \   }
-            \ }
-
         augroup nvimtree_augroup
             au!
             au VimEnter * hi! link NvimTreeFolderIcon GruvboxBlue
@@ -173,10 +138,14 @@ if Exists(BUNDLE_DIR .. "nvim-tree.lua") then
     require'nvim-tree'.setup {
         hijack_cursor = true,
         reload_on_bufenter = true,
+        respect_buf_cwd = true,
         update_focused_file = {
             enable = true,
         },
         renderer = {
+            highlight_opened_files = "all",
+            highlight_git = false,
+            group_empty = true,
             indent_markers = {
                 enable = true,
                 icons = {
@@ -187,6 +156,35 @@ if Exists(BUNDLE_DIR .. "nvim-tree.lua") then
             },
             icons = {
                 git_placement = "after",
+                show = {
+                    git = true,
+                    file = true,
+                    folder = true,
+                    folder_arrow = false
+                },
+                glyphs = {
+                    default= "",
+                    symlink= "",
+                    git= {
+                        unstaged= "✗",
+                        staged= "✓",
+                        unmerged= "",
+                        renamed= "➜",
+                        untracked= "★",
+                        deleted= "",
+                        ignored= "◌"
+                    },
+                    folder= {
+                        arrow_open= "",
+                        arrow_closed= "",
+                        default= "",
+                        open= "",
+                        empty= "",
+                        empty_open= "",
+                        symlink= "",
+                        symlink_open= "",
+                    }
+                }
             },
         },
         view = {
@@ -209,7 +207,7 @@ if Exists(BUNDLE_DIR .. "nvim-tree.lua") then
                     { key = "S",                            action = "search_node" },
                     { key = "W",                            action = "collapse_all" },
                     { key = "a",                            action = "create" },
-                    { key = "x",                            action = "remove" },
+                    { key = "d",                            action = "remove" },
                     { key = "f",                            action = "live_filter" },
                     { key = "Y",                            action = "copy_absolute_path" },
                     { key = "h",                            action = "dir_up" },
