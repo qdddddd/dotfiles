@@ -1,4 +1,5 @@
 alias sudo='sudo '
+alias watch='watch '
 
 case "$OSTYPE" in
     darwin*)
