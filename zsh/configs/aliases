@@ -39,3 +39,7 @@ alias xclip="xclip -selection c"
 csv() {
     column -s, -t < $1 | less
 }
+
+ps-kill() {
+    kill -9 $(ps-grep "$@" | awk '{print $2}')
+}
