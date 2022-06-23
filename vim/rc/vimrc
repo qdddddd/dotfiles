@@ -910,3 +910,10 @@
         augroup END
     endif
 " }
+
+" NERD Commenter {
+    if isdirectory(expand("~/.vim/bundle/nerdcommenter"))
+        let g:NERDCustomDelimiters = { 'razor': {'left': '@* ', 'right': ' *@'}}
+        let g:NERDDefaultAlign = 'none'
+    endif
+" }

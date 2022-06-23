@@ -63,6 +63,7 @@
         if has('nvim')
             Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
         endif
+        Plug 'jlcrochet/vim-razor'
     " }
 
     " LSP and Extensions {
