@@ -16,10 +16,15 @@ function IsDir(path)
 end
 
 local BUNDLE_DIR = os.getenv("HOME") .. "/.vim/bundle/"
+local map = vim.api.nvim_set_keymap
+local set_hl = function(name, fg, bg) vim.api.nvim_set_hl(0, name, {foreground=fg, background=bg}) end
+local set_hl_link = function(name, linkto) vim.api.nvim_set_hl(0, name, {link=linkto, default=false}) end
+local get_hl = function(name) return vim.api.nvim_get_hl_by_name(name, true) end
 
 --- Configure plugs ---
 
 if Exists(BUNDLE_DIR .. "bufferline.nvim") then
+    vim.g["airline#extensions#tabline#enabled"] = 0
     vim.opt.termguicolors = true
     require('bufferline').setup {
         options = {
@@ -37,42 +42,77 @@ if Exists(BUNDLE_DIR .. "bufferline.nvim") then
         }
     }
 
-    vim.cmd([[
-        nnoremap <silent><leader>1 <Cmd>BufferLineGoToBuffer 1<CR>
-        nnoremap <silent><leader>2 <Cmd>BufferLineGoToBuffer 2<CR>
-        nnoremap <silent><leader>3 <Cmd>BufferLineGoToBuffer 3<CR>
-        nnoremap <silent><leader>4 <Cmd>BufferLineGoToBuffer 4<CR>
-        nnoremap <silent><leader>5 <Cmd>BufferLineGoToBuffer 5<CR>
-        nnoremap <silent><leader>6 <Cmd>BufferLineGoToBuffer 6<CR>
-        nnoremap <silent><leader>7 <Cmd>BufferLineGoToBuffer 7<CR>
-        nnoremap <silent><leader>8 <Cmd>BufferLineGoToBuffer 8<CR>
-        nnoremap <silent><leader>9 <Cmd>BufferLineGoToBuffer 9<CR>
-        nnoremap <silent><leader><space>e :BufferLinePick<CR>
-        nnoremap <silent> – :BufferLineCyclePrev<CR>
-        nnoremap <silent> ≠ :BufferLineCycleNext<CR>
-        if LINUX() || has('nvim')
-            nnoremap <silent> <A--> :BufferLineCyclePrev<CR>
-            nnoremap <silent> <A-=> :BufferLineCycleNext<CR>
-        endif
+    local opts = {noremap = true, silent = true}
+    map('n', '<leader>1', '<Cmd>BufferLineGoToBuffer 1<CR>', opts)
+    map('n', '<leader>2', '<Cmd>BufferLineGoToBuffer 2<CR>', opts)
+    map('n', '<leader>3', '<Cmd>BufferLineGoToBuffer 3<CR>', opts)
+    map('n', '<leader>4', '<Cmd>BufferLineGoToBuffer 4<CR>', opts)
+    map('n', '<leader>5', '<Cmd>BufferLineGoToBuffer 5<CR>', opts)
+    map('n', '<leader>6', '<Cmd>BufferLineGoToBuffer 6<CR>', opts)
+    map('n', '<leader>7', '<Cmd>BufferLineGoToBuffer 7<CR>', opts)
+    map('n', '<leader>8', '<Cmd>BufferLineGoToBuffer 8<CR>', opts)
+    map('n', '<leader>9', '<Cmd>BufferLineGoToBuffer 9<CR>', opts)
+    map('n', '<leader><space>e', '<Cmd>BufferLinePick><CR>', opts)
+    map('n', '<A-->', '<Cmd>BufferPrevious<CR>', opts)
+    map('n', '<A-=>', '<Cmd>BufferNext<CR>', opts)
+    if vim.fn.OSX() then
+        map('n', '–', '<Cmd>BufferPrevious<CR>', opts)
+        map('n', '≠', '<Cmd>BufferNext<CR>', opts)
+    end
 
-        augroup bufferline_highlights
-            au!
-            au VimEnter * hi BufferLineFill guifg=#3c3836 guibg=#fbf1c7
+    set_hl("BufferLineFill", "#3c3836", "#fbf1c7")
+    set_hl_link("BufferLineBufferSelected", "airline_a")
+    set_hl_link("BufferLinePickSelected", "airline_a_red")
+    set_hl_link("BufferLineModifiedSelected", "airline_a")
+    set_hl("BufferLineBackground","#a89984", "#ebdbb2")
+    set_hl("BufferLinePick","#9d0006", "#ebdbb2")
+    set_hl_link("BufferLineSeparator", "BufferLineBackground")
+    set_hl("BufferLineModified","#076678", "#ebdbb2")
+    set_hl("BufferLineBufferVisible","#7c6f64", "#d5c4a1")
+    set_hl("BufferLinePickVisible","#9d0006", "#d5c4a1")
+    set_hl("BufferLineModifiedVisible","#076678", "#d5c4a1")
+end
 
-            au VimEnter * hi! link BufferLineBufferSelected airline_a
-            au VimEnter * hi! link BufferLinePickSelected airline_a_red
-            au VimEnter * hi! link BufferLineModifiedSelected airline_a
+if Exists(BUNDLE_DIR .. "barbar.nvim") then
+    vim.g["airline#extensions#tabline#enabled"] = 0
+    require'bufferline'.setup {
+        icons = 'numbers',
+        closable = false,
+        clickable = false,
+        icon_separator_active = '|',
+        icon_separator_inactive = '|',
+        maximum_padding = 0,
+        no_name_title = nil,
+    }
 
-            au VimEnter * hi BufferLineBackground guifg=#a89984 guibg=#ebdbb2
-            au VimEnter * hi BufferLinePick guifg=#9d0006 guibg=#ebdbb2
-            au VimEnter * hi! link BufferLineSeparator BufferLineBackground
-            au VimEnter * hi BufferLineModified guifg=#076678 guibg=#ebdbb2
+    local opts = {noremap = true, silent = false}
+    map('n', '<leader><space>e', '<Cmd>BufferPick<CR>', opts)
+    map('n', '<leader>1', '<Cmd>BufferGoto 1<CR>', opts)
+    map('n', '<leader>2', '<Cmd>BufferGoto 2<CR>', opts)
+    map('n', '<leader>3', '<Cmd>BufferGoto 3<CR>', opts)
+    map('n', '<leader>4', '<Cmd>BufferGoto 4<CR>', opts)
+    map('n', '<leader>5', '<Cmd>BufferGoto 5<CR>', opts)
+    map('n', '<leader>6', '<Cmd>BufferGoto 6<CR>', opts)
+    map('n', '<leader>7', '<Cmd>BufferGoto 7<CR>', opts)
+    map('n', '<leader>8', '<Cmd>BufferGoto 8<CR>', opts)
+    map('n', '<leader>9', '<Cmd>BufferGoto 9<CR>', opts)
+    map('n', '<leader>0', '<Cmd>BufferLast<CR>', opts)
+    map('n', '<A-->', '<Cmd>BufferPrevious<CR>', opts)
+    map('n', '<A-=>', '<Cmd>BufferNext<CR>', opts)
+    if vim.fn.OSX() then
+        map('n', '–', '<Cmd>BufferPrevious<CR>', opts)
+        map('n', '≠', '<Cmd>BufferNext<CR>', opts)
+    end
 
-            au VimEnter * hi BufferLineBufferVisible guifg=#7c6f64 guibg=#d5c4a1
-            au VimEnter * hi BufferLinePickVisible guifg=#9d0006 guibg=#d5c4a1
-            au VimEnter * hi BufferLineModifiedVisible guifg=#076678 guibg=#d5c4a1
-        augroup END
-    ]])
+    set_hl_link("BufferCurrent", "airline_a")
+    set_hl_link("BufferCurrentIndex", "BufferCurrent")
+    set_hl_link("BufferCurrentSign", "BufferInactive")
+    set_hl_link("BufferCurrentMod", "BufferCurrent")
+    set_hl_link("BufferVisible", "StatusLine")
+    set_hl_link("BufferVisibleIndex", "BufferVisible")
+    set_hl_link("BufferVisibleSign", "BufferInactive")
+    set_hl("BufferVisibleMod", get_hl("Identifier").foreground, get_hl("TabLine").background)
+    set_hl_link("BufferInactiveMod", "BufferVisibleMod")
 end
 
 if Exists(BUNDLE_DIR .. "nvim-treesitter") then
@@ -100,12 +140,7 @@ if Exists(BUNDLE_DIR .. "nvim-treesitter") then
         },
     }
 
-    vim.cmd([[
-        augroup treesitter_highlights
-            au!
-            au VimEnter * hi! link TSFuncBuiltin GruvboxAqua
-        augroup END
-    ]])
+    set_hl_link("TSFuncBuiltin", "GruvboxAqua")
 end
 
 if Exists(BUNDLE_DIR .. "nvim-tree.lua") then
@@ -118,22 +153,18 @@ if Exists(BUNDLE_DIR .. "nvim-tree.lua") then
         vim.cmd('NvimTreeResize '..new)
     end
 
-    vim.cmd([[
-        nnoremap <silent> <leader>e :NvimTreeFindFileToggle<CR>
-        augroup nvimtree_augroup
-            au!
-            au VimEnter * hi! link NvimTreeFolderIcon GruvboxBlue
-            au VimEnter * hi! link NvimTreeFolderName NvimTreeFolderIcon
-            au VimEnter * hi! link NvimTreeEmptyFolderName NvimTreeFolderName
-            au VimEnter * hi! NvimTreeRootFolder cterm=bold,underline ctermfg=24 gui=bold,underline guifg=#076678
-            au VimEnter * hi! link NvimTreeOpenedFolderName GruvboxBlueBold
-            au VimEnter * hi! link NvimTreeOpenedFile GruvboxGreen
-            au VimEnter * hi! link NvimTreeSymlink GruvboxAqua
-            au VimEnter * hi! link NvimTreeExecFile GruvboxYellow
-            au VimEnter * hi! NvimTreeSpecialFile ctermfg=237 ctermbg=229 guifg=#3c3836 guibg=#fbf1c7 gui=underline cterm=underline
-            au BufEnter NvimTree_* nnoremap <silent> <buffer> w :lua NvimTreeToggleWidth()<CR>
-        augroup END
-    ]])
+    set_hl_link("NvimTreeFolderIcon", "GruvboxBlue")
+    set_hl_link("NvimTreeFolderName", "NvimTreeFolderIcon")
+    set_hl_link("NvimTreeEmptyFolderName", "NvimTreeFolderName")
+    vim.api.nvim_set_hl(0, "NvimTreeRootFolder", {bold=true, underline=true, ctermfg=24, fg="#076678"})
+    set_hl_link("NvimTreeOpenedFolderName", "GruvboxBlueBold")
+    set_hl_link("NvimTreeOpenedFile", "GruvboxGreen")
+    set_hl_link("NvimTreeSymlink", "GruvboxAqua")
+    set_hl_link("NvimTreeExecFile", "GruvboxYellow")
+    vim.api.nvim_set_hl(0, "NvimTreeSpecialFile", {ctermfg=237, ctermbg=229, fg="#3c3836", bg="#fbf1c7", underline=true})
+    map("n", "<leader>e", "<Cmd>NvimTreeFindFileToggle<CR>", {noremap=true, silent=true})
+
+    vim.cmd([[ au! BufEnter NvimTree_* nnoremap <silent> <buffer> w :lua NvimTreeToggleWidth()<CR> ]])
 
     require'nvim-tree'.setup {
         hijack_cursor = true,
