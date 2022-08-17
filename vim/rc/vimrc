@@ -752,6 +752,11 @@
             endfunction
 
             " Key mappings
+            inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>"
+            inoremap <silent><expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
+            inoremap <silent><expr> <S-Tab> coc#pum#visible()) ? coc#pum#prev(1) : "\<S-Tab>"
+            inoremap <silent><expr> <down> coc#pum#visible() ? coc#pum#next(0) : "\<down>"
+            inoremap <silent><expr> <up> coc#pum#visible() ? coc#pum#prev(0) : "\<up>"
             nmap <silent> <leader>dl <Plug>(coc-definition)
             nmap <silent> <leader>re <Plug>(coc-references)
             nmap <silent> <leader>fi <Plug>(coc-fix-current)
@@ -779,6 +784,7 @@
             exe 'hi CocWarningFloat guifg=#b57614 guibg=' . s:menu_bg
             exe 'hi CocInfoFloat    guifg=#427b58 guibg=' . s:menu_bg
             hi! def link CocHintFloat CocWarningFloat
+            hi! CocMenuSel guifg=#f3e5bc guibg=#076678
 
             "" Autocmd
             augroup coc_user_defined
