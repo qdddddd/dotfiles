@@ -4,6 +4,6 @@
 src=$1
 dest=$2/$(basename ${src})/
 mkdir -p ${dest}
-parallel -j+0 cp {} ${dest} ::: ${src}/*
+parallel -j+0 cp -r {} ${dest} ::: ${src}/*
 unset src dest
 #}
