@@ -8,4 +8,8 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     brew install neovim
 fi
 
+pip install -U pip
 python3 -m pip install --user --upgrade pynvim
+
+source ~/.aliases
+vi +PlugInstall +PlugUpdate +PlugClean +qa!

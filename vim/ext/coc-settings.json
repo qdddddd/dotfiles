@@ -44,6 +44,7 @@
     "diagnostic.hintSign": "◇",
     "diagnostic.checkCurrentLine": true,
     "diagnostic.showDeprecated": true,
+    "diagnostic.level": "hint",
     "list.nextKeymap": "<C-n>",
     "list.previousKeymap": "<C-p>",
     "languageserver": {
@@ -69,7 +70,6 @@
         "-suggest-missing-includes",
         "-j=6"
     ],
-    "coc.preferences.colorSupport": true,
     "coc.source.buffer.ignoreGitignore": true,
     "coc.preferences.bracketEnterImprove": true,
     "coc.preferences.semanticTokensHighlights": true,

@@ -25,6 +25,7 @@ if (( $+commands[nvim] )); then
 fi
 alias llp='latexmk -xelatex -pvc -pdf -interaction=batchmode -quiet'
 alias ll='ls -lFh'
+alias lL='ll -L'
 alias crontab='VIM_CRONTAB=true EDITOR=vim crontab'
 alias ds='du -hd1'
 alias git-redate='GIT_COMMITTER_DATE="$(date)" git commit --amend --no-edit --date "$(date)"'
@@ -37,7 +38,7 @@ alias untarbz="tar --use-compress-program=lbzip2 -xf"
 alias xclip="xclip -selection c"
 
 csv() {
-    column -s, -t < $1 | less
+    column -s, -t < $1 | less -S
 }
 
 ps-kill() {
