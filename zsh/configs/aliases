@@ -44,3 +44,7 @@ csv() {
 ps-kill() {
     kill -9 $(ps-grep "$@" | awk '{print $2}')
 }
+
+mc-cp() {
+    mc cp remote/$1/$3/$2_$3.gz .
+}

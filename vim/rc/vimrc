@@ -278,6 +278,7 @@
                 \ :diffupdate<CR>
                 \ :syntax sync fromstart<CR>
                 \ :AirlineRefresh<CR>
+                \ :set relativenumber <bar> set cursorline <bar> set signcolumn=yes <CR>
 
     " Shortcut to copy over ssh
     vmap <silent> sy :w !sshcopy<CR><CR>
