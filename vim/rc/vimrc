@@ -168,6 +168,7 @@
     autocmd! BufRead,BufNewFile *.coffee set ft=coffee
     autocmd! BufRead,BufNewFile *.rst set ft=rst
     autocmd! BufRead,BufNewFile *.tex set ft=tex
+    autocmd! FileType json set ft=jsonc
 
     " Crontab {
         if $VIM_CRONTAB == 'true'
