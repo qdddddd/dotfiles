@@ -59,6 +59,8 @@ if ! (command_exists pip3); then
     rm get-pip.py
 fi
 
+pip3 install neovim
+
 # Install ag
 if ! (command_exists ag); then
     if is_linux; then
