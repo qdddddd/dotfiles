@@ -322,7 +322,7 @@
     "exe 'hi FmenuThumb guifg=' . s:menu_bg . ' guibg=#8a95a7'
 
     " Setup cursor style
-    autocmd OptionSet guicursor noautocmd set guicursor=
+    set guicursor=n-v-c-sm:hor20,i-ci-ve:hor20,r-cr-o:hor20
     if exists('$TMUX')
         let &t_SI .= "\<esc>Ptmux;\<esc>\<esc>[4 q\<esc>\\"
         let &t_EI .= "\<esc>Ptmux;\<esc>\<esc>[4 q\<esc>\\"
@@ -859,7 +859,7 @@
 " cpp enhanced highlight {
     if isdirectory(expand("~/.vim/bundle/vim-cpp-enhanced-highlight"))
         hi! def link Function GruvboxBlueBold
-        hi! def link Identifier GruvboxBlue
+        hi! def link Identifier GruvboxFg2
         let g:cpp_class_scope_highlight = 0
         let g:cpp_member_variable_highlight = 1
         let g:cpp_class_decl_highlight = 0

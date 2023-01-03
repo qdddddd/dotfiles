@@ -6,8 +6,6 @@ set runtimepath^=~/.vim
 let &packpath = &runtimepath
 source ~/.vim/vimrc
 
-" Set cursor style
-set guicursor="n-v-c-sm:hor20,i-ci-ve:hor20,r-cr-o:hor20"
 hi! clear Operator
 
 " Fzf floating window style

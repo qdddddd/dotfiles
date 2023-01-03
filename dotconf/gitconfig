@@ -10,6 +10,7 @@
     excludesfile = ~/.gitignore_global
     autocrlf = input
     whitespace = cr-at-eol
+    pager = tr -d '\\r' | less
 [branch]
     autosetuprebase = always
 [alias]
