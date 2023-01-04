@@ -33,6 +33,7 @@ command_exists() {
 
 standard_install() {
     if ! (command_exists $1); then
+    echo "\nInstalling $1..."
         if is_mac; then
             brew install $1
         elif is_linux; then
@@ -43,14 +44,24 @@ standard_install() {
 
 #############################
 
+# Create sym links for dot configs
+echo "\nCreating dot configs..."
+for dotfile in ${PWD}/dotconf/*; do
+    ln -s "$dotfile" "$HOME/.${dotfile:t}"
+done
+
+#############################
+
 # Intall homebrew
 if is_mac && ! (command_exists brew); then
+    echo "\nInstalling homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
     PATH=$PATH:/opt/homebrew/bin
 fi
 
 # Install pip
 if ! (command_exists pip3); then
+    echo "\nInstalling pip..."
     if is_linux; then
         sudo apt-get install python3 python3-distutils python3-apt
     fi
@@ -59,49 +70,18 @@ if ! (command_exists pip3); then
     rm get-pip.py
 fi
 
-pip3 install neovim
-
-# Install ag
-if ! (command_exists ag); then
-    if is_linux; then
-        sudo apt-get install silversearcher-ag
-    elif is_mac; then
-        brew install the_silver_searcher
-    fi
-fi
-
-# Install fzf
-if [ ! -s $HOME/.fzf ]; then
-    git clone --depth 1 git@github.com:junegunn/fzf.git $HOME/.fzf
-    $HOME/.fzf/install --bin
-fi
-
-# Install autojump
-standard_install autojump
-
-# Install thefuck
-if ! (command_exists fuck); then
-    pip3 install thefuck
-fi
-
-# Install vim-plug
-if [ ! -s $HOME/.vim/autoload/plug.vim ]; then
-    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-fi
-
-# Install dependencies for Coc
-if ! (command_exists node); then
-    curl -sL install-node.now.sh | sudo bash
-fi
-
-if ! (command_exists yarn); then
-    curl --compressed -o- -L https://yarnpkg.com/install.sh | bash
-fi
+# Install tmux
+echo "\nConfiguring tmux..."
+standard_install tmux
+git clone git@github.com:tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+tmux source $HOME/.tmux.conf
+$HOME/.tmux/plugins/tpm/scripts/install_plugins.sh
+$HOME/.tmux/plugins/tpm/scripts/source_plugins.sh
 
 rm $HOME/.zshrc
 
 # Create zsh config sym links
+echo "\nCreating zsh configs..."
 for rcfile in "${PWD}"/zsh/configs/*; do
     ln -s "$rcfile" "$HOME/.${rcfile:t}"
 done
@@ -119,14 +99,38 @@ EOF
     fi
 }
 
+source $HOME/.zshrc
+proxy-on
+
+pip3 install neovim
+
+# Install vim-plug
+if [ ! -s $HOME/.vim/autoload/plug.vim ]; then
+    echo "\nInstalling vim-plug..."
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+fi
+
+# Install dependencies for Coc
+if ! (command_exists node); then
+    echo "\nInstalling node..."
+    curl -sfLS https://install-node.vercel.app | sudo -E bash
+fi
+
+# Install yarn
+if ! (command_exists yarn); then
+    echo "\nInstalling yarn..."
+    curl --compressed -o- -L https://yarnpkg.com/install.sh | sudo -E bash
+fi
+
 # Install nvim
 if ! (command_exists nvim); then
+    echo "\nInstalling nvim..."
     ${PWD}/scripts/install_neovim
 fi
 
-source $HOME/.zshrc
-
 function() {
+    echo "\nConfiguring vim..."
     # Create vim config sym links
     local DOT_VIM_DIR=${PWD}/vim
     #for lcfile in ${DOT_VIMRC_DIR}/^*(README.md|nvim)*; do
@@ -143,22 +147,44 @@ function() {
         done
 
         nvim +UpdateRemotePlugins +qa!
+        alias vi='nvim'
     fi
 
     vi +PlugInstall +PlugClean +qa!
 }
 
-# Install tmux
-standard_install tmux
-git clone git@github.com:tmux-plugins/tpm $HOME/.tmux/plugins/tpm
-$HOME/.tmux/plugins/tpm/scripts/install_plugins.sh
-$HOME/.tmux/plugins/tpm/scripts/source_plugins.sh
+# Install ag
+if ! (command_exists ag); then
+    echo "\nInstalling ag..."
+    if is_linux; then
+        sudo apt-get install silversearcher-ag
+    elif is_mac; then
+        brew install the_silver_searcher
+    fi
+fi
 
 # Install tree
 standard_install tree
 
+# Install fzf
+if [ ! -s $HOME/.fzf ]; then
+    echo "\nInstalling fzf..."
+    git clone --depth 1 git@github.com:junegunn/fzf.git $HOME/.fzf
+    $HOME/.fzf/install --bin
+fi
+
+# Install autojump
+standard_install autojump
+
+# Install thefuck
+if ! (command_exists fuck); then
+    echo "\nInstalling thefuck..."
+    pip3 install thefuck
+fi
+
 # Install Kitty
 if ! (command_exists kitty); then
+    echo "\nInstalling kitty..."
     read "REPLY?Install kitty? [Y/n] "
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -177,8 +203,4 @@ if ! (command_exists kitty); then
 fi
 
 #############################
-
-# Create sym links for dot configs
-for dotfile in ${PWD}/dotconf/*; do
-    ln -s "$dotfile" "$HOME/.${dotfile:t}"
-done
+proxy-off

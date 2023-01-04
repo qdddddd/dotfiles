@@ -322,7 +322,7 @@
     "exe 'hi FmenuThumb guifg=' . s:menu_bg . ' guibg=#8a95a7'
 
     " Setup cursor style
-    set guicursor=n-v-c-sm:hor20,i-ci-ve:hor20,r-cr-o:hor20
+    set guicursor=a:hor20
     if exists('$TMUX')
         let &t_SI .= "\<esc>Ptmux;\<esc>\<esc>[4 q\<esc>\\"
         let &t_EI .= "\<esc>Ptmux;\<esc>\<esc>[4 q\<esc>\\"
