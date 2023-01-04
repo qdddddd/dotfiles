@@ -894,3 +894,9 @@
         let g:NERDDefaultAlign = 'none'
     endif
 " }
+
+" Read local config
+
+if filereadable(expand("~/.vim/vimrc.local"))
+    source ~/.vim/vimrc.local
+endif
