@@ -39,6 +39,8 @@ COMPLETION_WAITING_DOTS="true"
 # much, much faster.
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
+DISABLE_AUTO_UPDATE="true"
+
 # Plugins
 plugins=(
     autojump
