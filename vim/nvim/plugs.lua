@@ -29,16 +29,21 @@ if Exists(BUNDLE_DIR .. "bufferline.nvim") then
     require('bufferline').setup {
         options = {
             numbers = function(opts) return string.format('%s', opts.raise(opts.ordinal)) end,
+            show_buffer_default_icon = false,
             show_buffer_close_icons = false,
             show_close_icon = false,
             show_buffer_icons = false,
             show_tab_indicators = false,
             enforce_regular_tabs = false,
             diagnostics = false,
-            modified_icon = "+",
-            indicator_icon = "",
+            modified_icon = "●",
+            indicator = {
+                icon = "",
+                style = "icon"
+            },
+            diagnostics_indicator = "",
             separator_style = {'|', '|'},
-            tab_size = 10,
+            tab_size = 1,
         }
     }
 
@@ -53,36 +58,48 @@ if Exists(BUNDLE_DIR .. "bufferline.nvim") then
     map('n', '<leader>8', '<Cmd>BufferLineGoToBuffer 8<CR>', opts)
     map('n', '<leader>9', '<Cmd>BufferLineGoToBuffer 9<CR>', opts)
     map('n', '<leader><space>e', '<Cmd>BufferLinePick><CR>', opts)
-    map('n', '<A-->', '<Cmd>BufferPrevious<CR>', opts)
-    map('n', '<A-=>', '<Cmd>BufferNext<CR>', opts)
+    map('n', '<A-->', '<Cmd>BufferLineCyclePrev<CR>', opts)
+    map('n', '<A-=>', '<Cmd>BufferLineCycleNext<CR>', opts)
     if vim.fn.OSX() then
-        map('n', '–', '<Cmd>BufferPrevious<CR>', opts)
-        map('n', '≠', '<Cmd>BufferNext<CR>', opts)
+        map('n', '–', '<Cmd>BufferLineCyclePrev<CR>', opts)
+        map('n', '≠', '<Cmd>BufferLineCycleNext<CR>', opts)
     end
 
     set_hl("BufferLineFill", "#3c3836", "#fbf1c7")
     set_hl_link("BufferLineBufferSelected", "airline_a")
     set_hl_link("BufferLinePickSelected", "airline_a_red")
     set_hl_link("BufferLineModifiedSelected", "airline_a")
+    set_hl_link("BufferLineNumbersSelected", "airline_a")
     set_hl("BufferLineBackground","#a89984", "#ebdbb2")
     set_hl("BufferLinePick","#9d0006", "#ebdbb2")
     set_hl_link("BufferLineSeparator", "BufferLineBackground")
+    set_hl_link("BufferLineNumbers", "BufferLineBackground")
     set_hl("BufferLineModified","#076678", "#ebdbb2")
     set_hl("BufferLineBufferVisible","#7c6f64", "#d5c4a1")
     set_hl("BufferLinePickVisible","#9d0006", "#d5c4a1")
     set_hl("BufferLineModifiedVisible","#076678", "#d5c4a1")
+    set_hl("BufferLineNumbersVisible","#076678", "#d5c4a1")
+    set_hl("BufferLineIndicatorVisible","#076678", "#d5c4a1")
 end
 
 if Exists(BUNDLE_DIR .. "barbar.nvim") then
     vim.g["airline#extensions#tabline#enabled"] = 0
     require'bufferline'.setup {
-        icons = 'numbers',
-        closable = false,
-        clickable = false,
-        icon_separator_active = '|',
-        icon_separator_inactive = '|',
+        icons = {
+            buffer_index = true,
+            buffer_number = false,
+            filetype = {
+                enabled = false
+            },
+            button = false,
+            separator = { left = '|' },
+            inactive = {
+                separator = { left = '|' },
+            },
+        },
+        clickable = true,
         maximum_padding = 0,
-        no_name_title = nil,
+        no_name_title = nil
     }
 
     local opts = {noremap = true, silent = false}
@@ -106,7 +123,7 @@ if Exists(BUNDLE_DIR .. "barbar.nvim") then
 
     set_hl_link("BufferCurrent", "airline_a")
     set_hl_link("BufferCurrentIndex", "BufferCurrent")
-    set_hl_link("BufferCurrentSign", "BufferInactive")
+    set_hl_link("BufferCurrentSign", "BufferCurrent")
     set_hl_link("BufferCurrentMod", "BufferCurrent")
     set_hl_link("BufferVisible", "StatusLine")
     set_hl_link("BufferVisibleIndex", "BufferVisible")

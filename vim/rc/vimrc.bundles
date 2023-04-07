@@ -93,8 +93,8 @@
         Plug 'spf13/vim-preview'
         Plug 'tpope/vim-markdown'
         Plug 'dyng/ctrlsf.vim'
-        "Plug 'akinsho/bufferline.nvim'
-        Plug 'romgrk/barbar.nvim'
+        Plug 'akinsho/bufferline.nvim'
+        "Plug 'romgrk/barbar.nvim'
         "Plug 'vim-scripts/CycleColor'
         "Plug 'qdddddd/vim-cycle-airline-theme'
     " }

@@ -50,13 +50,16 @@
     "languageserver": {
         "csharp-ls": {
             "command": "csharp-ls",
+            "args": ["--loglevel", "log"],
             "filetypes": [
                 "cs"
             ],
             "rootPatterns": [
                 ".git/",
-                "*.sln"
-            ]
+                "*.sln",
+                "*.csproj"
+            ],
+            "trace.server": "verbose"
         }
     },
     "clangd.arguments": [

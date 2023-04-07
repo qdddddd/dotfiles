@@ -2,31 +2,24 @@
 
 echo "Make sure that all previous versions of nvidia-driver and cuda packages are already removed before running the scrip."
 
-# Install nvidia driver
-sudo apt install -y nvidia-driver-510
+## Install nvidia driver
+sudo apt install -y nvidia-driver-520
 
-# Add NVIDIA package repositories
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2004.pin
-sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
-sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub
-sudo add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/ /"
+## Add NVIDIA package repositories
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
+sudo \mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
+wget https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda-repo-ubuntu2204-11-8-local_11.8.0-520.61.05-1_amd64.deb
+sudo dpkg -i cuda-repo-ubuntu2204-11-8-local_11.8.0-520.61.05-1_amd64.deb
+sudo \cp /var/cuda-repo-ubuntu2204-11-8-local/cuda-*-keyring.gpg /usr/share/keyrings/
 sudo apt-get update
+sudo apt-get -y install cuda
 
-wget http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu2004/x86_64/nvidia-machine-learning-repo-ubuntu2004_1.0.0-1_amd64.deb
+## Install
+scp poisson:~/Downloads/cudnn-local-repo-ubuntu2204-8.6.0.163_1.0-1_amd64.deb .
+sudo dpkg -i cudnn-local-repo-ubuntu2204-8.6.0.163_1.0-1_amd64.deb
+sudo \cp /var/cudnn-local-repo-ubuntu2204-8.6.0.163/cudnn-local-FAED14DD-keyring.gpg /usr/share/keyrings/
 
-sudo apt install -y ./nvidia-machine-learning-repo-ubuntu2004_1.0.0-1_amd64.deb
-rm nvidia-machine-learning-repo-ubuntu2004_1.0.0-1_amd64.deb
-sudo apt-get update
+rm cuda-*
+rm cudnn-*
 
-wget https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/libnvinfer7_7.1.3-1+cuda11.0_amd64.deb
-sudo apt install -y ./libnvinfer7_7.1.3-1+cuda11.0_amd64.deb
-rm libnvinfer7_7.1.3-1+cuda11.0_amd64.deb
-sudo apt-get update
-
-# Install development and runtime libraries (~4GB)
-sudo apt-get install -y --no-install-recommends cuda-11-1 libcudnn8 libcudnn8-dev
-
-# Reboot. Check that GPUs are visible using the command: nvidia-smi
-
-# Install TensorRT. Requires that libcudnn8 is installed above.
-sudo apt-get install -y --no-install-recommends libnvinfer7 libnvinfer-dev libnvinfer-plugin
+echo "Reboot. Check that GPUs are visible using the command: nvidia-smi"
