@@ -780,6 +780,7 @@
             hi! def link CocWarningSign GruvboxYellowSign
             hi! def link CocInfoSign GruvboxAquaSign
             hi! def link CocHintSign CocWarningSign
+            hi! def link CocInlayHintType GruvboxBg4
 
             hi! def link CocFloating Fmenu
             exe 'hi CocErrorFloat   guifg=#9d0006 guibg=' . s:menu_bg
