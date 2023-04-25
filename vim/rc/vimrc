@@ -896,6 +896,19 @@
     endif
 " }
 
+" Copilot {
+    let g:copilot_no_tab_map = v:true
+    imap <silent><script><expr> <C-F> copilot#Accept("\<CR>")
+    imap <silent><script><expr> <TAB> copilot#Next()
+    imap <silent><script><expr> <S-TAB> copilot#Previous()
+    hi! CopilotSuggestion guifg=#fa8072 ctermfg=209 "salmon
+    "hi! CopilotSuggestion guifg=#f08080 ctermfg=210 "light pink
+    "hi! CopilotSuggestion guifg=#c39797 ctermfg=181 "purple
+    "hi! CopilotSuggestion guifg=#7ac5cd ctermfg=117 "light blue
+    "hi! CopilotSuggestion guifg=#9bcd9b ctermfg=114 "dark sea green
+    "hi! CopilotSuggestion guifg=#e1a95f ctermfg=180 "dark orange
+" }
+
 " Read local config
 
 if filereadable(expand("~/.vim/vimrc.local"))

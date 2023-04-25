@@ -63,6 +63,7 @@
             Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
         endif
         Plug 'jlcrochet/vim-razor'
+        Plug 'github/copilot.vim'
     " }
 
     " LSP and Extensions {
