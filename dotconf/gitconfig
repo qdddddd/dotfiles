@@ -21,3 +21,5 @@
     default = simple
 [credential]
     helper = store
+[advice]
+    skippedCherryPicks = false
