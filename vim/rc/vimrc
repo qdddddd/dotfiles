@@ -898,9 +898,9 @@
 
 " Copilot {
     let g:copilot_no_tab_map = v:true
-    imap <silent><script><expr> <C-F> copilot#Accept("\<CR>")
-    imap <silent><script><expr> <TAB> copilot#Next()
-    imap <silent><script><expr> <S-TAB> copilot#Previous()
+    inoremap <silent><script><expr> <C-F> copilot#Accept("\<CR>")
+    inoremap <silent><script><expr> <C-J> copilot#Next()
+    inoremap <silent><script><expr> <C-K> copilot#Previous()
     hi! CopilotSuggestion guifg=#fa8072 ctermfg=209 "salmon
     "hi! CopilotSuggestion guifg=#f08080 ctermfg=210 "light pink
     "hi! CopilotSuggestion guifg=#c39797 ctermfg=181 "purple
