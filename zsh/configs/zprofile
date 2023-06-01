@@ -81,18 +81,14 @@ case "$OSTYPE" in
 esac
 
 path=(
-    $HOME/.yarn/bin
-    $HOME/.config/yarn/global/node_modules/.bin
-    $HOME/.dotnet/tools
+    $path
     $HOME/.local/bin
-    $path
-)
-
-path=(
-    $path
     /usr/local/{bin,sbin}
     /usr/{bin,sbin}
     /{bin,sbin}
+    $HOME/.yarn/bin
+    $HOME/.config/yarn/global/node_modules/.bin
+    $HOME/.dotnet/tools
 )
 
 # Ensure path arrays do not contain duplicates.
