@@ -1,12 +1,9 @@
 {
     "suggest.minTriggerInputLength": 1,
-    "suggest.enablePreview": false,
-    "suggest.echodocSupport": true,
     "suggest.languageSourcePriority": 1,
-    "suggest.numberSelect": false,
     "suggest.snippetIndicator": "",
     "suggest.noselect": false,
-    "suggest.detailField": "menu",
+    "suggest.detailField": "preview",
     "suggest.labelMaxLength": 60,
     "suggest.removeDuplicateItems": true,
     "suggest.completionItemKindLabels": {
@@ -75,15 +72,7 @@
     ],
     "coc.source.buffer.ignoreGitignore": true,
     "coc.preferences.bracketEnterImprove": true,
-    "coc.preferences.semanticTokensHighlights": true,
-    "latex.build.onSave": true,
-    "latex.build.args": [
-        "-outdir=out",
-        "-pdf",
-        "-f",
-        "-silent"
-    ],
-    "latex.build.outputDirectory": "out",
+    "semanticTokens.enable": true,
     "pairs.enableCharacters": [
         "(",
         "[",
@@ -98,15 +87,11 @@
     "Lua.diagnostics.globals": [
         "vim"
     ],
-    "coc.preferences.formatOnSaveFiletypes": [
-        "c",
-        "cs",
-        "cpp",
-        "java",
-        "vim",
-        "yaml",
-        "python"
-    ],
+    "coc.preferences.formatOnSave": false,
+    "[c][cs][cpp][java][vim][yaml][python]": {
+        "coc.preferences.formatOnSave": true,
+    },
+    "inlayHint.enable": false,
     "coc.preferences.formatOnType": false,
     "coc.preferences.extensionUpdateCheck": "daily"
 }
