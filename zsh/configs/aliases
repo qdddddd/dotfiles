@@ -36,10 +36,7 @@ alias sshp="ssh -o ProxyCommand='nc -X 5 -x ${clash_socks} %h %p'"
 alias ps-grep="ps aux | grep -v grep | grep"
 alias untarbz="tar --use-compress-program=lbzip2 -xf"
 alias xclip="xclip -selection c"
-
-csv() {
-    column -s, -t < $1 | less -S
-}
+alias csv='column -s, -t | less -S'
 
 ps-kill() {
     kill -9 $(ps-grep "$@" | awk '{print $2}')
