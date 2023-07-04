@@ -83,6 +83,9 @@
     ],
     "python.formatting.provider": "black",
     "python.formatting.blackPath": "~/.local/bin/black",
+    "python.formatting.blackArgs": [
+        "--line-length", "120"
+    ],
     "python.linting.lintOnSave": true,
     "Lua.diagnostics.globals": [
         "vim"
