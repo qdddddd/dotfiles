@@ -3,24 +3,34 @@
 echo "Make sure that all previous versions of nvidia-driver and cuda packages are already removed before running the scrip."
 
 # Install nvidia driver
-sudo apt install -y nvidia-driver-520
+sudo apt install -y nvidia-driver-525
 
-## Add NVIDIA package repositories
+# Add NVIDIA package repositories
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
 sudo \mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
 wget https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda-repo-ubuntu2204-11-8-local_11.8.0-520.61.05-1_amd64.deb
 sudo dpkg -i cuda-repo-ubuntu2204-11-8-local_11.8.0-520.61.05-1_amd64.deb
 sudo \cp /var/cuda-repo-ubuntu2204-11-8-local/cuda-D95DBBE2-keyring.gpg /usr/share/keyrings/
+
+wget https://developer.download.nvidia.cn/compute/redist/cudnn/v8.6.0/local_installers/11.8/cudnn-local-repo-ubuntu2204-8.6.0.163_1.0-1_amd64.deb
+sudo dpkg -i cudnn-local-repo-ubuntu2204-8.6.0.163_1.0-1_amd64.deb
+sudo \cp /var/cudnn-local-repo-ubuntu2204-8.6.0.163/cudnn-local-FAED14DD-keyring.gpg /usr/share/keyrings/
+
 sudo apt-get update
 sudo apt-get -y install cuda
+sudo apt install libcudnn8 libcudnn8-dev
+
 rm cuda-*
+rm cudnn-*
 
-sudo pip3 install -U pip
-sudo pip3 install nvidia-cudnn-cu11==8.6.0.163
+#sudo pip3 install -U pip
+#sudo pip3 install nvidia-cudnn-cu11==8.6.0.163
 
-CUDNN_PATH=$(dirname $(python3 -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
+sudo rm -f /etc/profile.d/cuda.sh
 sudo touch /etc/profile.d/cuda.sh
-echo "export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$CUDNN_PATH/lib" | sudo tee -a /etc/profile.d/cuda.sh
+#CUDNN_PATH=$(dirname $(python3 -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
+#echo "export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$CUDNN_PATH/lib" | sudo tee -a /etc/profile.d/cuda.sh
+echo "export LD_LIBRARY_PATH=/usr/local/cuda/lib64" | sudo tee -a /etc/profile.d/cuda.sh
 echo "export PATH=\$PATH:/usr/local/cuda/bin" | sudo tee -a /etc/profile.d/cuda.sh
 
 echo "Reboot. Check that GPUs are visible using the command: nvidia-smi"
