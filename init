@@ -52,32 +52,6 @@ done
 
 #############################
 
-# Intall homebrew
-if is_mac && ! (command_exists brew); then
-    echo "\nInstalling homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-    PATH=$PATH:/opt/homebrew/bin
-fi
-
-# Install pip
-if ! (command_exists pip3); then
-    echo "\nInstalling pip..."
-    if is_linux; then
-        sudo apt-get install python3 python3-distutils python3-apt
-    fi
-    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-    sudo python3 get-pip.py
-    rm get-pip.py
-fi
-
-# Install tmux
-echo "\nConfiguring tmux..."
-standard_install tmux
-git clone git@github.com:tmux-plugins/tpm $HOME/.tmux/plugins/tpm
-tmux source $HOME/.tmux.conf
-$HOME/.tmux/plugins/tpm/scripts/install_plugins.sh
-$HOME/.tmux/plugins/tpm/scripts/source_plugins.sh
-
 rm $HOME/.zshrc
 
 # Create zsh config sym links
@@ -101,6 +75,38 @@ EOF
 
 source $HOME/.zshrc
 proxy-on
+
+# Intall homebrew
+if is_mac && ! (command_exists brew); then
+    echo "\nInstalling homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    PATH=$PATH:/opt/homebrew/bin
+fi
+
+# Install build-essential
+if is_linux; then
+    sudo apt update
+    sudo apt install build-essential
+fi
+
+# Install pip
+if ! (command_exists pip3); then
+    echo "\nInstalling pip..."
+    if is_linux; then
+        sudo apt-get install python3 python3-distutils python3-apt
+    fi
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+    sudo python3 get-pip.py
+    rm get-pip.py
+fi
+
+# Install tmux
+echo "\nConfiguring tmux..."
+standard_install tmux
+git clone git@github.com:tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+tmux source $HOME/.tmux.conf
+$HOME/.tmux/plugins/tpm/scripts/install_plugins.sh
+$HOME/.tmux/plugins/tpm/scripts/source_plugins.sh
 
 pip3 install neovim
 
@@ -128,6 +134,9 @@ fi
 # Install nvim
 if ! (command_exists nvim); then
     echo "\nInstalling nvim..."
+    if is_linux; then
+        sudo apt install libfuse2
+    fi
     ${PWD}/scripts/install_neovim
 fi
 
