@@ -3,7 +3,7 @@
 echo "Make sure that all previous versions of nvidia-driver and cuda packages are already removed before running the scrip."
 
 # Install nvidia driver
-sudo apt install -y nvidia-driver-525
+sudo apt install -y nvidia-driver-535
 
 # Add NVIDIA package repositories
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
