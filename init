@@ -69,6 +69,15 @@ function () {
 export ZSH_THEME_COLOR=66
 source ~/.p10k.zsh
 restore_tmux main
+
+alias mount-projects='sudo mount -t nfs ${POISSON_IP}:/srv/nfs/projects ~/projects & sudo mount -t nfs ${POISSON_IP}:/srv/nfs/store ~/store'
+
+if [ -n "$(find /home/qdu/projects -prune -empty 2>/dev/null)" ]; then
+    mount-projects
+fi
+
+ulimit -n unlimited
+restore_tmux "main"
 EOF
     fi
 }
