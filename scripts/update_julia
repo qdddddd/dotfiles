@@ -1,0 +1,3 @@
+#!/bin/zsh
+julia -e 'using UpdateJulia, Pkg; update_julia(systemwide=false, migrate_packages=:force)'
+julia -e 'using IJulia; IJulia.installkernel("Julia", env=Dict("JULIA_NUM_THREADS" => "120",))'
