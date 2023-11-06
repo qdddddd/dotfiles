@@ -646,7 +646,7 @@
 " }
 
 " IndentLine {
-    if isdirectory(expand("~/.vim/bundle/indentLine/")) || isdirectory(expand("~/.vim/bundle/indent-blankline.nvim"))
+    if isdirectory(expand("~/.vim/bundle/indentLine/"))
         let g:indentLine_enabled = 1
         let g:indentLine_faster = 0
         let g:indentLine_char = '│'    " Can be ¦, ┆, │, ⎸, or ▏

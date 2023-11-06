@@ -22,6 +22,21 @@ local set_hl_link = function(name, linkto) vim.api.nvim_set_hl(0, name, { link =
 local get_hl = function(name) return vim.api.nvim_get_hl_by_name(name, true) end
 
 --- Configure plugs ---
+if Exists(BUNDLE_DIR .. "indent-blankline.nvim") then
+    require('ibl').update {
+        enabled = true,
+        indent = { char = "│" },
+        exclude = {
+            filetypes = { "defx", "NvimTree", "startify" },
+            buftypes = { "help", "terminal", "nofile", "quickfix", "prompt" },
+        },
+        scope = {
+            enabled = true,
+            show_start = false,
+            show_end = false,
+        },
+    }
+end
 
 if Exists(BUNDLE_DIR .. "bufferline.nvim") then
     vim.g["airline#extensions#tabline#enabled"] = 0
