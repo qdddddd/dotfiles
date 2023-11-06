@@ -64,6 +64,8 @@
         endif
         Plug 'jlcrochet/vim-razor'
         Plug 'github/copilot.vim'
+        Plug 'jpalardy/vim-slime'
+        Plug 'klafyvel/vim-slime-cells'
     " }
 
     " LSP and Extensions {
