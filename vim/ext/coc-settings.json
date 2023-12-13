@@ -49,14 +49,14 @@
             "command": "csharp-ls",
             "args": ["--loglevel", "log"],
             "filetypes": [
-                "cs"
+                //"cs"
             ],
             "rootPatterns": [
                 ".git/",
                 "*.sln",
                 "*.csproj"
             ],
-            "trace.server": "verbose"
+            //"trace.server": ""
         }
     },
     "clangd.arguments": [
@@ -91,7 +91,7 @@
         "vim"
     ],
     "coc.preferences.formatOnSave": false,
-    "[c][cs][cpp][java][vim][yaml][python]": {
+    "[c][cpp][java][vim][yaml][python]": {
         "coc.preferences.formatOnSave": true,
     },
     "inlayHint.enable": false,

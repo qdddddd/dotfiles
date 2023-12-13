@@ -20,10 +20,6 @@
 " Load bundles config {
 
     " Plugin setteings before loading
-    let g:ale_completion_enabled = 0
-    "let g:ale_completion_delay = 0
-    let g:ale_echo_cursor = 0
-    let g:ale_cursor_detail = 1
 
     if filereadable(expand("~/.vim/vimrc.bundles"))
         source ~/.vim/vimrc.bundles
@@ -208,6 +204,20 @@
     function! SetHl(name, fg, bg)
         exe 'hi ' . a:name . ' guifg='. a:fg .' guibg=' . a:bg
     endfunction
+
+    function! ListVisible()
+        return getwininfo()
+                \ ->filter('v:val.tabnr == tabpagenr()')
+                \ ->filter({_,info -> 0
+                \     ? info.loclist && info.winid == getloclist(0, {'winid': 1}).winid
+                \     : !info.loclist && info.quickfix
+                \   })
+                \ ->len()
+    endfunction
+
+    nnoremap <expr> <C-j> ListVisible() ? ':cnext <CR>' : '\<C-j>'
+    nnoremap <expr> <C-k> ListVisible() ? ':cprevious <CR>' : '\<C-k>'
+    map <expr> q ListVisible() ? ':cclose <CR>' : 'q'
 " }
 
 " Key Mappings {
@@ -285,7 +295,7 @@
     vmap <silent> sy :w !sshcopy<CR><CR>
 
     " Exit terminal
-    tnoremap <Esc> <C-\><C-n>
+    tnoremap <leader><Esc> <C-\><C-n>
 " }
 
 " Displays {
@@ -331,6 +341,23 @@
         let &t_EI .= "\<esc>Ptmux;\<esc>\<esc>[4 q\<esc>\\"
         let &t_SR .= "\<esc>Ptmux;\<esc>\<esc>[4 q\<esc>\\"
     endif
+" }
+
+" Completion {
+    " Tab completion
+    "inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+    "inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+    " Some convenient mappings
+    inoremap <expr> <CR>   pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+    inoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"
+    inoremap <expr> <Up>   pumvisible() ? "\<C-p>" : "\<Up>"
+    inoremap <expr> <C-d>  pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+    inoremap <expr> <C-u>  pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+
+    au! CompleteDone,CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+
+    set completeopt=menu,noinsert,longest,preview
 " }
 
 " Plugin Settings
@@ -601,45 +628,6 @@
     endif
 " }
 
-" ALE {
-    if isdirectory(expand("~/.vim/bundle/ale/"))
-        let g:ale_disable_lsp = 1
-        let g:ale_linters_explicit = 1
-        let g:ale_lint_on_text_changed = 'normal'
-        let g:ale_lint_delay = 0
-        let g:ale_echo_delay = 0
-        let g:ale_set_loclist = 0
-        let g:ale_set_quickfix = 0
-        let g:ale_sign_error = '✗'
-        let g:ale_sign_warning = '▲'
-        let g:ale_sign_info = '●'
-        let g:ale_floating_preview = 1
-        let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰']
-        "let g:ale_floating_window_border = []
-        if g:colors_name == 'gruvbox'
-            hi! link ALEErrorSign GruvboxRedSign
-            hi! link ALEWarningSign GruvboxYellowSign
-            hi! link ALEInfoSign GruvboxAquaSign
-        endif
-        let g:ale_statusline_format = ['✗ %d', '▲ %d', '✓ OK']
-
-        let g:ale_linters = { }
-
-        let g:ale_fixers = { '*': ['remove_trailing_lines', 'trim_whitespace'] }
-        let g:ale_fix_on_save = 1
-
-        if g:ale_completion_enabled == 1
-            nmap <silent> <leader>dl :ALEGoToDefinition <CR>
-            nmap <silent> <leader>re :ALEFindReferences <CR>
-            nmap <silent> <leader>fi :ALEFix<CR>
-
-            set omnifunc=ale#completion#OmniFunc
-            nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-            nmap <silent> <C-j> <Plug>(ale_next_wrap)
-        endif
-    endif
-" }
-
 " FastFold {
     if isdirectory(expand("~/.vim/bundle/FastFold/"))
         let g:tex_fold_enabled=1
@@ -720,43 +708,27 @@
     nmap <silent> « :TmuxNavigatePrevious<cr>
 " }
 
-" Completion {
-    " Tab completion
-    inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" coc-nvim {
+    if isdirectory(expand("~/.vim/bundle/coc.nvim/"))
+        let g:coc_config_home = $HOME . '/.vim'
+        let g:coc_global_extensions=[
+                    \'coc-pairs',
+                    \'coc-snippets',
+                    \'coc-lists',
+                    \'coc-json'
+                    \]
+        set signcolumn=yes
 
-    " Some convenient mappings
-    inoremap <expr> <CR>   pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-    inoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"
-    inoremap <expr> <Up>   pumvisible() ? "\<C-p>" : "\<Up>"
-    inoremap <expr> <C-d>  pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-    inoremap <expr> <C-u>  pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+        function! s:show_documentation()
+            if (index(['vim','help'], &filetype) >= 0)
+                execute 'h '.expand('<cword>')
+            else
+                call CocAction('doHover')
+            endif
+        endfunction
 
-    au! CompleteDone,CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-
-    set completeopt=menu,longest
-
-    " coc-nvim {
-        if isdirectory(expand("~/.vim/bundle/coc.nvim/"))
-            let g:ale_lint_on_text_changed = 'never'
-            let g:coc_config_home = $HOME . '/.vim'
-            let g:coc_global_extensions=[
-                        \'coc-pairs',
-                        \'coc-snippets',
-                        \'coc-lists',
-                        \'coc-json'
-                        \]
-            set signcolumn=yes
-
-            function! s:show_documentation()
-                if (index(['vim','help'], &filetype) >= 0)
-                    execute 'h '.expand('<cword>')
-                else
-                    call CocAction('doHover')
-                endif
-            endfunction
-
-            " Key mappings
+        " Key mappings
+        function! s:coc_key_mappings()
             inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>"
             inoremap <silent><expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
             inoremap <silent><expr> <S-Tab> coc#pum#visible()) ? coc#pum#prev(1) : "\<S-Tab>"
@@ -777,34 +749,39 @@
             nmap <silent> <leader>ho :call <SID>show_documentation() <CR>
             nmap <silent> <leader>da :<C-u>CocList diagnostics<cr>
             nmap <silent> <leader>b<space> :CocList buffers<CR>
+        endfunction
 
-            " Highlight groups
-            hi! def link CocErrorSign GruvboxRedSign
-            hi! def link CocWarningSign GruvboxYellowSign
-            hi! def link CocInfoSign GruvboxAquaSign
-            hi! def link CocHintSign CocWarningSign
-            hi! def link CocInlayHintType GruvboxBg4
+        " Highlight groups
+        hi! def link CocErrorSign GruvboxRedSign
+        hi! def link CocWarningSign GruvboxYellowSign
+        hi! def link CocInfoSign GruvboxAquaSign
+        hi! def link CocHintSign CocWarningSign
+        hi! def link CocInlayHintType GruvboxBg4
+        hi! def link CocSemNamespace GruvboxAqua
+        hi! def link CocSemClass GruvboxYellow
+        hi! def link CocSemStruct CocSemClass
+        hi! def link CocSemEvent GruvboxAqua
 
-            hi! def link CocFloating Fmenu
-            exe 'hi CocErrorFloat   guifg=#9d0006 guibg=' . s:menu_bg
-            exe 'hi CocWarningFloat guifg=#b57614 guibg=' . s:menu_bg
-            exe 'hi CocInfoFloat    guifg=#427b58 guibg=' . s:menu_bg
-            hi! def link CocHintFloat CocWarningFloat
-            hi! CocMenuSel guifg=#f3e5bc guibg=#076678
+        hi! def link CocFloating Fmenu
+        exe 'hi CocErrorFloat   guifg=#9d0006 guibg=' . s:menu_bg
+        exe 'hi CocWarningFloat guifg=#b57614 guibg=' . s:menu_bg
+        exe 'hi CocInfoFloat    guifg=#427b58 guibg=' . s:menu_bg
+        hi! def link CocHintFloat CocWarningFloat
+        hi! CocMenuSel guifg=#f3e5bc guibg=#076678
 
-            "" Autocmd
-            augroup coc_user_defined
-                autocmd!
-                autocmd BufEnter *.cs silent :ALEDisableBuffer
-                autocmd FileType cs command! ClearBin exe "!find . -name bin -exec rm -rf {} +"
-                autocmd FileType cs nmap <silent> <leader>rs :CocRestart <CR><CR>
-                autocmd CursorHold  *.cs silent call CocActionAsync('highlight')
-                autocmd CursorHoldI *.cs silent call CocActionAsync('showSignatureHelp')
-                autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-                autocmd FileType tex let b:coc_pairs = [["$", "$"]]
-            augroup END
-        endif
-    " }
+        "" Autocmd
+        augroup coc_user_defined
+            autocmd!
+            autocmd FileType * call deoplete#disable()
+            autocmd FileType cs command! ClearBin exe "!find . \( -name bin -o -name obj \) -exec rm -rf {} +"
+            autocmd FileType cs nmap <silent> <leader>rs :CocRestart <CR><CR>
+            autocmd CursorHold  *.cs silent call CocActionAsync('highlight')
+            autocmd CursorHoldI *.cs silent call CocActionAsync('showSignatureHelp')
+            autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+            autocmd FileType tex let b:coc_pairs = [["$", "$"]]
+            autocmd FileType * call s:coc_key_mappings()
+        augroup END
+    endif
 " }
 
 " echodoc {

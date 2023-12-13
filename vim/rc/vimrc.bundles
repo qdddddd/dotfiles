@@ -24,9 +24,7 @@
     " Vim Compatible {
         if !has('nvim')
             Plug 'roxma/nvim-yarp'
-            Plug 'roxma/vim-hug-neovim-rpc', {
-                        \ 'do': 'pip3 install neovim'
-                        \ }
+            Plug 'roxma/vim-hug-neovim-rpc', { 'do': 'pip3 install neovim' }
         endif
     " }
 
@@ -37,9 +35,7 @@
             Plug 'kyazdani42/nvim-tree.lua'
             Plug 'kyazdani42/nvim-web-devicons'
         else
-            Plug 'Shougo/defx.nvim', {
-                        \ 'do': 'pip3 install pynvim'
-                        \ }
+            Plug 'Shougo/defx.nvim', { 'do': 'pip3 install pynvim' }
             Plug 'kristijanhusak/defx-git'
             Plug 'kristijanhusak/defx-icons'
         endif
@@ -73,13 +69,22 @@
             !./install.sh
         endfunction
         Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': function('BuildCoc')}
-        Plug 'dense-analysis/ale'
         Plug 'honza/vim-snippets'
         if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
             source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
         endif
         Plug 'SirVer/ultisnips'
         Plug 'Shougo/echodoc.vim'
+        Plug 'neovim/nvim-lspconfig'
+        if has('nvim')
+            Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+            Plug 'deoplete-plugins/deoplete-lsp'
+        else
+            Plug 'Shougo/deoplete.nvim'
+            Plug 'deoplete-plugins/deoplete-lsp'
+            Plug 'roxma/nvim-yarp'
+            Plug 'roxma/vim-hug-neovim-rpc'
+        endif
     " }
 
     " Misc {
@@ -97,7 +102,6 @@
         Plug 'tpope/vim-markdown'
         Plug 'dyng/ctrlsf.vim'
         Plug 'akinsho/bufferline.nvim'
-        "Plug 'romgrk/barbar.nvim'
         "Plug 'vim-scripts/CycleColor'
         "Plug 'qdddddd/vim-cycle-airline-theme'
     " }
