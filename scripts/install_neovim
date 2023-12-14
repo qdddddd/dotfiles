@@ -12,4 +12,5 @@ pip install -U pip
 python3 -m pip install --user --upgrade pynvim
 
 source ~/.aliases
-vi +PlugUpgrade +PlugClean +PlugInstall +PlugUpdate +TSUpdate +CocUpdate +qa!
+vi --noplugin +PlugUpgrade +PlugClean! +PlugInstall +PlugUpdate +qa!
+vi +TSUpdate +CocUpdate +qa!
