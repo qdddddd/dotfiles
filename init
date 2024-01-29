@@ -68,7 +68,6 @@ function () {
     cat <<EOF >>$RCLOCAL
 export ZSH_THEME_COLOR=66
 source ~/.p10k.zsh
-restore_tmux main
 
 alias mount-projects='sudo mount -t nfs ${POISSON_IP}:/srv/nfs/projects ~/projects & sudo mount -t nfs ${POISSON_IP}:/srv/nfs/store ~/store'
 
