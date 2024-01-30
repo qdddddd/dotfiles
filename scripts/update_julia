@@ -1,15 +1,4 @@
-#!/bin/bash
-#=
-exec julia "${BASH_SOURCE[0]}" "$@"
-=#
-
-using UpdateJulia
-update_julia(systemwide=false, migrate_packages=:force)
-
-using Pkg
-Pkg.resolve()
-Pkg.update()
-Pkg.instantiate()
-
-using IJulia
-IJulia.installkernel("Julia", env=Dict("JULIA_NUM_THREADS" => "$(Sys.CPU_THREADS - 8)",))
+#!/bin/zsh
+julia -e 'using UpdateJulia; update_julia(systemwide=false, migrate_packages=:force)'
+julia -e 'using Pkg; Pkg.resolve(); Pkg.update(); Pkg.instantiate()'
+julia -e 'using IJulia; IJulia.installkernel("Julia", env=Dict("JULIA_NUM_THREADS" => "$(Sys.CPU_THREADS - 8)",))'
