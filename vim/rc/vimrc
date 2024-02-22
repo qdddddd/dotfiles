@@ -120,9 +120,7 @@
         endif
     endfunction
     call InitializeDirectories()
-" }
 
-" Misc {
     set autoindent                  " Indent at the same level of the previous line
     set backspace=indent,eol,start  " Backspace for dummies
     set breakindent
@@ -218,6 +216,15 @@
     nnoremap <expr> <C-j> ListVisible() ? ':cnext <CR>' : '\<C-j>'
     nnoremap <expr> <C-k> ListVisible() ? ':cprevious <CR>' : '\<C-k>'
     map <expr> q ListVisible() ? ':cclose <CR>' : 'q'
+
+    " Remove trailing whitespace on save
+    function! <SID>StripTrailingWhitespaces()
+        let l = line(".")
+        let c = col(".")
+        %s/\s\+$//e
+        call cursor(l, c)
+    endfun
+    autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 " }
 
 " Key Mappings {
