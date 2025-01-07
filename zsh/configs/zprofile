@@ -126,3 +126,4 @@ export GRADLE_USER_HOME=$HOME/.cache/gradle
 export GREP_COLOR='1;35;40'
 export GREP_COLORS='mt=1;35;40'
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
+export JULIA_PKG_SERVER="https://mirrors.pku.edu.cn/julia"
