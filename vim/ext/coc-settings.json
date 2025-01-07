@@ -96,5 +96,6 @@
     },
     "inlayHint.enable": false,
     "coc.preferences.formatOnType": false,
-    "coc.preferences.extensionUpdateCheck": "daily"
+    "coc.preferences.extensionUpdateCheck": "daily",
+    "snippets.ultisnips.pythonPrompt": false
 }
