@@ -82,7 +82,6 @@
         "`"
     ],
     "python.formatting.provider": "black",
-    "python.formatting.blackPath": "~/.local/bin/black",
     "python.formatting.blackArgs": [
         "--line-length", "120"
     ],
@@ -97,5 +96,6 @@
     "inlayHint.enable": false,
     "coc.preferences.formatOnType": false,
     "coc.preferences.extensionUpdateCheck": "daily",
-    "snippets.ultisnips.pythonPrompt": false
+    "snippets.ultisnips.pythonPrompt": false,
+    "yaml.schemaStore.enable": true
 }
