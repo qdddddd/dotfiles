@@ -223,3 +223,8 @@ fi
 
 #############################
 proxy-off
+
+# Install Julia
+if ! (command_exists julia); then
+    curl -fsSL https://install.julialang.org | sh
+end
