@@ -1,0 +1,3 @@
+#!/bin/zsh
+
+julia -e 'using IJulia; IJulia.installkernel("Julia", env=Dict("JULIA_NUM_THREADS" => "$(Sys.CPU_THREADS - 8)",))'
