@@ -91,7 +91,7 @@
     ],
     "coc.preferences.formatOnSave": false,
     "[c][cpp][java][vim][yaml][python]": {
-        "coc.preferences.formatOnSave": true,
+        "coc.preferences.formatOnSave": false,
     },
     "inlayHint.enable": false,
     "coc.preferences.formatOnType": false,
