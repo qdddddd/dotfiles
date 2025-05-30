@@ -5,7 +5,7 @@
     smudge = git-lfs smudge -- %f
 [user]
     name = qdu
-    email = q.du@connect.ust.hk
+    email = qdduuu@gmail.com
 [core]
     excludesfile = ~/.gitignore_global
     autocrlf = input

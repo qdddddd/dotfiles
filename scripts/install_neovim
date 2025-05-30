@@ -1,15 +1,15 @@
 #!/bin/zsh
 
 if [[ "$OSTYPE" == 'linux-gnu'* ]]; then
-    wget https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
-    chmod u+x nvim.appimage
-    mv nvim.appimage $HOME/.local/bin/nvim
+    curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.appimage
+    chmod u+x nvim-linux-x86_64.appimage
+    mv nvim-linux-x86_64.appimage $HOME/.local/bin/nvim
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     brew install neovim
 fi
 
 pip install -U pip
-python3 -m pip install --user --upgrade pynvim
+python3 -m pip install --upgrade pynvim
 
 source ~/.aliases
 vi --noplugin +PlugUpgrade +PlugClean! +PlugInstall +PlugUpdate +qa!
