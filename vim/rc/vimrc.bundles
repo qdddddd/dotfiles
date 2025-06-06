@@ -7,7 +7,6 @@
 
 " Plugs {
     " General {
-        Plug 'bling/vim-bufferline'
         Plug 'mbbill/undotree'
         Plug 'mhinz/vim-signify'
         Plug 'rhysd/conflict-marker.vim'
@@ -15,7 +14,7 @@
         Plug 'tpope/vim-fugitive'
         Plug 'tpope/vim-repeat'
         Plug 'tpope/vim-surround'
-        Plug 'vim-airline/vim-airline'
+        Plug 'nvim-lualine/lualine.nvim'
         Plug 'vim-scripts/matchit.zip'
         Plug 'vim-scripts/restore_view.vim'
         Plug 'vim-scripts/sessionman.vim'
@@ -96,13 +95,11 @@
         Plug 'airblade/vim-rooter'
         Plug 'christoomey/vim-tmux-navigator'
         Plug 'mhinz/vim-startify'
-        Plug 'morhetz/gruvbox'
+        Plug 'ellisonleao/gruvbox.nvim'
         Plug 'spf13/vim-preview'
         Plug 'tpope/vim-markdown'
         Plug 'dyng/ctrlsf.vim'
-        Plug 'akinsho/bufferline.nvim'
         "Plug 'vim-scripts/CycleColor'
-        "Plug 'qdddddd/vim-cycle-airline-theme'
     " }
 " }
 
