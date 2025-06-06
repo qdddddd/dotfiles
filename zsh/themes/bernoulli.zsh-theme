@@ -102,7 +102,7 @@ function prompt_bernoulli_setup {
 
     # Define prompts.
     PROMPT='%B${PROMPT_L} ${PROMPT_M} ${PROMPT_R}'
-    PROMPT+=$'\n  %b%f'
+    PROMPT+=$'\n %b%f'
 }
 
 prompt_bernoulli_setup "$@"
