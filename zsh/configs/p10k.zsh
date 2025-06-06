@@ -192,7 +192,7 @@
   # Red prompt symbol if the last command failed.
   typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=9
   # Default prompt symbol.
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION=""
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION=""
   # Prompt symbol in command vi mode.
   typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VICMD_CONTENT_EXPANSION='<'
   # Prompt symbol in visual vi mode.
@@ -421,12 +421,12 @@
       res+=" ${modified}wip"
     fi
 
-    local aheadsym='ﰵ'
-    local behindsym='ﰬ'
+    local aheadsym='󰜷'
+    local behindsym='󰜮'
     local conflictsym='~'
     local stagedsym='+'
     local unstagedsym='*'
-    local stashsym=''
+    local stashsym=''
 
     # >42 if ahead of the remote; no leading space if also behind the remote: <42>42.
     (( VCS_STATUS_COMMITS_AHEAD  )) && res+="${clean}${aheadsym}"
@@ -560,7 +560,7 @@
   # Background jobs color.
   typeset -g POWERLEVEL9K_BACKGROUND_JOBS_FOREGROUND=6
   # Custom icon.
-   typeset -g POWERLEVEL9K_BACKGROUND_JOBS_VISUAL_IDENTIFIER_EXPANSION=''
+  typeset -g POWERLEVEL9K_BACKGROUND_JOBS_VISUAL_IDENTIFIER_EXPANSION=''
 
   #######################[ direnv: direnv status (https://direnv.net/) ]########################
   # Direnv color.
