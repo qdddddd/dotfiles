@@ -196,7 +196,6 @@ if Exists(BUNDLE_DIR .. "indent-blankline.nvim") then
 end
 
 if Exists(BUNDLE_DIR .. "bufferline.nvim") then
-    vim.g["airline#extensions#tabline#enabled"] = 0
     vim.opt.termguicolors = true
     require('bufferline').setup {
         options = {
@@ -229,18 +228,12 @@ if Exists(BUNDLE_DIR .. "bufferline.nvim") then
     map('n', '<leader>8', '<Cmd>BufferLineGoToBuffer 8<CR>', opts)
     map('n', '<leader>9', '<Cmd>BufferLineGoToBuffer 9<CR>', opts)
     map('n', '<leader><space>e', '<Cmd>BufferLinePick><CR>', opts)
-    map('n', '<A-->', '<Cmd>BufferLineCyclePrev<CR>', opts)
-    map('n', '<A-=>', '<Cmd>BufferLineCycleNext<CR>', opts)
-    if vim.fn.OSX() then
-        map('n', '–', '<Cmd>BufferLineCyclePrev<CR>', opts)
-        map('n', '≠', '<Cmd>BufferLineCycleNext<CR>', opts)
-    end
 
     set_hl("BufferLineFill", "#3c3836", "#fbf1c7")
-    set_hl_link("BufferLineBufferSelected", "airline_a")
-    set_hl_link("BufferLinePickSelected", "airline_a_red")
-    set_hl_link("BufferLineModifiedSelected", "airline_a")
-    set_hl_link("BufferLineNumbersSelected", "airline_a")
+    set_hl_link("BufferLineBufferSelected", "lualine_c_visual")
+    set_hl_link("BufferLinePickSelected", "lualine_a_visual")
+    set_hl_link("BufferLineModifiedSelected", "lualine_c_visual")
+    set_hl_link("BufferLineNumbersSelected", "lualine_c_visual")
     set_hl("BufferLineBackground", "#a89984", "#ebdbb2")
     set_hl("BufferLinePick", "#9d0006", "#ebdbb2")
     set_hl_link("BufferLineSeparator", "BufferLineBackground")
@@ -251,56 +244,6 @@ if Exists(BUNDLE_DIR .. "bufferline.nvim") then
     set_hl("BufferLineModifiedVisible", "#076678", "#d5c4a1")
     set_hl("BufferLineNumbersVisible", "#076678", "#d5c4a1")
     set_hl("BufferLineIndicatorVisible", "#076678", "#d5c4a1")
-end
-
-if Exists(BUNDLE_DIR .. "barbar.nvim") then
-    vim.g["airline#extensions#tabline#enabled"] = 0
-    require 'bufferline'.setup {
-        icons = {
-            buffer_index = true,
-            buffer_number = false,
-            filetype = {
-                enabled = false
-            },
-            button = false,
-            separator = { left = '|' },
-            inactive = {
-                separator = { left = '|' },
-            },
-        },
-        clickable = true,
-        maximum_padding = 0,
-        no_name_title = nil
-    }
-
-    local opts = { noremap = true, silent = false }
-    map('n', '<leader><space>e', '<Cmd>BufferPick<CR>', opts)
-    map('n', '<leader>1', '<Cmd>BufferGoto 1<CR>', opts)
-    map('n', '<leader>2', '<Cmd>BufferGoto 2<CR>', opts)
-    map('n', '<leader>3', '<Cmd>BufferGoto 3<CR>', opts)
-    map('n', '<leader>4', '<Cmd>BufferGoto 4<CR>', opts)
-    map('n', '<leader>5', '<Cmd>BufferGoto 5<CR>', opts)
-    map('n', '<leader>6', '<Cmd>BufferGoto 6<CR>', opts)
-    map('n', '<leader>7', '<Cmd>BufferGoto 7<CR>', opts)
-    map('n', '<leader>8', '<Cmd>BufferGoto 8<CR>', opts)
-    map('n', '<leader>9', '<Cmd>BufferGoto 9<CR>', opts)
-    map('n', '<leader>0', '<Cmd>BufferLast<CR>', opts)
-    map('n', '<A-->', '<Cmd>BufferPrevious<CR>', opts)
-    map('n', '<A-=>', '<Cmd>BufferNext<CR>', opts)
-    if vim.fn.OSX() then
-        map('n', '–', '<Cmd>BufferPrevious<CR>', opts)
-        map('n', '≠', '<Cmd>BufferNext<CR>', opts)
-    end
-
-    set_hl_link("BufferCurrent", "airline_a")
-    set_hl_link("BufferCurrentIndex", "BufferCurrent")
-    set_hl_link("BufferCurrentSign", "BufferCurrent")
-    set_hl_link("BufferCurrentMod", "BufferCurrent")
-    set_hl_link("BufferVisible", "StatusLine")
-    set_hl_link("BufferVisibleIndex", "BufferVisible")
-    set_hl_link("BufferVisibleSign", "BufferInactive")
-    set_hl("BufferVisibleMod", get_hl("Identifier").foreground, get_hl("TabLine").background)
-    set_hl_link("BufferInactiveMod", "BufferVisibleMod")
 end
 
 if Exists(BUNDLE_DIR .. "nvim-treesitter") then
@@ -458,4 +401,86 @@ if Exists(BUNDLE_DIR .. "nvim-tree.lua") then
             },
         }
     }
+end
+
+if Exists(BUNDLE_DIR .. "lualine.nvim") then
+    local buffer_section = {
+        'buffers',
+        icons_enabled = false,
+        mode = 2,
+        use_mode_colors = false,
+        max_length = vim.o.columns - 6,
+        buffers_color = {
+            active = { fg = 'bg', bg = '#076678' },
+            inactive = { fg = '#7c6f64' },
+        },
+        symbols = {
+            modified = ' ●',
+            alternate_file = '',
+            directory = '',
+        },
+        separator = "|",
+        padding = 1,
+        filetype_names = {
+            TelescopePrompt = 'Telescope',
+            dashboard = 'Dashboard',
+            packer = 'Packer',
+            fzf = 'FZF',
+            alpha = 'Alpha',
+            NvimTree = 'E',
+            startify = 'Startify',
+        },
+    }
+
+    local gb = require 'lualine.themes.gruvbox_light'
+
+    require('lualine').setup {
+        options = {
+            --section_separators = { left = '', right = '' },
+            --component_separators = { left = '|', right = '|' },
+            section_separators = { left = '', right = '' },
+            component_separators = { left = '', right = '' },
+            always_show_tabline = true,
+            globalstatus = false,
+            disabled_filetypes = {
+                statusline = { 'startify', 'defx' },
+                winbar = { 'NvimTree', 'startify', 'defx', 'fugitive', 'fugitiveblame', 'help' },
+            },
+            theme = gb
+        },
+        sections = {
+            lualine_a = { 'mode' },
+            lualine_b = { 'branch', 'diff' },
+            lualine_c = { { 'filename', newfile_status = true, path = 1 } },
+            lualine_x = { 'diagnostics', 'progress', 'location' },
+            lualine_y = { 'filetype' },
+            lualine_z = { 'lsp_status' },
+        },
+        inactive_sections = {
+            lualine_a = {},
+            lualine_b = { { 'filename', newfile_status = true, path = 3 } },
+            lualine_c = { 'diagnostics' },
+            lualine_x = {},
+            lualine_y = {},
+            lualine_z = {}
+        },
+        tabline = {
+            lualine_a = {},
+            lualine_b = {},
+            lualine_c = { buffer_section },
+            lualine_z = { 'tabs' }
+        },
+        extensions = { 'nvim-tree', 'quickfix', 'fugitive', 'fzf' }
+    }
+
+    local opts = { noremap = true, silent = true }
+    map('n', '<leader>1', '<Cmd>LualineBuffersJump 1<CR>', opts)
+    map('n', '<leader>2', '<Cmd>LualineBuffersJump 2<CR>', opts)
+    map('n', '<leader>3', '<Cmd>LualineBuffersJump 3<CR>', opts)
+    map('n', '<leader>4', '<Cmd>LualineBuffersJump 4<CR>', opts)
+    map('n', '<leader>5', '<Cmd>LualineBuffersJump 5<CR>', opts)
+    map('n', '<leader>6', '<Cmd>LualineBuffersJump 6<CR>', opts)
+    map('n', '<leader>7', '<Cmd>LualineBuffersJump 7<CR>', opts)
+    map('n', '<leader>8', '<Cmd>LualineBuffersJump 8<CR>', opts)
+    map('n', '<leader>9', '<Cmd>LualineBuffersJump 9<CR>', opts)
 end
