@@ -406,6 +406,7 @@ end
 if Exists(BUNDLE_DIR .. "lualine.nvim") then
     local buffer_section = {
         'buffers',
+        show_filename_only = false,
         icons_enabled = false,
         mode = 2,
         use_mode_colors = false,
@@ -430,6 +431,38 @@ if Exists(BUNDLE_DIR .. "lualine.nvim") then
             NvimTree = 'E',
             startify = 'Startify',
         },
+        fmt = function(str)
+            -- Displays buffers with unique names, or parent directory if duplicates exist --
+            if str == '' then return '' end -- Handle unnamed buffers like [No Name]
+
+            -- Count occurrences of each filename across all listed buffers
+            local filename_counts = {}
+            for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+                if vim.bo[bufnr].buflisted then
+                    local buf_name = vim.api.nvim_buf_get_name(bufnr)
+                    if buf_name ~= '' then
+                        local filename = vim.fn.fnamemodify(buf_name, ':t')
+                        filename_counts[filename] = (filename_counts[filename] or 0) + 1
+                    end
+                end
+            end
+
+            local filename = vim.fn.fnamemodify(str, ':t') -- of the current buffer being processed
+
+            if filename_counts[filename] and filename_counts[filename] > 1 then
+                -- It's a duplicate: show "parent_directory/filename"
+                local dirname = vim.fn.fnamemodify(str, ':p:h:t')
+
+                if dirname == '.' or dirname == '' then
+                    -- Avoid showing './filename' for files in the cwd or '/' for root
+                    return filename
+                end
+                return dirname .. '/' .. filename
+            else
+                -- It's unique: show just the filename
+                return filename
+            end
+        end
     }
 
     local gb = require 'lualine.themes.gruvbox_light'
