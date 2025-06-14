@@ -1,16 +1,17 @@
 # Vim and NeoVim Configs
 
-Vim config files whose structure referencing [spf13](https://github.com/spf13/spf13-vim).
-Supports both Vim and NeoVim.
+NeoVim config files whose structure referencing [spf13](https://github.com/spf13/spf13-vim).
 
-`rc` contains vimrcs and `nvim` contains NeoVim specific configs, sourcing `rc/vimrc` as the basics.
-NeoVim plugin settings written in Lua should go in `nvim/plugs.lua`. The load order is as follows:
+`nvim` contains NeoVim specific configs, sourcing `init.lua` as the basics, loading
+modules in the following order:
 
 ```text
 rc/vimrc.bundles
-rc/vimrc
-nvim/plugs.lua
-nvim/init.vim
+lua/environment.lua
+lua/display.lua
+lua/keymaps.lua
+lua/lsp.lua
+lua/plugins.lua
 ```
 
-Anything needs to be sourced before `rc/vimrc.bundles` should be written at the beginning of the "Load bundles config" block in `rc/vimrc`.
+Plugin settings should go in `nvim/lua/plugins.lua`.
