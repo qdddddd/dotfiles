@@ -165,11 +165,8 @@ function() {
 
     # Create nvim config sym links
     if (command_exists nvim); then
-        local NVIM_CONFIG_DIR=$HOME/.config/nvim
-        mkdir -p ${NVIM_CONFIG_DIR}
-        for lcfile in ${DOT_VIM_DIR}/nvim/*; do
-            ln -s "$lcfile" "${NVIM_CONFIG_DIR}/${lcfile:t}"
-        done
+        rm -r $HOME/.config/nvim
+        ln -sf ${DOT_VIM_DIR}/nvim $HOME/.config/nvim
 
         nvim +UpdateRemotePlugins +qa!
         alias vi='nvim'

@@ -15,7 +15,7 @@
         Plug 'tpope/vim-repeat'
         Plug 'tpope/vim-surround'
         Plug 'nvim-lualine/lualine.nvim'
-        Plug 'vim-scripts/matchit.zip'
+        Plug 'adelarsq/vim-matchit'
         Plug 'vim-scripts/restore_view.vim'
         Plug 'vim-scripts/sessionman.vim'
     " }
@@ -49,7 +49,7 @@
     " General Programming {
         Plug 'scrooloose/nerdcommenter'
         Plug 'godlygeek/tabular'
-        Plug 'luochen1990/rainbow'
+        Plug 'HiPhish/rainbow-delimiters.nvim'
         if executable('ctags')
             Plug 'majutsushi/tagbar'
         endif
@@ -72,7 +72,6 @@
             source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
         endif
         Plug 'SirVer/ultisnips'
-        Plug 'Shougo/echodoc.vim'
         Plug 'neovim/nvim-lspconfig'
         if has('nvim')
             Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
