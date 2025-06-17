@@ -17,8 +17,6 @@ function() {
 
 #############################
 
-# Some useful functions
-
 is_mac() {
     [[ "$OSTYPE" == "darwin"* ]]
 }
@@ -69,7 +67,7 @@ function () {
 export ZSH_THEME_COLOR=66
 source ~/.p10k.zsh
 
-alias mount-projects='sudo mount -t nfs ${POISSON_IP}:/srv/nfs/projects ~/projects & sudo mount -t nfs ${POISSON_IP}:/srv/nfs/store ~/store'
+alias mount-projects='sudo mount -t nfs \${POISSON_IP}:/srv/nfs/projects ~/projects & sudo mount -t nfs \${POISSON_IP}:/srv/nfs/store ~/store'
 
 if [ -n "$(find /home/qdu/projects -prune -empty 2>/dev/null)" ]; then
     mount-projects
@@ -84,6 +82,8 @@ EOF
 source $HOME/.zshrc
 proxy-on
 
+#############################
+
 # Intall homebrew
 if is_mac && ! (command_exists brew); then
     echo "\nInstalling homebrew..."
@@ -94,8 +94,12 @@ fi
 # Install build-essential
 if is_linux; then
     sudo apt update
-    sudo apt install build-essential
+    sudo apt install build-essential libfuse2 iftop nfs-common
 fi
+
+# Create python3 venv
+python3 -m venv $HOME/.venv
+export PATH="$HOME/.venv/bin:$PATH"
 
 # Install pip
 if ! (command_exists pip3); then
@@ -107,6 +111,8 @@ if ! (command_exists pip3); then
     sudo python3 get-pip.py
     rm get-pip.py
 fi
+
+#############################
 
 # Install tmux
 echo "\nConfiguring tmux..."
@@ -227,4 +233,4 @@ proxy-off
 # Install Julia
 if ! (command_exists julia); then
     curl -fsSL https://install.julialang.org | sh
-end
+fi
