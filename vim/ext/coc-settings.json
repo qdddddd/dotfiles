@@ -44,21 +44,7 @@
     "diagnostic.level": "hint",
     "list.nextKeymap": "<C-n>",
     "list.previousKeymap": "<C-p>",
-    "languageserver": {
-        "csharp-ls": {
-            "command": "csharp-ls",
-            "args": ["--loglevel", "log"],
-            "filetypes": [
-                //"cs"
-            ],
-            "rootPatterns": [
-                ".git/",
-                "*.sln",
-                "*.csproj"
-            ],
-            //"trace.server": ""
-        }
-    },
+    "languageserver": {},
     "clangd.arguments": [
         "-log=error",
         "-pretty",
@@ -83,7 +69,8 @@
     ],
     "python.formatting.provider": "black",
     "python.formatting.blackArgs": [
-        "--line-length", "120"
+        "--line-length",
+        "120"
     ],
     "python.linting.lintOnSave": true,
     "Lua.diagnostics.globals": [

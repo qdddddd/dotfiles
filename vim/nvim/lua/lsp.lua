@@ -1,25 +1,8 @@
-require 'lspconfig'.csharp_ls.setup {
-    cmd = { 'csharp-ls', '--loglevel', 'log' },
-    filetypes = { "cs" },
-    init_options = {
-        AutomaticWorkspaceInit = true
-    },
-    root_dir = function(_, _)
-        return vim.fs.dirname(
-            vim.fs.find(
-                function(name)
-                    return name:match('.*%.sln$')
-                end,
-                { upward = true, limit = math.huge, type = 'file' }
-            )[1]
-        )
-    end,
-    single_file_support = true,
-}
+vim.lsp.enable({ 'csharp_ls', 'r_language_server' })
 
 vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('UserLspConfig', { clear = true }),
-    pattern = "*.cs",
+    pattern = { "*.cs", "*.R" },
     callback = function(args)
         vim.api.nvim_del_augroup_by_id(vim.api.nvim_create_augroup('coc_user_defined', { clear = true }))
         vim.cmd([[ CocDisable ]])
@@ -48,9 +31,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
         -- Diagnostics
         local signs = {
             { name = "DiagnosticSignError", text = "✗", severity = vim.diagnostic.severity.ERROR },
-            { name = "DiagnosticSignWarn", text = "▲", severity = vim.diagnostic.severity.WARN },
-            { name = "DiagnosticSignHint", text = "◇", severity = vim.diagnostic.severity.HINT },
-            { name = "DiagnosticSignInfo", text = "●", severity = vim.diagnostic.severity.INFO },
+            { name = "DiagnosticSignWarn",  text = "▲", severity = vim.diagnostic.severity.WARN },
+            { name = "DiagnosticSignHint",  text = "◇", severity = vim.diagnostic.severity.HINT },
+            { name = "DiagnosticSignInfo",  text = "●", severity = vim.diagnostic.severity.INFO },
         }
 
         for _, sign in ipairs(signs) do
@@ -97,6 +80,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
         SetHlLink("DiagnosticFloatingWarn", "DiagnosticWarn")
         SetHlLink("DiagnosticFloatingHint", "DiagnosticHint")
         SetHlLink("DiagnosticFloatingInfo", "DiagnosticInfo")
+        SetHl("DiagnosticSignError", GetHl("GruvboxRed").foreground, nil)
+        SetHl("DiagnosticSignWarn", GetHl("GruvboxYellow").foreground, nil)
+        SetHl("DiagnosticSignHint", GetHl("GruvboxYellow").foreground, nil)
+        SetHl("DiagnosticSignInfo", GetHl("GruvboxAqua").foreground, nil)
 
         -- Signatures
         vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(

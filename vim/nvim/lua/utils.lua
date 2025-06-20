@@ -1,11 +1,11 @@
 HOME = os.getenv("HOME")
 
 function OSX()
-    return vim.fn.has("macunix")
+    return vim.fn.has("macunix") == 1
 end
 
 function LINUX()
-    return vim.fn.has("unix") and not OSX() and not vim.fn.has("win32unix")
+    return vim.fn.has("unix") == 1 and OSX() == 0 and vim.fn.has("win32unix") == 0
 end
 
 function Exists(file)
