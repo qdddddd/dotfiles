@@ -21,9 +21,9 @@ end
 
 if ExistsBundle("sessionman.vim") then
     vim.o.sessionoptions = 'blank,buffers,curdir,folds,tabpages,winsize'
-    vim.keymap.set('n', '<leader>sl', ':SessionList<CR>', { noremap = true, silent = true })
-    vim.keymap.set('n', '<leader>ss', ':SessionSave<CR>', { noremap = true, silent = true })
-    vim.keymap.set('n', '<leader>sc', ':SessionClose<CR>', { noremap = true, silent = true })
+    Keymap('n', '<leader>sl', ':SessionList<CR>', { noremap = true, silent = true })
+    Keymap('n', '<leader>ss', ':SessionSave<CR>', { noremap = true, silent = true })
+    Keymap('n', '<leader>sc', ':SessionClose<CR>', { noremap = true, silent = true })
 end
 
 if ExistsBundle("vim-startify") then
@@ -32,16 +32,17 @@ if ExistsBundle("vim-startify") then
     ver = 'v' .. ver
 
     vim.g.startify_custom_header = {
-        '                                                                         ',
-        '                                                                         ',
-        '       ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗                ',
-        '       ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║                ',
-        '       ██╔██╗ ██║█████╗  ██║   ██║ ██║ ██║ ██║██╔████╔██║                ',
-        '       ██║╚██╗██║██╔══╝  ██║   ██║ ██║ ██║ ██║██║╚██╔╝██║                ',
-        '       ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║                ',
-        '       ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝  ' .. ver .. ' ',
-        '                                                                         ',
-        '                                                                         ',
+        [[                                                                         ]],
+        [[                                                                         ]],
+        [[       ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗                ]],
+        [[       ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║                ]],
+        [[       ██╔██╗ ██║█████╗  ██║   ██║ ██║ ██║ ██║██╔████╔██║                ]],
+        [[       ██║╚██╗██║██╔══╝  ██║   ██║ ██║ ██║ ██║██║╚██╔╝██║                ]],
+        [[       ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║                ]],
+        [[       ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝  ]] ..
+        ver,
+        [[                                                                         ]],
+        [[                                                                         ]],
     }
     vim.g.startify_session_dir = vim.fn.expand("~/.vim/sessions")
     vim.g.startify_files_number = 6
@@ -70,10 +71,10 @@ if ExistsBundle("vim-startify") then
         vim.fn.escape(vim.fn.fnamemodify(vim.fn.resolve(vim.env.VIMRUNTIME), ':p'), '\\') .. 'doc',
         'bundle/.*/doc',
     }
-    vim.api.nvim_create_autocmd('FileType', {
+    Au('FileType', {
         pattern = 'startify',
         callback = function()
-            vim.keymap.set('n', '<F2>', '<Nop>', { buffer = true })
+            Keymap('n', '<F2>', '<Nop>', { buffer = true })
             vim.opt_local.wrap = false
         end,
     })
@@ -82,11 +83,11 @@ end
 if ExistsBundle("vim-tmux-navigator") then
     vim.g.tmux_navigator_no_mappings = 1
     vim.g.tmux_navigator_disable_when_zoomed = 1
-    vim.keymap.set('n', '˙', ':TmuxNavigateLeft<CR>', { silent = true })
-    vim.keymap.set('n', '∆', ':TmuxNavigateDown<CR>', { silent = true })
-    vim.keymap.set('n', '˚', ':TmuxNavigateUp<CR>', { silent = true })
-    vim.keymap.set('n', '¬', ':TmuxNavigateRight<CR>', { silent = true })
-    vim.keymap.set('n', '«', ':TmuxNavigatePrevious<CR>', { silent = true })
+    Keymap('n', '˙', ':TmuxNavigateLeft<CR>', { silent = true })
+    Keymap('n', '∆', ':TmuxNavigateDown<CR>', { silent = true })
+    Keymap('n', '˚', ':TmuxNavigateUp<CR>', { silent = true })
+    Keymap('n', '¬', ':TmuxNavigateRight<CR>', { silent = true })
+    Keymap('n', '«', ':TmuxNavigatePrevious<CR>', { silent = true })
 end
 
 if ExistsBundle("indent-blankline.nvim") then
@@ -139,55 +140,68 @@ if ExistsBundle("nvim-tree.lua") then
     local width_perc = 0.2
     local original_width = math.floor(vim.o.columns * width_perc)
 
-    function NvimTreeToggleWidth()
-        local max = vim.fn.MaxLineLength()
-        local new = (max == vim.fn.winwidth(0)) and original_width or max
-        vim.cmd('NvimTreeResize ' .. new)
-    end
+    Keymap("n", "<leader>e", "<Cmd>NvimTreeFindFileToggle<CR>", { silent = true })
 
-    Map("n", "<leader>e", "<Cmd>NvimTreeFindFileToggle<CR>", { noremap = true, silent = true })
-
-    vim.cmd([[ au! BufEnter NvimTree_* nnoremap <silent> <buffer> w :lua NvimTreeToggleWidth()<CR> ]])
+    Au("BufEnter", {
+        desc = "NvimTree: Toggle width on 'w' key",
+        pattern = "NvimTree_*",
+        callback = function(args)
+            Keymap(
+                'n',
+                'w',
+                function()
+                    local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+                    local max_len = 0
+                    for _, line in ipairs(lines) do
+                        max_len = math.max(max_len, #line)
+                    end
+                    local new = (max_len == vim.fn.winwidth(0)) and original_width or max_len
+                    vim.cmd('NvimTreeResize ' .. new)
+                end,
+                { buffer = args.buf }
+            )
+        end
+    })
 
     local function on_attach(bufnr)
         local api = require 'nvim-tree.api'
 
         local function opts(desc)
-            return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+            return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, silent = true, nowait = true }
         end
 
-        vim.keymap.set('n', '.', api.tree.toggle_hidden_filter, opts('Toggle Dotfiles'))
-        vim.keymap.set('n', '<BS>', api.node.navigate.parent_close, opts('Close Directory'))
-        vim.keymap.set('n', '<C-j>', api.node.navigate.sibling.next, opts('Next Sibling'))
-        vim.keymap.set('n', '<C-k>', api.node.navigate.sibling.prev, opts('Previous Sibling'))
-        vim.keymap.set('n', '<Tab>', api.node.open.preview, opts('Open Preview'))
-        vim.keymap.set('n', '?', api.tree.toggle_help, opts('Help'))
-        vim.keymap.set('n', 'D', api.fs.trash, opts('Trash'))
-        vim.keymap.set('n', 'f', api.live_filter.start, opts('Filter'))
-        vim.keymap.set('n', 'F', api.live_filter.clear, opts('Clean Filter'))
-        vim.keymap.set('n', 'i', api.tree.toggle_gitignore_filter, opts('Toggle Git Ignore'))
-        vim.keymap.set('n', 'P', api.node.navigate.parent, opts('Parent Directory'))
-        vim.keymap.set('n', 'R', api.tree.reload, opts('Refresh'))
-        vim.keymap.set('n', 'S', api.tree.search_node, opts('Search'))
-        vim.keymap.set('n', 'W', api.tree.collapse_all, opts('Collapse'))
-        vim.keymap.set('n', 'a', api.fs.create, opts('Create'))
-        vim.keymap.set('n', 'd', api.fs.remove, opts('Delete'))
-        vim.keymap.set('n', 'Y', api.fs.copy.absolute_path, opts('Copy Absolute Path'))
-        vim.keymap.set('n', 'h', api.tree.change_root_to_parent, opts('Up'))
-        vim.keymap.set('n', '<leader>ho', api.node.show_info_popup, opts('Info'))
-        vim.keymap.set('n', 'm', api.fs.cut, opts('Cut'))
-        vim.keymap.set('n', 'p', api.fs.paste, opts('Paste'))
-        vim.keymap.set('n', 'q', api.tree.close, opts('Close'))
-        vim.keymap.set('n', 'r', api.fs.rename, opts('Rename'))
-        vim.keymap.set('n', 's', api.node.open.horizontal, opts('Open: Horizontal Split'))
-        vim.keymap.set('n', 'v', api.node.open.vertical, opts('Open: Vertical Split'))
-        vim.keymap.set('n', 'y', api.fs.copy.node, opts('Copy'))
-        vim.keymap.set('n', 'l', api.tree.change_root_to_node, opts('CD'))
-        vim.keymap.set('n', '<2-RightMouse>', api.tree.change_root_to_node, opts('CD'))
-        vim.keymap.set('n', '<CR>', api.node.open.edit, opts('Open'))
-        vim.keymap.set('n', 'o', api.node.open.edit, opts('Open'))
-        vim.keymap.set('n', '<2-LeftMouse>', api.node.open.edit, opts('Open'))
-        vim.keymap.set('n', 'O', api.node.open.no_window_picker, opts('Open: No Window Picker'))
+        Keymap('n', '.', api.tree.toggle_hidden_filter, opts('Toggle Dotfiles'))
+        Keymap('n', '<BS>', api.node.navigate.parent_close, opts('Close Directory'))
+        Keymap('n', '<C-j>', api.node.navigate.sibling.next, opts('Next Sibling'))
+        Keymap('n', '<C-k>', api.node.navigate.sibling.prev, opts('Previous Sibling'))
+        Keymap('n', '<Tab>', api.node.open.preview, opts('Open Preview'))
+        Keymap('n', '?', api.tree.toggle_help, opts('Help'))
+        Keymap('n', 'D', api.fs.trash, opts('Trash'))
+        Keymap('n', 'f', api.live_filter.start, opts('Filter'))
+        Keymap('n', 'F', api.live_filter.clear, opts('Clean Filter'))
+        Keymap('n', 'i', api.tree.toggle_gitignore_filter, opts('Toggle Git Ignore'))
+        Keymap('n', 'P', api.node.navigate.parent, opts('Parent Directory'))
+        Keymap('n', 'R', api.tree.reload, opts('Refresh'))
+        Keymap('n', 'S', api.tree.search_node, opts('Search'))
+        Keymap('n', 'W', api.tree.collapse_all, opts('Collapse'))
+        Keymap('n', 'a', api.fs.create, opts('Create'))
+        Keymap('n', 'd', api.fs.remove, opts('Delete'))
+        Keymap('n', 'Y', api.fs.copy.absolute_path, opts('Copy Absolute Path'))
+        Keymap('n', 'h', api.tree.change_root_to_parent, opts('Up'))
+        Keymap('n', '<leader>ho', api.node.show_info_popup, opts('Info'))
+        Keymap('n', 'm', api.fs.cut, opts('Cut'))
+        Keymap('n', 'p', api.fs.paste, opts('Paste'))
+        Keymap('n', 'q', api.tree.close, opts('Close'))
+        Keymap('n', 'r', api.fs.rename, opts('Rename'))
+        Keymap('n', 's', api.node.open.horizontal, opts('Open: Horizontal Split'))
+        Keymap('n', 'v', api.node.open.vertical, opts('Open: Vertical Split'))
+        Keymap('n', 'y', api.fs.copy.node, opts('Copy'))
+        Keymap('n', 'l', api.tree.change_root_to_node, opts('CD'))
+        Keymap('n', '<2-RightMouse>', api.tree.change_root_to_node, opts('CD'))
+        Keymap('n', '<CR>', api.node.open.edit, opts('Open'))
+        Keymap('n', 'o', api.node.open.edit, opts('Open'))
+        Keymap('n', '<2-LeftMouse>', api.node.open.edit, opts('Open'))
+        Keymap('n', 'O', api.node.open.no_window_picker, opts('Open: No Window Picker'))
     end
 
     require 'nvim-tree'.setup {
@@ -352,16 +366,16 @@ if ExistsBundle("lualine.nvim") then
         extensions = { 'nvim-tree', 'quickfix', 'fugitive', 'fzf' }
     }
 
-    local opts = { noremap = true, silent = true }
-    Map('n', '<leader>1', '<Cmd>LualineBuffersJump 1<CR>', opts)
-    Map('n', '<leader>2', '<Cmd>LualineBuffersJump 2<CR>', opts)
-    Map('n', '<leader>3', '<Cmd>LualineBuffersJump 3<CR>', opts)
-    Map('n', '<leader>4', '<Cmd>LualineBuffersJump 4<CR>', opts)
-    Map('n', '<leader>5', '<Cmd>LualineBuffersJump 5<CR>', opts)
-    Map('n', '<leader>6', '<Cmd>LualineBuffersJump 6<CR>', opts)
-    Map('n', '<leader>7', '<Cmd>LualineBuffersJump 7<CR>', opts)
-    Map('n', '<leader>8', '<Cmd>LualineBuffersJump 8<CR>', opts)
-    Map('n', '<leader>9', '<Cmd>LualineBuffersJump 9<CR>', opts)
+    local opts = { silent = true }
+    Keymap('n', '<leader>1', '<Cmd>LualineBuffersJump 1<CR>', opts)
+    Keymap('n', '<leader>2', '<Cmd>LualineBuffersJump 2<CR>', opts)
+    Keymap('n', '<leader>3', '<Cmd>LualineBuffersJump 3<CR>', opts)
+    Keymap('n', '<leader>4', '<Cmd>LualineBuffersJump 4<CR>', opts)
+    Keymap('n', '<leader>5', '<Cmd>LualineBuffersJump 5<CR>', opts)
+    Keymap('n', '<leader>6', '<Cmd>LualineBuffersJump 6<CR>', opts)
+    Keymap('n', '<leader>7', '<Cmd>LualineBuffersJump 7<CR>', opts)
+    Keymap('n', '<leader>8', '<Cmd>LualineBuffersJump 8<CR>', opts)
+    Keymap('n', '<leader>9', '<Cmd>LualineBuffersJump 9<CR>', opts)
 end
 
 if ExistsBundle("coc.nvim") then
@@ -403,8 +417,8 @@ if ExistsBundle("coc.nvim") then
         Keymap("n", "<leader>b<space>", ":CocList buffers<CR>", nmap_opts)
     end
 
-    local coc_augrp = vim.api.nvim_create_augroup("coc_user_defined", { clear = true })
-    vim.api.nvim_create_autocmd("FileType", {
+    local coc_augrp = AuGrp("coc_user_defined")
+    Au("FileType", {
         group = coc_augrp,
         pattern = "*",
         callback = function()
@@ -412,12 +426,12 @@ if ExistsBundle("coc.nvim") then
             coc_key_mappings()
         end
     })
-    vim.api.nvim_create_autocmd("CursorHold", {
+    Au("CursorHold", {
         group = coc_augrp,
         pattern = "*.cs",
         command = "silent call CocActionAsync('highlight')",
     })
-    vim.api.nvim_create_autocmd("FileType", {
+    Au("FileType", {
         group = coc_augrp,
         pattern = "tex",
         callback = function()
@@ -489,12 +503,10 @@ if ExistsBundle("ctrlsf.vim") then
 end
 
 if ExistsBundle("vim-litecorrect") then
-    vim.api.nvim_create_autocmd("FileType", {
-        group = vim.api.nvim_create_augroup("litecorrect", { clear = true }),
+    Au("FileType", {
+        group = AuGrp("litecorrect"),
         pattern = { "markdown", "mkd", "tex" },
-        callback = function()
-            vim.cmd("call litecorrect#init()")
-        end
+        command = "call litecorrect#init()"
     })
 end
 
@@ -525,12 +537,12 @@ if ExistsBundle("vim-slime") then
 
     -- Slime key mappings
     local opts = { silent = true }
-    vim.keymap.set("v", "<C-j><C-e>", "<Plug>SlimeRegionSend", opts)
-    vim.keymap.set("n", "<C-j><C-r>", "<Plug>SlimeParagraphSend", opts)
-    vim.keymap.set("n", "<C-j><C-e>", "<Plug>SlimeCellsSend", opts)
-    vim.keymap.set("n", "<C-j><C-S-e>", "<Plug>SlimeCellsSendAndGoToNext", opts)
-    vim.keymap.set("n", "<C-j><C-j>", "<Plug>SlimeCellsNext", opts)
-    vim.keymap.set("n", "<C-k><C-k>", "<Plug>SlimeCellsPrev", opts)
+    Keymap("v", "<C-j><C-e>", "<Plug>SlimeRegionSend", opts)
+    Keymap("n", "<C-j><C-r>", "<Plug>SlimeParagraphSend", opts)
+    Keymap("n", "<C-j><C-e>", "<Plug>SlimeCellsSend", opts)
+    Keymap("n", "<C-j><C-S-e>", "<Plug>SlimeCellsSendAndGoToNext", opts)
+    Keymap("n", "<C-j><C-j>", "<Plug>SlimeCellsNext", opts)
+    Keymap("n", "<C-k><C-k>", "<Plug>SlimeCellsPrev", opts)
 end
 
 if ExistsBundle("rainbow_parentheses.vim") then

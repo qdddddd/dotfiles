@@ -1,28 +1,29 @@
+require('utils')
 vim.lsp.enable({ 'csharp_ls', 'r_language_server' })
 
-vim.api.nvim_create_autocmd('LspAttach', {
-    group = vim.api.nvim_create_augroup('UserLspConfig', { clear = true }),
+Au('LspAttach', {
+    group = AuGrp('UserLspConfig'),
     pattern = { "*.cs", "*.R" },
     callback = function(args)
-        vim.api.nvim_del_augroup_by_id(vim.api.nvim_create_augroup('coc_user_defined', { clear = true }))
+        vim.api.nvim_del_augroup_by_id('coc_user_defined')
         vim.cmd([[ CocDisable ]])
 
         -- Keymappings
         local opts = { buffer = args.buf }
-        vim.keymap.set('n', '<leader>ho', vim.lsp.buf.hover, opts)
-        vim.keymap.set('n', '<leader>fo', function() vim.lsp.buf.format { async = true } end, opts)
-        vim.keymap.set('n', '<leader>fi', vim.lsp.buf.code_action, opts)
-        vim.keymap.set('n', '<leader>dl', vim.lsp.buf.definition, opts)
-        vim.keymap.set('n', '<leader>re', vim.lsp.buf.references, opts)
-        vim.keymap.set('n', '<leader>im', vim.lsp.buf.implementation, opts)
-        vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
-        vim.keymap.set('n', '<leader>da', vim.diagnostic.setloclist, { noremap = true, silent = true })
-        vim.keymap.set(
+        Keymap('n', '<leader>ho', vim.lsp.buf.hover, opts)
+        Keymap('n', '<leader>fo', function() vim.lsp.buf.format { async = true } end, opts)
+        Keymap('n', '<leader>fi', vim.lsp.buf.code_action, opts)
+        Keymap('n', '<leader>dl', vim.lsp.buf.definition, opts)
+        Keymap('n', '<leader>re', vim.lsp.buf.references, opts)
+        Keymap('n', '<leader>im', vim.lsp.buf.implementation, opts)
+        Keymap('n', '<leader>rn', vim.lsp.buf.rename, opts)
+        Keymap('n', '<leader>da', vim.diagnostic.setloclist, { noremap = true, silent = true })
+        Keymap(
             'n', '<C-j>',
             function() if vim.fn.ListVisible() == 0 then vim.diagnostic.goto_next() else vim.cmd('cnext') end end,
             { noremap = true, silent = true }
         )
-        vim.keymap.set(
+        Keymap(
             'n', '<C-k>',
             function() if vim.fn.ListVisible() == 0 then vim.diagnostic.goto_prev() else vim.cmd('cprevious') end end,
             { noremap = true, silent = true }
@@ -93,8 +94,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
                 focusable = false,
             }
         )
-        vim.api.nvim_create_autocmd({ "CursorHoldI" }, {
-            group = vim.api.nvim_create_augroup("CsLspSignature", {}),
+        Au({ "CursorHoldI" }, {
+            group = AuGrp("CsLspSignature"),
             pattern = "*.cs",
             callback = function(_) vim.lsp.buf.signature_help() end
         })
@@ -116,15 +117,15 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.fn['deoplete#enable']()
         vim.fn['deoplete#lsp#enable']()
         local o = { noremap = true, silent = true, expr = true }
-        vim.keymap.set('i', '<CR>', 'pumvisible() ? deoplete#close_popup() : "\\<CR>"', o)
-        vim.keymap.set('i', '<C-d>', 'pumvisible() ? "\\<PageDown>" : "\\<C-d>"', o)
-        vim.keymap.set('i', '<C-u>', 'pumvisible() ? "\\<PageUp>" : "\\<C-u>"', o)
-        vim.keymap.set('i', '<C-space>', 'deoplete#manual_complete()', o)
+        Keymap('i', '<CR>', 'pumvisible() ? deoplete#close_popup() : "\\<CR>"', o)
+        Keymap('i', '<C-d>', 'pumvisible() ? "\\<PageDown>" : "\\<C-d>"', o)
+        Keymap('i', '<C-u>', 'pumvisible() ? "\\<PageUp>" : "\\<C-u>"', o)
+        Keymap('i', '<C-space>', 'deoplete#manual_complete()', o)
     end
 })
 
-vim.api.nvim_create_autocmd({ "FileType" }, {
-    group = vim.api.nvim_create_augroup("CsLspHighlight", {}),
+Au({ "FileType" }, {
+    group = AuGrp("CsLspHighlight"),
     pattern = "cs",
     callback = function(_)
         SetHlLink("csStorage", "GruvboxRed")

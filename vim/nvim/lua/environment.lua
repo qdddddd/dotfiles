@@ -2,7 +2,6 @@ require("utils")
 
 local fn = vim.fn
 local opt = vim.opt
-local au = vim.api.nvim_create_autocmd
 
 -- Terminal and environment
 if not fn.has("gui") then
@@ -36,10 +35,10 @@ opt.hidden = true
 opt.iskeyword:remove({ ".", "#", "-" })
 
 -- Git commit cursor reset
-au("FileType", {
+Au("FileType", {
     pattern = "gitcommit",
     callback = function()
-        au("BufEnter", {
+        Au("BufEnter", {
             pattern = "COMMIT_EDITMSG",
             command = "call setpos('.', [0, 1, 1, 0])"
         })
@@ -123,23 +122,23 @@ opt.winminheight = 0
 opt.wrap = true
 
 -- Filetype overrides
-au({ "BufRead", "BufNewFile" }, {
+Au({ "BufRead", "BufNewFile" }, {
     pattern = "*.html.twig",
     command = "set ft=html.twig"
 })
-au({ "BufRead", "BufNewFile" }, {
+Au({ "BufRead", "BufNewFile" }, {
     pattern = "*.coffee",
     command = "set ft=coffee"
 })
-au({ "BufRead", "BufNewFile" }, {
+Au({ "BufRead", "BufNewFile" }, {
     pattern = "*.rst",
     command = "set ft=rst"
 })
-au({ "BufRead", "BufNewFile" }, {
+Au({ "BufRead", "BufNewFile" }, {
     pattern = "*.tex",
     command = "set ft=tex"
 })
-au("FileType", {
+Au("FileType", {
     pattern = "json",
     command = "set ft=jsonc"
 })
@@ -169,9 +168,9 @@ if not fn.has("gui_running") == 1 then
     opt.ttimeoutlen = 0
     opt.timeoutlen = 500
 
-    local fast_escape = vim.api.nvim_create_augroup("FastEscape", { clear = true })
+    local fast_escape = AuGrp("FastEscape")
 
-    au("InsertEnter", {
+    Au("InsertEnter", {
         group = fast_escape,
         pattern = "*",
         callback = function()
@@ -179,7 +178,7 @@ if not fn.has("gui_running") == 1 then
         end,
     })
 
-    au("InsertLeave", {
+    Au("InsertLeave", {
         group = fast_escape,
         pattern = "*",
         callback = function()
@@ -190,7 +189,7 @@ end
 
 -- Auto-write
 vim.o.autowrite = true
-au({ "BufEnter", "BufNewFile" }, {
+Au({ "BufEnter", "BufNewFile" }, {
     pattern = { "*.vim", "*vimrc*" },
     command = "nmap <leader>s :w <bar> so % <CR>",
 })
@@ -198,7 +197,7 @@ au({ "BufEnter", "BufNewFile" }, {
 -- Completion
 vim.o.completeopt = "menu,noinsert,longest,preview"
 -- Close preview window when completion menu closes
-au({ "CompleteDone", "CursorMovedI", "InsertLeave" }, {
+Au({ "CompleteDone", "CursorMovedI", "InsertLeave" }, {
     callback = function()
         if fn.pumvisible() == 0 then
             pcall(fn.pclose)

@@ -63,7 +63,7 @@ vim.g.fzf_layout = {
 }
 
 -- Strip trailing whitespace before saving
-vim.api.nvim_create_autocmd("BufWritePre", {
+Au("BufWritePre", {
     pattern = "*",
     callback = function()
         local pos = vim.api.nvim_win_get_cursor(0)
@@ -73,18 +73,17 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 })
 
 -- Always color column 99999 to disable until triggered
-vim.api.nvim_create_autocmd("BufWinEnter", {
+Au("BufWinEnter", {
     pattern = "*",
     command = "set colorcolumn=99999",
 })
 
 -- Show column marker if longest line exceeds limit
-vim.api.nvim_create_augroup("TriggerColorColumn", { clear = true })
-vim.api.nvim_create_autocmd(
+Au(
     { "BufWinEnter", "BufRead", "TextChanged", "TextChangedI" },
     {
         pattern = "*.cs",
-        group = "TriggerColorColumn",
+        group = AuGrp("TriggerColorColumn"),
         callback = function()
             local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
             local max_len = 0
