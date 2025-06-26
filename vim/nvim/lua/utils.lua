@@ -32,3 +32,12 @@ end
 function GetHl(name)
     return vim.api.nvim_get_hl_by_name(name, true)
 end
+
+function Contains(array, item)
+    for _, v in ipairs(array) do
+        if v == item then
+            return true
+        end
+    end
+    return false
+end

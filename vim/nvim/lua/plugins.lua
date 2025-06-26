@@ -47,12 +47,12 @@ if ExistsBundle("vim-startify") then
     vim.g.startify_session_dir = vim.fn.expand("~/.vim/sessions")
     vim.g.startify_files_number = 6
     vim.g.startify_list_order = {
+        { '   Sessions:' },
+        'sessions',
         { '   MRU files in the current directory:' },
         'dir',
         { '   MRU files:' },
         'files',
-        { '   Sessions:' },
-        'sessions',
         { '   Bookmarks:' },
         'bookmarks',
     }
@@ -283,13 +283,9 @@ if ExistsBundle("lualine.nvim") then
         separator = "|",
         padding = 1,
         filetype_names = {
-            TelescopePrompt = 'Telescope',
-            dashboard = 'Dashboard',
-            packer = 'Packer',
-            fzf = 'FZF',
-            alpha = 'Alpha',
-            NvimTree = 'E',
-            startify = 'Startify',
+            fzf = 'search',
+            NvimTree = 'tree',
+            startify = 'start.dev',
         },
         fmt = function(str)
             -- Displays buffers with unique names, or parent directory if duplicates exist --
@@ -339,7 +335,7 @@ if ExistsBundle("lualine.nvim") then
                 statusline = { 'startify', 'defx' },
                 winbar = { 'NvimTree', 'startify', 'defx', 'fugitive', 'fugitiveblame', 'help' },
             },
-            theme = gb
+            theme = gb,
         },
         sections = {
             lualine_a = { 'mode' },
@@ -517,19 +513,19 @@ end
 
 if ExistsBundle("copilot.vim") then
     vim.g.copilot_no_tab_map = true
-    local opts = { silent = true, expr = true, script = true }
-    Keymap("i", "<C-F>", 'copilot#Accept("\\<CR>")', opts)
-    Keymap("i", "<C-J>", "copilot#Next()", opts)
-    Keymap("i", "<C-K>", "copilot#Previous()", opts)
-    SetHl("CopilotSuggestion", "#fa8072", nil)
+    local opts = { silent = true, expr = true, replace_keycodes = false }
+    Keymap('i', '<C-f>', 'copilot#Accept("\\<CR>")', opts)
+    Keymap("i", "<C-j>", "copilot#Next()", opts)
+    Keymap("i", "<C-k>", "copilot#Previous()", opts)
+    SetHl("CopilotSuggestion", "#fa8072", nil) -- salmon
 end
 
 if ExistsBundle("vim-slime") then
     vim.g.slime_target = "tmux"
     vim.g.slime_cell_delimiter = "^\\s*##"
     vim.g.slime_default_config = {
-        socket_name = vim.fn.get(vim.fn.split(vim.fn.getenv("TMUX"), ","), 0),
-        target_pane = ":.2"
+        socket_name = "default",
+        target_pane = "{last}"
     }
     vim.g.slime_dont_ask_default = 0
     vim.g.slime_bracketed_paste = 1

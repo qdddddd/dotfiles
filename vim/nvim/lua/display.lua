@@ -43,6 +43,9 @@ require("gruvbox").setup({
         -- lsp
         Function = { link = "GruvboxBlueBold" },
         Identifier = { link = "GruvboxFg2" },
+        -- Startify
+        StartifyHeader = { link = "GruvboxYellow" },
+        StartifySection = { link = "GruvboxYellow" }
     }
 })
 
