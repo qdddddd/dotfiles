@@ -69,7 +69,7 @@ source ~/.p10k.zsh
 
 alias mount-projects='sudo mount -t nfs \${POISSON_IP}:/srv/nfs/projects ~/projects & sudo mount -t nfs \${POISSON_IP}:/srv/nfs/store ~/store'
 
-if [ -n "$(find /home/qdu/projects -prune -empty 2>/dev/null)" ]; then
+if [ -n "\$(find /home/qdu/projects -prune -empty 2>/dev/null)" ]; then
     mount-projects
 fi
 
@@ -165,6 +165,7 @@ function() {
 
     # Create nvim config sym links
     if (command_exists nvim); then
+        mkdir -p $HOME/.config
         rm -r $HOME/.config/nvim
         ln -sf ${DOT_VIM_DIR}/nvim $HOME/.config/nvim
 
