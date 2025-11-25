@@ -92,7 +92,6 @@ case "$OSTYPE" in
 esac
 
 path=(
-    $HOME/.venv/bin
     $HOME/.local/bin
     /usr/local/{bin,sbin}
     /usr/{bin,sbin}
