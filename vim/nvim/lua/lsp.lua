@@ -5,7 +5,7 @@ Au('LspAttach', {
     group = AuGrp('UserLspConfig'),
     pattern = { "*.cs", "*.R" },
     callback = function(args)
-        vim.api.nvim_del_augroup_by_id('coc_user_defined')
+        --vim.api.nvim_del_augroup_by_name('coc_user_defined')
         vim.cmd([[ CocDisable ]])
 
         -- Keymappings

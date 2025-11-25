@@ -521,12 +521,13 @@ if ExistsBundle("copilot.vim") then
 end
 
 if ExistsBundle("vim-slime") then
-    vim.g.slime_target = "tmux"
     vim.g.slime_cell_delimiter = "^\\s*##"
-    vim.g.slime_default_config = {
-        socket_name = "default",
-        target_pane = "{last}"
-    }
+    --vim.g.slime_target = "tmux"
+    --vim.g.slime_default_config = { socket_name = "default", target_pane = "{last}" }
+    vim.g.slime_target = "kitty"
+    local handle = io.popen("ls /tmp/kitty-*.sock | head -n 1"):read("*a"):gsub("%s+", "")
+    vim.g.slime_default_config = { window_id = 0, listen_on = "unix:" .. handle }
+
     vim.g.slime_dont_ask_default = 0
     vim.g.slime_bracketed_paste = 1
     vim.g.slime_no_mappings = 1
