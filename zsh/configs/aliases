@@ -37,6 +37,7 @@ alias ps-grep="ps aux | grep -v grep | grep"
 alias untarbz="tar --use-compress-program=lbzip2 -xf"
 alias xclip="xclip -selection c"
 alias csv='column -s, -t | less -S'
+alias py="python3"
 
 ps-kill() {
     kill -9 $(ps-grep "$@" | awk '{print $2}')
