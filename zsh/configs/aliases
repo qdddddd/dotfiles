@@ -30,8 +30,6 @@ alias crontab='VIM_CRONTAB=true EDITOR=vim crontab'
 alias ds='du -hd1'
 alias git-redate='GIT_COMMITTER_DATE="$(date)" git commit --amend --no-edit --date "$(date)"'
 alias ag='ag --nobreak --nonumbers --noheading --silent --path-to-ignore ~/.config/agignore . | fzf --reverse -e'
-alias proxy-on='export https_proxy=${POISSON_IP}:7890 http_proxy=${POISSON_IP}:7890 all_proxy=${POISSON_IP}:7891'
-alias proxy-off='unset http_proxy https_proxy all_proxy'
 alias sshp="ssh -o ProxyCommand='nc -X 5 -x ${clash_socks} %h %p'"
 alias ps-grep="ps aux | grep -v grep | grep"
 alias untarbz="tar --use-compress-program=lbzip2 -xf"
@@ -50,4 +48,16 @@ mc-cp() {
 
 mc-cat() {
     mc cat remote/$1/$2/$3_$2.gz | gunzip -c | less
+}
+
+proxy-on() {
+    PROXY_URL="${PROXY_IP}:7890"
+    export http_proxy="$PROXY_URL"
+    export https_proxy="$PROXY_URL"
+    export all_proxy="${PROXY_IP}:7891"
+    export no_proxy="127.0.0.1,localhost,.local,.internal,192.168.0.0/16"
+}
+
+proxy-off() {
+    unset http_proxy https_proxy no_proxy all_proxy
 }

@@ -21,6 +21,7 @@ fi
 # Poisson host
 #
 export POISSON_IP="192.168.32.77"
+export PROXY_IP="${POISSON_IP}"
 
 #
 # Browser

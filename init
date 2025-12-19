@@ -69,7 +69,7 @@ source ~/.p10k.zsh
 
 alias mount-projects='sudo mount -t nfs \${POISSON_IP}:/srv/nfs/projects ~/projects & sudo mount -t nfs \${POISSON_IP}:/srv/nfs/store ~/store'
 
-if [ -n "\$(find /home/qdu/projects -prune -empty 2>/dev/null)" ]; then
+if [ -d ~/projects ] && [ ! "\$(ls -A ~/projects)" ]; then
     mount-projects
 fi
 
