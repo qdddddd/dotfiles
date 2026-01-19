@@ -109,31 +109,37 @@ if ExistsBundle("indent-blankline.nvim") then
 end
 
 if ExistsBundle("nvim-treesitter") then
-    require 'nvim-treesitter.configs'.setup {
-        ensure_installed = { "vim", "python" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-        ignore_install = {},                    -- List of parsers to ignore installing
-        highlight = {
-            enable = true,                      -- false will disable the whole extension
-            disable = {},                       -- list of language that will be disabled
-            additional_vim_regex_highlighting = false,
-        },
-        indent = {
-            enable = true,
-            disable = {},
-        },
-        incremental_selection = {
-            enable = true,
-            disable = {},
-            keymaps = {
-                init_selection = "vv",
-                node_decremental = "vd",
-                node_incremental = "vn",
-                scope_incremental = "vs"
+    local ok, ts_configs = pcall(require, "nvim-treesitter.configs")
+    if not ok then
+        ok, ts_configs = pcall(require, "nvim-treesitter.config")
+    end
+    if ok then
+        ts_configs.setup {
+            ensure_installed = { "vim", "python" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+            ignore_install = {},                    -- List of parsers to ignore installing
+            highlight = {
+                enable = true,                      -- false will disable the whole extension
+                disable = {},                       -- list of language that will be disabled
+                additional_vim_regex_highlighting = false,
             },
-        },
-    }
+            indent = {
+                enable = true,
+                disable = {},
+            },
+            incremental_selection = {
+                enable = true,
+                disable = {},
+                keymaps = {
+                    init_selection = "vv",
+                    node_decremental = "vd",
+                    node_incremental = "vn",
+                    scope_incremental = "vs"
+                },
+            },
+        }
 
-    SetHlLink("TSFuncBuiltin", "GruvboxAqua")
+        SetHlLink("TSFuncBuiltin", "GruvboxAqua")
+    end
 end
 
 if ExistsBundle("nvim-tree.lua") then
@@ -525,8 +531,11 @@ if ExistsBundle("vim-slime") then
     --vim.g.slime_target = "tmux"
     --vim.g.slime_default_config = { socket_name = "default", target_pane = "{last}" }
     vim.g.slime_target = "kitty"
-    local handle = io.popen("ls /tmp/kitty-*.sock | head -n 1"):read("*a"):gsub("%s+", "")
-    vim.g.slime_default_config = { window_id = 0, listen_on = "unix:" .. handle }
+    local sockets = vim.fn.glob("/tmp/kitty-*.sock", true, true)
+    if #sockets > 0 then
+        local handle = sockets[1]
+        vim.g.slime_default_config = { window_id = 0, listen_on = "unix:" .. handle }
+    end
 
     vim.g.slime_dont_ask_default = 0
     vim.g.slime_bracketed_paste = 1
