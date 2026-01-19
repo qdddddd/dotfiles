@@ -51,13 +51,11 @@ mc-cat() {
 }
 
 proxy-on() {
-    PROXY_URL="${PROXY_IP}:7890"
-    export http_proxy="$PROXY_URL"
-    export https_proxy="$PROXY_URL"
-    export all_proxy="${PROXY_IP}:7891"
-    export no_proxy="127.0.0.1,localhost,.local,.internal,192.168.0.0/16"
+    export http_proxy=${PROXY_IP}
+    export https_proxy=${PROXY_IP}
+    export no_proxy="127.0.0.1,localhost,.local,.internal,192.168.0.0/16,10.23.0.0/16"
 }
 
 proxy-off() {
-    unset http_proxy https_proxy no_proxy all_proxy
+    unset http_proxy https_proxy no_proxy
 }
