@@ -51,11 +51,17 @@ mc-cat() {
 }
 
 proxy-on() {
-    export http_proxy=${PROXY_IP}
-    export https_proxy=${PROXY_IP}
+    local proxy_url="http://${PROXY_IP}"
+    export http_proxy="$proxy_url"
+    export https_proxy="$proxy_url"
+    if [[ -n "${clash_socks}" ]]; then
+        export all_proxy="socks5://${clash_socks}"
+    elif [[ -n "${all_proxy}" && "${all_proxy}" != *"://"* ]]; then
+        export all_proxy="http://${all_proxy}"
+    fi
     export no_proxy="127.0.0.1,localhost,.local,.internal,192.168.0.0/16,10.23.0.0/16"
 }
 
 proxy-off() {
-    unset http_proxy https_proxy no_proxy
+    unset http_proxy https_proxy all_proxy no_proxy
 }
