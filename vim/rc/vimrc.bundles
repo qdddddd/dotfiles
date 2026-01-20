@@ -57,7 +57,10 @@
         if has('nvim')
             Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
         endif
-        Plug 'github/copilot.vim'
+        if has('nvim')
+            Plug 'nvim-lua/plenary.nvim'
+            Plug 'zbirenbaum/copilot.lua'
+        endif
         Plug 'jpalardy/vim-slime'
         Plug 'klafyvel/vim-slime-cells'
     " }

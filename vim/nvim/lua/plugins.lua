@@ -517,12 +517,40 @@ if ExistsBundle("nerdcommenter") then
     vim.g.NERDDefaultAlign = 'none'
 end
 
-if ExistsBundle("copilot.vim") then
-    vim.g.copilot_no_tab_map = true
-    local opts = { silent = true, expr = true, replace_keycodes = false }
-    Keymap('i', '<C-f>', 'copilot#Accept("\\<CR>")', opts)
-    Keymap("i", "<C-j>", "copilot#Next()", opts)
-    Keymap("i", "<C-k>", "copilot#Previous()", opts)
+if ExistsBundle("copilot.lua") then
+    local copilot_opts = {
+        panel      = { enabled = false },
+        suggestion = {
+            enabled = true,
+            auto_trigger = true,
+            keymap = {
+                accept = "<C-f>",
+                next = "<C-j>",
+                prev = "<C-k>",
+            },
+        },
+        filetypes  = {
+            gitcommit = vim.g.codex_commit_enabled and false or true,
+            ["."] = true,
+        },
+    }
+    require("copilot").setup(copilot_opts)
+    local ok_suggestion, suggestion = pcall(require, "copilot.suggestion")
+    if ok_suggestion then
+        Keymap("i", "<C-u>", function()
+            if suggestion.is_visible() then
+                suggestion.dismiss()
+                if vim.fn.pumvisible() == 1 then
+                    return "<C-e>"
+                end
+                return ""
+            end
+            if vim.fn.pumvisible() == 1 then
+                return "<PageUp><C-p><C-n>"
+            end
+            return "<C-u>"
+        end, { expr = true, silent = true })
+    end
     SetHl("CopilotSuggestion", "#fa8072", nil) -- salmon
 end
 
