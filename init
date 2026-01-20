@@ -99,9 +99,6 @@ fi
 
 # Create python3 venv
 python3 -m venv --system-site-packages $HOME/.venv
-if ! grep -q "source \$HOME/.venv/bin/activate" $HOME/.zshrc.local; then
-    echo "source \$HOME/.venv/bin/activate" >> $HOME/.zshrc.local
-fi
 source $HOME/.zshrc
 
 # Install pip
