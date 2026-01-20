@@ -8,6 +8,7 @@ modules in the following order:
 ```text
 rc/vimrc.bundles
 lua/environment.lua
+lua/gitcommit.lua
 lua/display.lua
 lua/keymaps.lua
 lua/lsp.lua

@@ -12,6 +12,7 @@ else
         vim.cmd("source ~/.vim/vimrc.bundles")
     end
     require("environment")
+    require("gitcommit")
     require("display")
     require("keymaps")
     require("lsp")
