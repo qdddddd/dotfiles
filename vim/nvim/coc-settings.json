@@ -35,6 +35,7 @@
     },
     "signature.triggerSignatureWait": 200,
     "signature.target": "float",
+    "diagnostic.enableSign": true,
     "diagnostic.errorSign": "✗",
     "diagnostic.warningSign": "▲",
     "diagnostic.infoSign": "●",
@@ -82,7 +83,7 @@
     },
     "inlayHint.enable": false,
     "coc.preferences.formatOnType": false,
-    "coc.preferences.extensionUpdateCheck": "daily",
+    "extensions.updateCheck": "daily",
     "snippets.ultisnips.pythonPrompt": false,
     "yaml.schemaStore.enable": true
 }

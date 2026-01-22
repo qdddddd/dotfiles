@@ -124,14 +124,7 @@ $HOME/.tmux/plugins/tpm/scripts/source_plugins.sh
 
 pip3 install neovim
 
-# Install vim-plug
-if [ ! -s $HOME/.vim/autoload/plug.vim ]; then
-    echo "\nInstalling vim-plug..."
-    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-fi
-
-# Install dependencies for Coc
+# Install node
 if ! (command_exists node); then
     echo "\nInstalling node..."
     curl -sfLS https://install-node.vercel.app | sudo -E bash
@@ -158,10 +151,6 @@ function() {
     echo "\nConfiguring vim..."
     # Create vim config sym links
     local DOT_VIM_DIR=${PWD}/vim
-    #for lcfile in ${DOT_VIMRC_DIR}/^*(README.md|nvim)*; do
-    for lcfile in ${DOT_VIM_DIR}/(rc|ext)/*; do
-        ln -s "$lcfile" "$HOME/.vim/${lcfile:t}"
-    done
 
     # Create nvim config sym links
     if (command_exists nvim); then

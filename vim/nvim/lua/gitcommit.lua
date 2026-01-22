@@ -1,7 +1,5 @@
 require("utils")
 
-vim.g.codex_commit_enabled = false
-
 vim.g.codex_commit_max_chars = 8000
 if vim.g.codex_commit_enabled == nil then
     vim.g.codex_commit_enabled = true

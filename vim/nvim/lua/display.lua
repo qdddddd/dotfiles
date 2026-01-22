@@ -1,57 +1,5 @@
 require("utils")
-vim.o.background = "light"
-local menu_bg = "#f3e5bc"
-
-require("gruvbox").setup({
-    terminal_colors = true,
-    invert_selection = false,
-    overrides = {
-        GruvboxGreenSign = { fg = "#79740e", bg = "bg" },
-        GruvboxRedSign = { fg = "#9d0006", bg = "bg" },
-        GruvboxAquaSign = { fg = "#427b58", bg = "bg" },
-        GruvboxYellowSign = { fg = "#b57614", bg = "bg" },
-        SignColumn = { bg = "bg" },
-        -- floating window
-        Fmenu = { fg = "#32302f", bg = menu_bg },
-        FmenuThumb = { fg = menu_bg, bg = "#8a95a7" },
-        FmenuSbar = { link = "PmenuSbar", default = true },
-        -- coc
-        CocErrorFloat = { fg = "#9d0006", bg = menu_bg },
-        CocWarningFloat = { fg = "#b57614", bg = menu_bg },
-        CocInfoFloat = { fg = "#427b58", bg = menu_bg },
-        CocWarningSign = { link = "GruvboxYellowSign" },
-        CocInfoSign = { link = "GruvboxAquaSign" },
-        CocHintSign = { link = "GruvboxYellowSign" },
-        CocInlayHintType = { link = "GruvboxBg4" },
-        CocSemNamespace = { link = "GruvboxAqua" },
-        CocSemClass = { link = "GruvboxYellow" },
-        CocSemStruct = { link = "CocSemClass" },
-        CocSemEvent = { link = "GruvboxAqua" },
-        CocFloating = { link = "Fmenu" },
-        CocHintFloat = { link = "CocWarningFloat" },
-        CocMenuSel = { fg = "#f3e5bc", bg = "#076678" },
-        -- NvimTree
-        NvimTreeFolderIcon = { link = "GruvboxBlue" },
-        NvimTreeFolderName = { link = "NvimTreeFolderIcon" },
-        NvimTreeEmptyFolderName = { link = "NvimTreeFolderName" },
-        NvimTreeRootFolder = { bold = true, underline = true, fg = "#076678" },
-        NvimTreeOpenedFolderName = { link = "GruvboxBlueBold" },
-        NvimTreeOpenedFile = { link = "GruvboxGreen" },
-        NvimTreeSymlink = { link = "GruvboxAqua" },
-        NvimTreeExecFile = { link = "GruvboxYellow" },
-        NvimTreeSpecialFile = { fg = "#3c3836", bg = "#fbf1c7", underline = true },
-        -- lsp
-        Function = { link = "GruvboxBlueBold" },
-        Identifier = { link = "GruvboxFg2" },
-        -- Startify
-        StartifyHeader = { link = "GruvboxYellow" },
-        StartifySection = { link = "GruvboxYellow" }
-    }
-})
-
-vim.cmd.colorscheme("gruvbox")
 vim.cmd("syntax on")
-vim.cmd("hi! clear Operator")
 vim.opt.conceallevel = 1
 vim.opt.guicursor = "a:hor20"
 

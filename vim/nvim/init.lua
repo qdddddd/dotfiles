@@ -8,13 +8,11 @@ if vim.g.vscode then
 else
     vim.opt.runtimepath:prepend(vim.fn.expand("~/.vim"))
     vim.opt.packpath = vim.opt.runtimepath:get()
-    if Exists(HOME .. "/.vim/vimrc.bundles") then
-        vim.cmd("source ~/.vim/vimrc.bundles")
-    end
+    vim.g.codex_commit_enabled = vim.fn.executable("codex") == 1
     require("environment")
     require("gitcommit")
     require("display")
     require("keymaps")
-    require("lsp")
     require("plugins")
+    require("lsp")
 end
