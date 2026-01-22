@@ -481,6 +481,8 @@ require("lazy").setup({
         branch = "main",
         build = function()
             vim.fn.system({
+                "env",
+                "npm_config_build_from_source=true",
                 "npm",
                 "install",
                 "-g",
@@ -488,7 +490,6 @@ require("lazy").setup({
                 vim.fn.expand("~/.local"),
                 "tree-sitter-cli",
             })
-            vim.cmd("TSUpdate")
         end,
         config = function()
             local ts = require("nvim-treesitter")
