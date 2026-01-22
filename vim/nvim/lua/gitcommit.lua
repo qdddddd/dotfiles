@@ -156,6 +156,19 @@ local function build_prompt(diff)
     return header .. "Staged diff:\n" .. diff
 end
 
+local function cmd_has_config(cmd, key)
+    for i = 1, #cmd - 1 do
+        local flag = cmd[i]
+        if flag == "-c" or flag == "--config" then
+            local value = cmd[i + 1]
+            if type(value) == "string" and value:match("^" .. key .. "=") then
+                return true
+            end
+        end
+    end
+    return false
+end
+
 local function get_cmd()
     local cmd = vim.g.codex_commit_cmd
     if cmd == nil then
@@ -166,6 +179,10 @@ local function get_cmd()
     end
     if cmd[1] == "codex" and cmd[2] == nil then
         table.insert(cmd, 2, "exec")
+    end
+    if cmd[1] == "codex" and not cmd_has_config(cmd, "model_reasoning_effort") then
+        table.insert(cmd, "-c")
+        table.insert(cmd, "model_reasoning_effort=medium")
     end
     return cmd
 end
