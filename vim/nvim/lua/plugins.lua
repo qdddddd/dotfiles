@@ -23,6 +23,28 @@ local fzf_dep = {
     end,
 }
 
+local function glibc_lt_2_39()
+    if vim.fn.executable("ldd") ~= 1 then
+        return false
+    end
+    local out = vim.fn.system({ "ldd", "--version" })
+    if vim.v.shell_error ~= 0 or type(out) ~= "string" then
+        return false
+    end
+    local major, minor = out:match("GLIBC%s+(%d+)%.(%d+)")
+    if not major then
+        major, minor = out:match("(%d+)%.(%d+)")
+    end
+    major = tonumber(major)
+    minor = tonumber(minor)
+    if not major or not minor then
+        return false
+    end
+    return major < 2 or (major == 2 and minor < 39)
+end
+
+local treesitter_legacy = glibc_lt_2_39()
+
 require("lazy").setup({
     -- Colorscheme
     {
@@ -478,11 +500,14 @@ require("lazy").setup({
     },
     {
         "nvim-treesitter/nvim-treesitter",
-        branch = "main",
+        branch = treesitter_legacy and "master" or "main",
         build = function()
+            if treesitter_legacy then
+                vim.cmd(":TSUpdate")
+                return
+            end
+
             vim.fn.system({
-                "env",
-                "npm_config_build_from_source=true",
                 "npm",
                 "install",
                 "-g",
@@ -492,37 +517,83 @@ require("lazy").setup({
             })
         end,
         config = function()
-            local ts = require("nvim-treesitter")
-            ts.setup({
-                install_dir = vim.fn.stdpath("data") .. "/site",
-            })
+            local ensure_langs = { "vim", "python", "c_sharp" }
+            local ensure_fts = { "vim", "python", "cs" }
 
-            local ensure = { "vim", "python", "c_sharp" }
+            if not treesitter_legacy then
+                local ts = require("nvim-treesitter")
+                ts.setup({
+                    install_dir = vim.fn.stdpath("data") .. "/site",
+                })
 
-            local group = AuGrp("TreesitterMain")
-            Au("FileType", {
-                group = group,
-                pattern = "*",
-                callback = function(args)
-                    if not Contains(ensure, args.match) then
-                        return
-                    end
-                    local lang = vim.treesitter.language.get_lang(args.match)
-                    if not lang then
-                        return
-                    end
-                    ts.install({ lang })
-                    pcall(vim.treesitter.start, args.buf, lang)
-                    vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-                end,
+                local group = AuGrp("TreesitterMain")
+                Au("FileType", {
+                    group = group,
+                    pattern = "*",
+                    callback = function(args)
+                        if not Contains(ensure_fts, args.match) then
+                            return
+                        end
+                        local lang = vim.treesitter.language.get_lang(args.match)
+                        if not lang then
+                            return
+                        end
+                        ts.install({ lang })
+                        pcall(vim.treesitter.start, args.buf, lang)
+                        vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                    end,
+                })
+
+                local function set_ts_links()
+                    SetHlLink("@function.builtin", "GruvboxAqua")
+                end
+                set_ts_links()
+                Au("ColorScheme", {
+                    group = group,
+                    callback = set_ts_links,
+                })
+                return
+            end
+
+            local ok, configs = pcall(require, "nvim-treesitter.configs")
+            if not ok then
+                return
+            end
+            configs.setup({
+                ensure_installed = ensure_langs,
+                ignore_install = {},
+                auto_install = true,
+                highlight = {
+                    enable = true,
+                    disable = function(lang, _)
+                        return not Contains(ensure_langs, lang)
+                    end,
+                    additional_vim_regex_highlighting = true,
+                },
+                indent = {
+                    enable = true,
+                    disable = function(lang, _)
+                        return not Contains(ensure_langs, lang)
+                    end,
+                },
+                incremental_selection = {
+                    enable = true,
+                    disable = {},
+                    keymaps = {
+                        init_selection = "vv",
+                        node_decremental = "vd",
+                        node_incremental = "vn",
+                        scope_incremental = "vs",
+                    },
+                },
             })
 
             local function set_ts_links()
-                SetHlLink("@function.builtin", "GruvboxAqua")
+                SetHlLink("TSFuncBuiltin", "GruvboxAqua")
             end
             set_ts_links()
             Au("ColorScheme", {
-                group = group,
+                group = AuGrp("TSHighlight"),
                 callback = set_ts_links,
             })
         end,
