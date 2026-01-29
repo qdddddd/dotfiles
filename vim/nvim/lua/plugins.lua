@@ -511,8 +511,6 @@ require("lazy").setup({
                 "npm",
                 "install",
                 "-g",
-                "--prefix",
-                vim.fn.expand("~/.local"),
                 "tree-sitter-cli",
             })
         end,

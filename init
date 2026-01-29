@@ -130,13 +130,8 @@ if ! (command_exists node); then
     curl -sfLS https://install-node.vercel.app | sudo -E bash
 fi
 
-sudo npm install -g neovim
-
-# Install yarn
-if ! (command_exists yarn); then
-    echo "\nInstalling yarn..."
-    curl --compressed -o- -L https://yarnpkg.com/install.sh | sudo -E bash
-fi
+npm config set prefix ~/.local
+npm install -g neovim
 
 # Install nvim
 if ! (command_exists nvim); then
