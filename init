@@ -157,7 +157,7 @@ function() {
         alias vi='nvim'
     fi
 
-    vi +PlugInstall +PlugClean +qa!
+    vi --headless -c 'lua require("lazy").install()' -c 'qa'
 }
 
 # Install ag

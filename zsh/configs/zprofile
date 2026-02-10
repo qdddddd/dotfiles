@@ -93,12 +93,13 @@ case "$OSTYPE" in
 esac
 
 path=(
+    $HOME/.venv/bin
     $HOME/.local/bin
+    $HOME/.dotnet/tools
+    $HOME/.juliaup/bin
     /usr/local/{bin,sbin}
     /usr/{bin,sbin}
     /{bin,sbin}
-    $HOME/.dotnet/tools
-    $HOME/.juliaup/bin
     $path
 )
 

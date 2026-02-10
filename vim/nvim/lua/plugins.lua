@@ -637,6 +637,30 @@ require("lazy").setup({
         end,
     },
     {
+        "NickvanDyke/opencode.nvim",
+        dependencies = {
+            ---@module 'snacks'
+            { "folke/snacks.nvim", opts = { input = {}, picker = {}, terminal = {} } },
+        },
+        config = function()
+            ---@type opencode.Opts
+            vim.g.opencode_opts = {}
+
+            -- Required for `opts.events.reload`.
+            vim.o.autoread = true
+
+            Keymap({ "n", "x" }, "<C-a>",
+                function() require("opencode").ask("@this: ", { submit = true }) end,
+                { desc = "Ask opencode…" })
+            Keymap({ "n", "x" }, "<leader>o<space>", function() require("opencode").select() end,
+                { desc = "Execute opencode action…" })
+            Keymap({ "n", "t" }, "<C-/>", function() require("opencode").toggle() end,
+                { desc = "Toggle opencode" })
+            Keymap({ "n", "x" }, "go", function() return require("opencode").operator("@this ") end,
+                { desc = "Add range to opencode", expr = true })
+        end,
+    },
+    {
         "jpalardy/vim-slime",
         config = function()
             vim.g.slime_cell_delimiter = "^\\s*##"
