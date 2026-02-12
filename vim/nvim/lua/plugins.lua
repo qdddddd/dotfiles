@@ -382,6 +382,9 @@ require("lazy").setup({
                 update_focused_file = {
                     enable = true,
                 },
+                filters = {
+                    git_ignored = false,
+                },
                 view = {
                     width = original_width,
                 },

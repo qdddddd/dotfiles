@@ -147,3 +147,5 @@ cmake-build-debug
 cmake-build-release
 .vscode/
 AGENTS.md
+slurm/
+.repo-memory.json
