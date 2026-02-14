@@ -30,6 +30,7 @@ alias crontab='VIM_CRONTAB=true EDITOR=vim crontab'
 alias ds='du -hd1'
 alias git-redate='GIT_COMMITTER_DATE="$(date)" git commit --amend --no-edit --date "$(date)"'
 alias ag='ag --nobreak --nonumbers --noheading --silent --path-to-ignore ~/.config/agignore . | fzf --reverse -e'
+alias ssh="TERM=xterm-256color ssh"
 alias sshp="ssh -o ProxyCommand='nc -X 5 -x ${clash_socks} %h %p'"
 alias ps-grep="ps aux | grep -v grep | grep"
 alias untarbz="tar --use-compress-program=lbzip2 -xf"
