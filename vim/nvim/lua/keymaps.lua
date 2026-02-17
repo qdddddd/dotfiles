@@ -84,14 +84,11 @@ Keymap("i", "<C-l>", "<Right>")
 -- Exit terminal
 Keymap("t", "<leader><Esc>", "<C-\\><C-n>")
 
--- Cycle buffers
-if LINUX() then
-    Keymap("n", "<M-->", ":bprevious<CR>")
-    Keymap("n", "<M-=>", ":bnext<CR>")
-elseif OSX() then
-    Keymap("n", "–", ":bprevious<CR>")
-    Keymap("n", "≠", ":bnext<CR>")
-end
+-- Cycle buffers (<M--> and Unicode fallback for macOS Option key over SSH)
+Keymap("n", "<M-->", ":bprevious<CR>")
+Keymap("n", "<M-=>", ":bnext<CR>")
+Keymap("n", "–", ":bprevious<CR>")
+Keymap("n", "≠", ":bnext<CR>")
 
 -- Open file in new tab
 Keymap("n", "<leader>t", ":tabnew <C-R>=expand('%:p')<CR><CR>", opts)
