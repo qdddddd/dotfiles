@@ -615,7 +615,7 @@ require("lazy").setup({
                     },
                 },
                 filetypes = {
-                    gitcommit = vim.g.codex_commit_enabled and false or true,
+                    gitcommit = true,
                     ["."] = true,
                 },
             }

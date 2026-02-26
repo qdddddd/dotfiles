@@ -10,7 +10,6 @@ else
     vim.opt.packpath = vim.opt.runtimepath:get()
     vim.g.codex_commit_enabled = vim.fn.executable("codex") == 1
     require("environment")
-    require("gitcommit")
     require("display")
     require("keymaps")
     require("plugins")
