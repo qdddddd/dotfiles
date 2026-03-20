@@ -4,7 +4,7 @@ function () {
     local FZF_DIR=$HOME/.fzf
 
     if [[ ! "$PATH" == *$FZF_DIR/bin* ]]; then
-        export PATH="${PATH:+${PATH}:}$FZF_DIR/bin"
+        export PATH="$FZF_DIR/bin:${PATH:+${PATH}:}"
     fi
 
     # Auto-completion

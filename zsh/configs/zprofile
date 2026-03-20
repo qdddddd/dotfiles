@@ -96,11 +96,11 @@ path=(
     $HOME/.venv/bin
     $HOME/.dotnet/tools
     $HOME/.juliaup/bin
-    $path
     $HOME/.local/bin
     /usr/local/{bin,sbin}
     /usr/{bin,sbin}
     /{bin,sbin}
+    $path
 )
 
 # Ensure path arrays do not contain duplicates.
