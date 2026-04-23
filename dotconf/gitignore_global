@@ -148,3 +148,4 @@ cmake-build-release
 AGENTS.md
 slurm/
 .repo-memory.json
+.claude/
