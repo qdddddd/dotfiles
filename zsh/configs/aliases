@@ -61,9 +61,10 @@ proxy-on() {
     elif [[ -n "${all_proxy}" && "${all_proxy}" != *"://"* ]]; then
         export all_proxy="http://${all_proxy}"
     fi
-    export no_proxy="127.0.0.1,localhost,.local,.internal,192.168.0.0/16,10.23.0.0/16"
+    export no_proxy="127.0.0.1,localhost,.local,.internal,192.168.0.0/16,10.23.0.0/16,gsa.apple.com,.apple.com,apple.com"
+    export NO_PROXY="$no_proxy"
 }
 
 proxy-off() {
-    unset http_proxy https_proxy all_proxy no_proxy
+    unset http_proxy https_proxy all_proxy no_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY NO_PROXY
 }
