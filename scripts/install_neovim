@@ -12,5 +12,20 @@ pip install -U pip
 python3 -m pip install --upgrade pynvim
 
 source ~/.aliases
-vi --noplugin +PlugUpgrade +PlugClean! +PlugInstall +PlugUpdate +qa!
-vi +TSUpdate +CocUpdate +qa!
+
+# Resolve nvim directly: the vi alias falls back to vim whenever ~/.local/bin
+# is not on PATH, which is the case for non-login shells.
+nvim_bin="$HOME/.local/bin/nvim"
+[[ -x "$nvim_bin" ]] || nvim_bin="$(command -v nvim)"
+
+if [[ -n "$nvim_bin" ]]; then
+    # Lazy sync == install + clean + update, and updates lazy.nvim itself.
+    "$nvim_bin" --headless "+Lazy! sync" +qa
+
+    # The Sync variants block; the plain ones return before headless nvim exits.
+    # Guarded because nvim-treesitter only defines TSUpdateSync on master.
+    "$nvim_bin" --headless \
+        -c 'lua if vim.fn.exists(":TSUpdateSync") == 2 then vim.cmd("TSUpdateSync") end' \
+        -c 'lua if vim.fn.exists(":CocUpdateSync") == 2 then vim.cmd("CocUpdateSync") end' \
+        -c 'qa'
+fi
