@@ -14,7 +14,8 @@ end
 vim.cmd("filetype plugin indent on")
 opt.mouse = "a"
 opt.mousehide = true
-opt.guioptions = ""
+-- Guarded: nvim < 0.11 does not expose guioptions outside a GUI.
+pcall(function() opt.guioptions = "" end)
 vim.scriptencoding = "utf-8"
 opt.encoding = "utf-8"
 
