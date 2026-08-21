@@ -85,5 +85,8 @@
     "coc.preferences.formatOnType": false,
     "extensions.updateCheck": "daily",
     "snippets.ultisnips.pythonPrompt": false,
-    "yaml.schemaStore.enable": true
+    "yaml.schemaStore.enable": true,
+    "json.schemaDownload.trustedDomains": {
+      "https://www.schemastore.org": true
+    }
 }

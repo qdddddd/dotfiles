@@ -146,6 +146,7 @@ cmake-build-debug
 cmake-build-release
 .vscode/
 AGENTS.md
+CLAUDE.md
 slurm/
 .repo-memory.json
 .claude/
