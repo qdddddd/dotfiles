@@ -150,3 +150,6 @@ CLAUDE.md
 slurm/
 .repo-memory.json
 .claude/
+.codex/
+
+**/.claude/settings.local.json
