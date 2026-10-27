@@ -50,7 +50,8 @@ if git -C "$cwd" --no-optional-locks rev-parse --is-inside-work-tree &>/dev/null
     [[ "$git_branch" == "$wt" || "$git_branch" == "worktree-$wt" ]] && git_branch=""
   fi
 fi
-path="${path/#$HOME/\~}"
+# Not ${path/#$HOME/\~}: bash 3.2 (macOS) keeps the backslash.
+case "$path" in "$HOME" | "$HOME"/*) path="~${path#"$HOME"}" ;; esac
 
 fits() {
   local n=$((${#path} + ${#tail}))
@@ -123,7 +124,7 @@ model=$(echo "$input" | jq -r '.model.display_name // .model.id // ""')
 model="${model% (*context)}"
 model="${model%\[*\]}"
 model="${model// /-}"
-model="${model,,}"
+model=$(printf '%s' "$model" | tr '[:upper:]' '[:lower:]')
 
 now=$(date +%s)
 
@@ -145,19 +146,40 @@ time_left() {
 # /api/oauth/usage refreshed by a detached background job; rendering never
 # waits on the network. The cache sits in tmpfs and is shared with meterboard.
 # The dir is built from UID, not XDG_RUNTIME_DIR: ssh logins here get that
-# variable unexpanded from /etc/environment.
-usage_dir="/run/user/$UID/claude-usage"
+# variable unexpanded from /etc/environment. macOS has no /run/user, so it
+# falls back to the per-user $TMPDIR there.
+if [ -d "/run/user/$UID" ]; then
+  usage_dir="/run/user/$UID/claude-usage"
+else
+  usage_dir="${TMPDIR:-/tmp}/claude-usage-$UID"
+fi
 usage_cache="$usage_dir/usage-utilization.json"
 usage_lock="$usage_dir/usage-utilization.lock"
 usage_failures="$usage_dir/usage-utilization.failures" # failed refreshes in a row; mtime = last one
 usage_creds="$HOME/.claude/.credentials.json"
+
+# The OAuth access token: the credentials file (Linux), else the macOS
+# Keychain item, where Claude Code keeps it there (the file may exist
+# without a token). The Keychain is only readable from a GUI login session.
+oauth_token() {
+  local tok=
+  [ -r "$usage_creds" ] && tok=$(jq -r '.claudeAiOauth.accessToken // empty' "$usage_creds" 2>/dev/null)
+  if [ -z "$tok" ] && command -v security >/dev/null 2>&1; then
+    tok=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null \
+      | jq -r '.claudeAiOauth.accessToken // empty' 2>/dev/null)
+  fi
+  printf '%s' "$tok"
+}
+
+# File mtime in epoch seconds (GNU stat, then BSD/macOS stat), 0 if missing.
+mtime() { stat -c %Y "$1" 2>/dev/null || stat -f %m "$1" 2>/dev/null || echo 0; }
 usage_ttl=120          # refresh in the background once the cache is older than this
 usage_backoff_max=1800 # longest wait between retries once refreshes keep failing
 usage_max_age=21600    # stop displaying entirely rather than show a stale number
 
 usage_cache_age() {
   if [ -f "$usage_cache" ]; then
-    echo $(( $(date +%s) - $(stat -c %Y "$usage_cache" 2>/dev/null || echo 0) ))
+    echo $(( $(date +%s) - $(mtime "$usage_cache") ))
   else
     echo 999999
   fi
@@ -175,7 +197,7 @@ usage_refresh_due() {
   case "$failures" in [0-5]) ;; ''|*[!0-9]*) failures=1 ;; *) failures=5 ;; esac
   retry_wait=$(( usage_ttl << failures ))
   [ "$retry_wait" -gt "$usage_backoff_max" ] && retry_wait=$usage_backoff_max
-  [ $(( $(date +%s) - $(stat -c %Y "$usage_failures" 2>/dev/null || echo 0) )) -ge "$retry_wait" ]
+  [ $(( $(date +%s) - $(mtime "$usage_failures") )) -ge "$retry_wait" ]
 }
 
 # Claude Code re-runs this script every refreshInterval seconds (settings
@@ -188,7 +210,7 @@ mkdir -p "$usage_dir" 2>/dev/null
 sid=$(echo "$input" | jq -r '.session_id // empty' 2>/dev/null)
 session_event=1
 if [ -n "$sid" ]; then
-  sig=$(echo "$input" | jq -cS 'del(.cost.total_duration_ms)' 2>/dev/null | md5sum | cut -c1-32)
+  sig=$(echo "$input" | jq -cS 'del(.cost.total_duration_ms)' 2>/dev/null | cksum | cut -d' ' -f1)
   sig_file="$usage_dir/statusline-${sid//[^A-Za-z0-9-]/}.sig"
   last_sig=
   read -r last_sig 2>/dev/null < "$sig_file"
@@ -197,12 +219,12 @@ if [ -n "$sid" ]; then
 fi
 
 cache_age=$(usage_cache_age)
-if [ "$session_event" = 1 ] && [ "$cache_age" -ge "$usage_ttl" ] && [ -r "$usage_creds" ] && command -v curl >/dev/null 2>&1 && usage_refresh_due; then
+if [ "$session_event" = 1 ] && [ "$cache_age" -ge "$usage_ttl" ] && { [ -r "$usage_creds" ] || command -v security >/dev/null 2>&1; } && command -v curl >/dev/null 2>&1 && usage_refresh_due; then
   if mkdir "$usage_lock" 2>/dev/null; then
     (
       trap 'rmdir "$usage_lock" 2>/dev/null' EXIT
       usage_refresh_due || exit 0
-      tok=$(jq -r '.claudeAiOauth.accessToken // empty' "$usage_creds" 2>/dev/null)
+      tok=$(oauth_token)
       tmp="${usage_cache}.$$"
       if [ -n "$tok" ] \
          && curl -sf --max-time 8 "https://api.anthropic.com/api/oauth/usage" \
@@ -221,7 +243,9 @@ if [ "$session_event" = 1 ] && [ "$cache_age" -ge "$usage_ttl" ] && [ -r "$usage
     ) </dev/null >/dev/null 2>&1 &
   else
     # Reclaim a lock left behind by a refresh that was killed.
-    lock_age=$(( now - $(stat -c %Y "$usage_lock" 2>/dev/null || echo "$now") ))
+    lock_mtime=$(mtime "$usage_lock")
+    [ "$lock_mtime" -gt 0 ] || lock_mtime=$now
+    lock_age=$(( now - lock_mtime ))
     [ "$lock_age" -gt 60 ] && rmdir "$usage_lock" 2>/dev/null
   fi
 fi
