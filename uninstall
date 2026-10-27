@@ -33,3 +33,8 @@ rm -rf $HOME/.cache/.zcompdump* $HOME/.zhistory $HOME/.cache/.zcompcache
 for dfile in ${PWD}/dotconf/*; do
     rm -f "$HOME/.${dfile:t}"
 done
+
+# Remove the Claude Code status line link
+if [ "$(readlink "$HOME/.claude/statusline.sh")" = "${PWD}/claude-statusline.sh" ]; then
+    rm -f "$HOME/.claude/statusline.sh"
+fi

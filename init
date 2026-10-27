@@ -50,6 +50,13 @@ done
 
 #############################
 
+# Claude Code status line (settings.json runs ~/.claude/statusline.sh)
+echo "\nLinking Claude Code status line..."
+mkdir -p "$HOME/.claude"
+ln -sf "${PWD}/claude-statusline.sh" "$HOME/.claude/statusline.sh"
+
+#############################
+
 rm $HOME/.zshrc
 
 # Create zsh config sym links
