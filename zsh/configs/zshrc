@@ -113,3 +113,6 @@ complete -o nospace -C /home/qdu/.local/bin/mc mc
 if [ -f ~/.zshrc.local ]; then
     source ~/.zshrc.local
 fi
+
+# opencode
+[ -d "$HOME/.opencode/bin" ] && export PATH="$HOME/.opencode/bin:$PATH"
