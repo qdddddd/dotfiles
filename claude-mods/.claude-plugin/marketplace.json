@@ -1,0 +1,7 @@
+{
+  "name": "qdu-mods",
+  "owner": { "name": "qdu" },
+  "plugins": [
+    { "name": "agent-models", "source": "./agent-models", "description": "Show each running subagent's and workflow agent's model on the prompt hint line" }
+  ]
+}

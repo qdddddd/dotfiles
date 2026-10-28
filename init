@@ -55,6 +55,12 @@ echo "\nLinking Claude Code status line..."
 mkdir -p "$HOME/.claude"
 ln -sf "${PWD}/claude-statusline.sh" "$HOME/.claude/statusline.sh"
 
+# Claude Code mods (local marketplace qdu-mods in claude-mods/)
+if command -v claude >/dev/null 2>&1; then
+    claude plugin marketplace add "${PWD}/claude-mods"
+    claude plugin install agent-models@qdu-mods
+fi
+
 #############################
 
 rm $HOME/.zshrc

@@ -1,0 +1,1 @@
+{ "name": "agent-models", "version": "0.1.0", "description": "Show each running subagent's and workflow agent's model on the prompt hint line" }
