@@ -137,3 +137,4 @@ export GRADLE_USER_HOME=$HOME/.cache/gradle
 export GREP_COLOR='1;35;40'
 export GREP_COLORS='mt=1;35;40'
 export JULIA_PKG_SERVER="https://mirrors.pku.edu.cn/julia"
+export CLAUDE_CODE_TMUX_TRUECOLOR=1
