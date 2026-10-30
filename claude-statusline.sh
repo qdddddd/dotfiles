@@ -158,17 +158,19 @@ usage_lock="$usage_dir/usage-utilization.lock"
 usage_failures="$usage_dir/usage-utilization.failures" # failed refreshes in a row; mtime = last one
 usage_creds="$HOME/.claude/.credentials.json"
 
-# The OAuth access token: the credentials file (Linux), else the macOS
-# Keychain item, where Claude Code keeps it there (the file may exist
-# without a token). The Keychain is only readable from a GUI login session.
+# The OAuth access token that expires last, from the credentials file
+# (Linux) and this user's macOS Keychain item (where Claude Code keeps it
+# there). Either can hold a stale copy: a file left over from another
+# machine, or a Keychain item for another account under the same service
+# name, so the lookup pins the account. The Keychain is only readable from a
+# GUI login session.
 oauth_token() {
-  local tok=
-  [ -r "$usage_creds" ] && tok=$(jq -r '.claudeAiOauth.accessToken // empty' "$usage_creds" 2>/dev/null)
-  if [ -z "$tok" ] && command -v security >/dev/null 2>&1; then
-    tok=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null \
-      | jq -r '.claudeAiOauth.accessToken // empty' 2>/dev/null)
-  fi
-  printf '%s' "$tok"
+  {
+    [ -r "$usage_creds" ] && cat "$usage_creds"
+    command -v security >/dev/null 2>&1 \
+      && security find-generic-password -s "Claude Code-credentials" -a "$(id -un)" -w 2>/dev/null
+  } | jq -rs 'map(.claudeAiOauth? // empty | select(.accessToken))
+              | max_by(.expiresAt // 0) | .accessToken // empty' 2>/dev/null
 }
 
 # File mtime in epoch seconds (GNU stat, then BSD/macOS stat), 0 if missing.
