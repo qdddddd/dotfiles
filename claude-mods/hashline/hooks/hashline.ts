@@ -33,7 +33,27 @@ export function decodeUtf8(bytes: Uint8Array): { value: string; bom: string } | 
   return { value, bom: hasBom ? '﻿' : '' }
 }
 
-export function parsePatch(patch: string, count: number, seen: Set<number>): Operation[] {
+function lineHash(number: number, value: string): string {
+  let hash = 0x811c9dc5
+  // Include the position so adjacent identical lines don't share a content-only anchor.
+  const input = `${number}:${value}`
+  for (let index = 0; index < input.length; index++) {
+    hash = Math.imul(hash ^ input.charCodeAt(index), 0x01000193)
+  }
+  return ((hash ^ (hash >>> 16)) & 0xfff).toString(16).padStart(3, '0')
+}
+
+export function lineAnchor(number: number, value: string): string {
+  return `${number}#${lineHash(number, value)}`
+}
+
+export function parsePatch(patch: string, lines: readonly Line[], seen: ReadonlySet<number>): Operation[] {
+  const count = lines.length
+  function checkAnchor(number: number, supplied: string) {
+    if (lineHash(number, lines[number - 1]!.value) !== supplied.toLowerCase()) {
+      throw new Error(`Hashline anchor mismatch at line ${number}. Re-read around that line and verify the intended edit.`)
+    }
+  }
   // Only a trailing newline is structural. Trailing whitespace on '+' rows is file content.
   const normalized = patch.replace(/\r\n/g, '\n')
   if (normalized.includes('\r') || normalized.includes('\0')) {
@@ -43,27 +63,34 @@ export function parsePatch(patch: string, count: number, seen: Set<number>): Ope
   const operations: Operation[] = []
   for (let index = 0; index < rows.length; index++) {
     const row = rows[index]!
-    const range = /^(PUT|CUT) (\d+)\.=(\d+)(:)?$/.exec(row)
-    const insertion = /^PUT ([<>])(\d+|\$):$/.exec(row)
-    if (!insertion && (!range || (range[1] === 'PUT') !== Boolean(range[4]))) {
-      throw new Error(`Invalid hashline operation on patch row ${index + 1}.`)
-    }
-    const first = insertion?.[2] === '$' ? count : Number(insertion?.[2] ?? range?.[2])
-    const last = insertion ? first : Number(range?.[3])
+    const range = /^(PUT|CUT) (\d+)#([\da-fA-F]{3})\.=(\d+)#([\da-fA-F]{3})(:)?$/.exec(row)
+    const insertion = /^PUT ([<>])(\d+)#([\da-fA-F]{3}):$/.exec(row)
+    const append = row === 'PUT >$:'
     const emptyHead = count === 0 && row === 'PUT <1:'
+    if (!insertion && !append && !emptyHead && (!range || (range[1] === 'PUT') !== Boolean(range[6]))) {
+      throw new Error(`Invalid hashline operation on patch row ${index + 1}. Copy each N#hash anchor from the read output.`)
+    }
+    const first = append ? count : emptyHead ? 1 : Number(insertion?.[2] ?? range?.[2])
+    const last = range ? Number(range[4]) : first
     if (!emptyHead && (!Number.isSafeInteger(first) || first < 1 || last < first || last > count)) {
       throw new Error(`Anchor is outside the file on patch row ${index + 1}. Use PUT <1: for an empty file.`)
     }
     for (let line = first; !emptyHead && line <= last; line++) {
       if (!seen.has(line)) throw new Error(`Line ${line} has not been shown for this snapshot. Read it first.`)
     }
-    const start = emptyHead ? 0 : insertion?.[1] === '>' ? first : first - 1
+    if (range) {
+      checkAnchor(first, range[3]!)
+      checkAnchor(last, range[5]!)
+    } else if (insertion) {
+      checkAnchor(first, insertion[3]!)
+    }
+    const start = append || insertion?.[1] === '>' ? first : first - 1
     const body: string[] = []
-    if (insertion || range?.[1] === 'PUT') {
+    if (range?.[1] !== 'CUT') {
       while (rows[index + 1]?.startsWith('+')) body.push(rows[++index]!.slice(1))
       if (!body.length) throw new Error('PUT requires one or more + lines. Use CUT to delete.')
     }
-    operations.push({ start, end: insertion ? start : last, body })
+    operations.push({ start, end: range ? last : start, body })
   }
   operations.sort((left, right) => left.start - right.start)
   for (let index = 1; index < operations.length; index++) {

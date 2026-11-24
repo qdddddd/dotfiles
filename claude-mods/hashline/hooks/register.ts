@@ -7,27 +7,29 @@ import {
   byteLength,
   capBytes,
   decodeUtf8,
+  lineAnchor,
   linesOf,
   parsePatch,
   previewDiff,
   type Line,
 } from './hashline'
 
-const READ = 'mcp__hashline__read'
-const EDIT = 'mcp__hashline__edit'
+const READ = 'mcp__hashline__hashline_read'
+const EDIT = 'mcp__hashline__hashline_edit'
 
 const READ_DESCRIPTION =
-  'Read a local UTF-8 text file as numbered `N:text` lines under a `[path#TAG]` snapshot header, ' +
+  'Read a local UTF-8 text file as `N#hash:text` lines under a `[path#TAG]` snapshot header, ' +
   `for ${EDIT}. Only lines shown by this tool for the current snapshot can be edited. ` +
   'offset is 1-based (default 1); limit defaults to 250 lines (max 2000).'
 
 const EDIT_DESCRIPTION =
-  'Edit previously displayed lines of one existing file. Supply the 16-hex tag from ' +
-  `${READ} and a patch made of: PUT N.=M: (replace lines N..M inclusive), PUT <N: or PUT >N: ` +
-  '(insert before/after line N; PUT >$: appends), or CUT N.=M (delete lines N..M). ' +
-  'Each PUT is followed by body rows starting with +; a bare + is a blank line. ' +
-  'Several operations may share one patch; all line numbers refer to the original snapshot. ' +
-  'Set preview=true for a dry-run unified diff. Re-read after each applied edit.'
+  `Edit an existing file using the 16-hex snapshot tag and N#hash anchors from ${READ}. ` +
+  'Copy the anchors exactly. If the read shows `2#abc:old`, replace that line with `PUT 2#abc.=2#abc:\\n+new`. ' +
+  'Use `PUT N#hash.=M#hash:` to replace an inclusive range, `CUT N#hash.=M#hash` to delete one, ' +
+  'and `PUT <N#hash:` or `PUT >N#hash:` to insert before or after a line. ' +
+  '`PUT >$:` appends after the last displayed line only if it is the end of the file; `PUT <1:` inserts into an empty file. ' +
+  'Prefix PUT body lines with + (a bare + is a blank line). Do not include read prefixes in the body. ' +
+  'All anchors refer to the original snapshot. Set preview=true for a dry-run diff. A subsequent edit requires a fresh read.'
 
 type Snapshot = { hash: string; lines: Line[]; value: string; bom: string }
 type Seen = { hash: string; lines: Set<number> }
@@ -45,10 +47,15 @@ async function sha256(bytes: Uint8Array): Promise<string> {
 }
 
 async function resolvePath($: EngineInterface, path: string): Promise<string> {
+  if (typeof path !== 'string' || !path || path.includes('\0')) throw new Error('Supply a valid file path.')
   let spelled = path
-  if (spelled === '~' || spelled.startsWith('~/')) spelled = `${(await $.env.get('HOME')) ?? ''}${spelled.slice(1)}`
-  const stat = await $.fs.stat(spelled, { resolve: true }).catch(() => undefined)
-  if (!stat?.realPath) throw new Error(`${path} does not exist.`)
+  if (path === '~' || path.startsWith('~/')) {
+    const home = await $.env.get('HOME')
+    if (!home) throw new Error('Cannot expand ~ without HOME. Use an absolute path.')
+    spelled = home + path.slice(1)
+  }
+  const stat = await $.fs.stat(spelled, { resolve: true })
+  if (!stat.realPath) throw new Error('Cannot resolve the file path.')
   if (stat.kind !== 'file' || stat.size > MAX_FILE_BYTES) {
     throw new Error('Hashline requires a regular UTF-8 file of up to 4 MiB.')
   }
@@ -82,7 +89,7 @@ export const register: Register = on => {
 
   on('session.start', async ($, e, next) => {
     await $.tool.register({
-      name: 'read',
+      name: 'hashline_read',
       description: READ_DESCRIPTION,
       isDeferred: false,
       inputSchema: {
@@ -97,7 +104,7 @@ export const register: Register = on => {
       },
     })
     await $.tool.register({
-      name: 'edit',
+      name: 'hashline_edit',
       description: EDIT_DESCRIPTION,
       isDeferred: false,
       inputSchema: {
@@ -115,6 +122,11 @@ export const register: Register = on => {
     return next(e)
   })
 
+  on('session.end', ($, e, next) => {
+    seen.clear()
+    return next(e)
+  })
+
   on('tool.run', { tool: READ }, async ($, e) => {
     try {
       const input = e as unknown as { path: string; offset?: number; limit?: number }
@@ -129,7 +141,8 @@ export const register: Register = on => {
       let displayed = 0
       let index = offset - 1
       for (; index < Math.min(lines.length, offset - 1 + (input.limit ?? 250)); index++) {
-        const row = `${index + 1}:${lines[index]!.value}`
+        const { value } = lines[index]!
+        const row = `${lineAnchor(index + 1, value)}:${value}`
         const size = byteLength(row) + 1
         if (size > MAX_OUTPUT_BYTES) {
           rows.push(`[Line ${index + 1} exceeds the output limit and cannot be used as an anchor]`)
@@ -161,7 +174,7 @@ export const register: Register = on => {
         if (record?.hash !== current.hash || current.hash.slice(0, 16) !== input.tag.toLowerCase()) {
           throw new Error(`Hashline snapshot is stale or unavailable. Re-read ${input.path} before editing.`)
         }
-        const operations = parsePatch(input.patch, current.lines.length, record.lines)
+        const operations = parsePatch(input.patch, current.lines, record.lines)
         const updated = current.bom + applyPatch(current.lines, operations)
         if (byteLength(updated) > MAX_FILE_BYTES) throw new Error('The patched file would exceed 4 MiB.')
         if (updated === current.value) return { result: 'The patch leaves the file unchanged.' }
@@ -176,7 +189,7 @@ export const register: Register = on => {
         await $.fs.write(path, updated)
         seen.delete(path)
         return {
-          result: `Applied ${operations.length} hashline operation(s) to ${input.path}. Re-read before editing it again.`,
+          result: `Applied ${operations.length} hashline operation(s) to ${input.path}. A subsequent edit requires a fresh read.`,
         }
       })
     } catch (error) {
