@@ -2,6 +2,7 @@
   "name": "qdu-mods",
   "owner": { "name": "qdu" },
   "plugins": [
-    { "name": "agent-models", "source": "./agent-models", "description": "Show each running subagent's and workflow agent's model on the prompt hint line" }
+    { "name": "agent-models", "source": "./agent-models", "description": "Show each running subagent's and workflow agent's model on the prompt hint line" },
+    { "name": "hashline", "source": "./hashline", "description": "Line-anchored read/edit tools with snapshot tags, ported from the oh-my-pi hashline edit mode" }
   ]
 }
